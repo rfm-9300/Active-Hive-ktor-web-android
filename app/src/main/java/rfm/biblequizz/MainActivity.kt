@@ -11,10 +11,24 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import io.realm.kotlin.Realm
+import io.realm.kotlin.RealmConfiguration
+import rfm.biblequizz.data.local.models.Question
 import rfm.biblequizz.ui.theme.BiblequizzTheme
 
 class MainActivity : ComponentActivity() {
+
+    companion object {
+        lateinit var realm: Realm
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        realm = Realm.open(
+            configuration = RealmConfiguration.create(
+                schema = setOf(Question::class)
+            )
+        )
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
@@ -28,6 +42,8 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
+
 }
 
 @Composable
