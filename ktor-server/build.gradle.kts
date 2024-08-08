@@ -32,14 +32,7 @@ ktor {
     }
     docker {
         jreVersion.set(JavaVersion.VERSION_19)
-        imageTag.set("${project.version}")
-        externalRegistry.set(
-            io.ktor.plugin.features.DockerImageRegistry.dockerHub(
-                appName = provider { "rfm9300/ktor-central" },
-                username = providers.environmentVariable("DOCKER_HUB_USERNAME"),
-                password = providers.environmentVariable("DOCKER_HUB_PASSWORD")
-            )
-        )
+
     }
     jib {
         from {
