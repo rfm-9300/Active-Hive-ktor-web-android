@@ -1,13 +1,16 @@
-
+val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
 val postgres_version: String by project
 val h2_version: String by project
+val exposed_version: String by project
 
 plugins {
     kotlin("jvm") version "2.0.0"
     id("io.ktor.plugin") version "2.3.12"
     id("org.jetbrains.kotlin.plugin.serialization") version "2.0.0"
+    id("com.google.cloud.tools.jib") version "3.2.1"
+
 }
 
 group = "example.com"
@@ -23,6 +26,32 @@ application {
 repositories {
     mavenCentral()
 }
+ktor {
+    fatJar {
+        archiveFileName.set("rfm.ktor-server.jar")
+    }
+    docker {
+        jreVersion.set(JavaVersion.VERSION_19)
+        imageTag.set("${project.version}")
+        externalRegistry.set(
+            io.ktor.plugin.features.DockerImageRegistry.dockerHub(
+                appName = provider { "rfm9300/ktor-central" },
+                username = providers.environmentVariable("DOCKER_HUB_USERNAME"),
+                password = providers.environmentVariable("DOCKER_HUB_PASSWORD")
+            )
+        )
+    }
+    jib {
+        from {
+            image = "openjdk:19-jdk-alpine"
+        }
+        to {
+            image = "rfm9300/ktor-central"
+            tags = setOf("${project.version}")
+        }
+    }
+}
+
 
 dependencies {
     implementation("io.ktor:ktor-server-core-jvm")
@@ -33,6 +62,18 @@ dependencies {
     implementation("io.ktor:ktor-server-netty-jvm")
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("io.ktor:ktor-server-config-yaml")
+    implementation("org.flywaydb:flyway-core:9.20.1")
+    implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
+
+    implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
+    implementation("io.ktor:ktor-server-status-pages:$ktor_version")
+
+    implementation("io.github.cdimascio:dotenv-kotlin:6.2.2") // Adjust the version if necessary
+
+
     testImplementation("io.ktor:ktor-server-test-host-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }
+

@@ -9,44 +9,8 @@ import java.sql.*
 import kotlinx.coroutines.*
 
 fun Application.configureDatabases() {
-    val dbConnection: Connection = connectToPostgres(embedded = true)
-    val cityService = CityService(dbConnection)
-    
-    routing {
-    
-        // Create city
-        post("/cities") {
-            val city = call.receive<City>()
-            val id = cityService.create(city)
-            call.respond(HttpStatusCode.Created, id)
-        }
-    
-        // Read city
-        get("/cities/{id}") {
-            val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Invalid ID")
-            try {
-                val city = cityService.read(id)
-                call.respond(HttpStatusCode.OK, city)
-            } catch (e: Exception) {
-                call.respond(HttpStatusCode.NotFound)
-            }
-        }
-    
-        // Update city
-        put("/cities/{id}") {
-            val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Invalid ID")
-            val user = call.receive<City>()
-            cityService.update(id, user)
-            call.respond(HttpStatusCode.OK)
-        }
-    
-        // Delete city
-        delete("/cities/{id}") {
-            val id = call.parameters["id"]?.toInt() ?: throw IllegalArgumentException("Invalid ID")
-            cityService.delete(id)
-            call.respond(HttpStatusCode.OK)
-        }
-    }
+
+
 }
 
 /**
@@ -58,7 +22,7 @@ fun Application.configureDatabases() {
  * - postgres.user -- Username for database connection
  * - postgres.password -- Password for database connection
  *
- * If you don't have a database process running yet, you may need to [download]((https://www.postgresql.org/download/))
+ *  * If you don't have a database process running yet, you may need to [download]((https://www.postgresql.org/download/))
  * and install Postgres and follow the instructions [here](https://postgresapp.com/).
  * Then, you would be able to edit your url,  which is usually "jdbc:postgresql://host:port/database", as well as
  * user and password values.
