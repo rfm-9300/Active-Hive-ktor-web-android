@@ -43,7 +43,7 @@ object DatabaseFactory {
 }
 
 fun Application.module() {
-    //DatabaseFactory.init(environment.config)
+    DatabaseFactory.init(environment.config)
     configureSerialization()
     configureDatabases()
     configureRouting()
