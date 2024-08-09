@@ -11,6 +11,5 @@ create table if not exists public."user"
     salt           varchar(256) not null
 );
 
--- Replace 'actual_user' with the PostgreSQL username
 alter table public."user"
-    owner to actual_user;
+    owner to postgres;

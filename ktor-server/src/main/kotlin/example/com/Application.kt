@@ -2,6 +2,7 @@ package example.com
 
 import example.com.plugins.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.config.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
@@ -14,36 +15,16 @@ fun main(args: Array<String>) {
     EngineMain.main(args)
     embeddedServer(
         Netty,
-        port = 8080, // This is the port on which Ktor is listening
+        port = 8080,
         host = "0.0.0.0",
         module = Application::module
     ).start(wait = true)
 }
-object DatabaseFactory {
-    fun init(config: ApplicationConfig) {
-        println("test version")
-        // Load the .env file
-        val databaseName = config.property("storage.name").getString()
-        val host = config.property("storage.host").getString()
-        val driverClassName = "org.postgresql.Driver"
-        val jdbcURL = "jdbc:postgresql://$host:5432/$databaseName"
-        val dbUser = config.property("storage.user").getString()
-        val dbPassword = config.property("storage.password").getString()
-
-
-        val flyway = Flyway.configure().dataSource(jdbcURL, dbUser, dbPassword).load()
-        flyway.baseline()
-        flyway.migrate()
-
-        Database.connect(url = jdbcURL, user = dbUser, password = dbPassword, driver = driverClassName)
-    }
-
-    suspend fun <T> dbQuery(block: suspend () -> T): T =
-        newSuspendedTransaction(Dispatchers.IO) { block() }
-}
 
 fun Application.module() {
+    install(Authentication)
     DatabaseFactory.init(environment.config)
+    //configureSecurity()
     configureSerialization()
     configureDatabases()
     configureRouting()

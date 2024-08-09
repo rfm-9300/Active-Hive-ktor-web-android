@@ -25,6 +25,18 @@ services:
     depends_on:
       db:
         condition: service_healthy
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com  # Change this to your preferred email
+      PGADMIN_DEFAULT_PASSWORD: admin         # Change this to a secure password
+      PGADMIN_LISTEN_PORT: 80
+    ports:
+      - "8081:80"  # This maps the pgAdmin container's port 80 to port 8081 on the host machine
+    depends_on:
+      - db
 
 volumes:
   pg-volume: {}
