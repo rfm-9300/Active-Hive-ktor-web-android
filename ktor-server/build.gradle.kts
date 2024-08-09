@@ -10,11 +10,29 @@ plugins {
     id("io.ktor.plugin") version "2.3.12"
     id("org.jetbrains.kotlin.plugin.serialization") version "2.0.0"
     id("com.google.cloud.tools.jib") version "3.2.1"
-
 }
 
+// Read version from version.txt
+val versionFile = file("version.txt")
+val currentVersion = versionFile.readText().trim()
+
+// Split the version into major, minor, and patch
+val versionParts = currentVersion.split(".")
+val majorVersion = versionParts[0].toInt()
+val minorVersion = versionParts[1].toInt()
+val patchVersion = versionParts[2].toInt()
+
+// Increment the patch version
+val newPatchVersion = patchVersion + 1
+
+// Construct the new version string
+val newVersion = "$majorVersion.$minorVersion.$newPatchVersion"
+
 group = "example.com"
-version = "0.0.1"
+version = newVersion
+
+// Write the new version back to version.txt
+versionFile.writeText(newVersion)
 
 application {
     mainClass.set("io.ktor.server.netty.EngineMain")

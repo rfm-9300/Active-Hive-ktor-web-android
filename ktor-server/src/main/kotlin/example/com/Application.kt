@@ -1,8 +1,6 @@
 package example.com
 
 import example.com.plugins.*
-import io.github.cdimascio.dotenv.Dotenv
-import io.github.cdimascio.dotenv.dotenv
 import io.ktor.server.application.*
 import io.ktor.server.config.*
 import io.ktor.server.engine.*
@@ -13,7 +11,7 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 
 fun main(args: Array<String>) {
-    io.ktor.server.netty.EngineMain.main(args)
+    EngineMain.main(args)
     embeddedServer(
         Netty,
         port = 8080, // This is the port on which Ktor is listening
@@ -23,6 +21,7 @@ fun main(args: Array<String>) {
 }
 object DatabaseFactory {
     fun init(config: ApplicationConfig) {
+        println("test version")
         // Load the .env file
         val databaseName = config.property("storage.name").getString()
         val host = config.property("storage.host").getString()

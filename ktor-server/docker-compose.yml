@@ -14,17 +14,14 @@ services:
       test: [ "CMD-SHELL", "pg_isready -U $POSTGRES_USERNAME -d $POSTGRES_DB" ]
       interval: 5s
   ktor:
-    build: .
+    image: rfm9300/ktor-central:latest
     platform: linux/amd64
     container_name: backend-ktor
     restart: always
     ports:
       - "8080:8080"
-    environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USERNAME=postgres
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_HOST=db
+    env_file:
+      - .env
     depends_on:
       db:
         condition: service_healthy
