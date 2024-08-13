@@ -12,31 +12,18 @@ import org.flywaydb.core.Flyway
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 
-object DatabaseFactory {
-    fun init(config: ApplicationConfig) {
-        println("QUERO VER UAI")
-        // Load the .env file
-        val databaseName = config.property("storage.name").getString()
-        val host = config.property("storage.host").getString()
-        val driverClassName = "org.postgresql.Driver"
-        val jdbcURL = "jdbc:postgresql://$host:5432/$databaseName"
-        val dbUser = config.property("storage.user").getString()
-        val dbPassword = config.property("storage.password").getString()
+fun Application.configureDatabases(config: ApplicationConfig) {
+    val databaseName = config.property("storage.name").getString()
+    val host = config.property("storage.host").getString()
+    val driverClassName = "org.postgresql.Driver"
+    val jdbcURL = "jdbc:postgresql://$host:5432/$databaseName"
+    val dbUser = config.property("storage.user").getString()
+    val dbPassword = config.property("storage.password").getString()
 
+    val flyway = Flyway.configure().dataSource(jdbcURL, dbUser, dbPassword).load()
+    flyway.migrate()
 
-        val flyway = Flyway.configure().dataSource(jdbcURL, dbUser, dbPassword).load()
-        flyway.migrate()
-
-        Database.connect(url = jdbcURL, user = dbUser, password = dbPassword, driver = driverClassName)
-    }
-
-    suspend fun <T> dbQuery(block: suspend () -> T): T =
-        newSuspendedTransaction(Dispatchers.IO) { block() }
-}
-
-fun Application.configureDatabases() {
-
-
+    Database.connect(url = jdbcURL, user = dbUser, password = dbPassword, driver = driverClassName)
 }
 
 /**

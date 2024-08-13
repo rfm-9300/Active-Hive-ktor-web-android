@@ -1,15 +1,15 @@
 package example.com
 
+
 import example.com.plugins.*
+import example.com.security.hashing.SHA256HashingService
+import example.com.security.token.JwtTokenService
+import example.com.security.token.TokenConfig
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
-import io.ktor.server.config.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import kotlinx.coroutines.Dispatchers
-import org.flywaydb.core.Flyway
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
+
 
 fun main(args: Array<String>) {
     EngineMain.main(args)
@@ -23,9 +23,18 @@ fun main(args: Array<String>) {
 
 fun Application.module() {
     install(Authentication)
-    DatabaseFactory.init(environment.config)
-    //configureSecurity()
+
+    val tokenService = JwtTokenService()
+    val tokenConfig = TokenConfig(
+        issuer = environment.config.property("jwt.issuer").getString(),
+        audience = environment.config.property("jwt.audience").getString(),
+        expiresInt = 1000L * 60L * 60L * 24L,
+        secret = environment.config.property("jwt.secret").getString(),
+    )
+    val hashingService = SHA256HashingService()
+
+    configureSecurity(tokenConfig)
     configureSerialization()
-    configureDatabases()
+    configureDatabases(environment.config)
     configureRouting()
 }
