@@ -26,4 +26,4 @@ class UserDao(id: EntityID<Int>): IntEntity(id) {
 suspend fun <T> suspendTransaction(block: Transaction.() -> T): T =
     newSuspendedTransaction(Dispatchers.IO, statement = block)
 
-fun UserDao.toUser() = User(name, password, salt)
+fun UserDao.toUser() = User(name, password, salt, id.value)

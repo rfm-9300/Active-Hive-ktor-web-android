@@ -1,6 +1,7 @@
 package example.com
 
 
+import example.com.data.user.PostgresUserRepository
 import example.com.plugins.*
 import example.com.security.hashing.SHA256HashingService
 import example.com.security.token.JwtTokenService
@@ -36,5 +37,10 @@ fun Application.module() {
     configureSecurity(tokenConfig)
     configureSerialization()
     configureDatabases(environment.config)
-    configureRouting()
+    configureRouting(
+        userRepository = PostgresUserRepository(),
+        hashingService = hashingService,
+        tokenService = tokenService,
+        tokenConfig = tokenConfig
+    )
 }
