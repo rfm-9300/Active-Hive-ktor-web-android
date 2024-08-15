@@ -80,7 +80,7 @@ fun Route.login(
             )
         )
 
-        if (!isPasswordCorrect) return@post call.respond(HttpStatusCode.Unauthorized)
+        if (!isPasswordCorrect) return@post call.respond(HttpStatusCode.Unauthorized, "Invalid password")
 
         val token = tokenService.generateToken(
             config = tokenConfig,

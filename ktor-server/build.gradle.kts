@@ -13,27 +13,32 @@ plugins {
     id("com.google.cloud.tools.jib") version "3.2.1"
 }
 
-// Read version from version.txt
-val versionFile = file("version.txt")
-val currentVersion = versionFile.readText().trim()
-
-// Split the version into major, minor, and patch
-val versionParts = currentVersion.split(".")
-val majorVersion = versionParts[0].toInt()
-val minorVersion = versionParts[1].toInt()
-val patchVersion = versionParts[2].toInt()
-
-// Increment the patch version
-val newPatchVersion = patchVersion + 1
-
-// Construct the new version string
-val newVersion = "$majorVersion.$minorVersion.$newPatchVersion"
-
 group = "example.com"
-version = newVersion
+version = file("version.txt").readText().trim()
 
-// Write the new version back to version.txt
-versionFile.writeText(newVersion)
+val incrementVersion by tasks.registering {
+    doLast {
+        val versionFile = file("version.txt")
+        val currentVersion = versionFile.readText().trim()
+
+        val versionParts = currentVersion.split(".")
+        val majorVersion = versionParts[0].toInt()
+        val minorVersion = versionParts[1].toInt()
+        val patchVersion = versionParts[2].toInt()
+
+        val newPatchVersion = patchVersion + 1
+        val newVersion = "$majorVersion.$minorVersion.$newPatchVersion"
+
+        project.version = newVersion
+        versionFile.writeText(newVersion)
+
+        println("Version incremented to: $newVersion")
+    }
+}
+
+tasks.named("jib") {
+    dependsOn(incrementVersion)
+}
 
 application {
     mainClass.set("io.ktor.server.netty.EngineMain")

@@ -8,7 +8,8 @@ class SHA256HashingService: HashingService {
 
     override fun generateSaltedHash(password: String, length: Int): SaltedHash {
         val salt = SecureRandom.getInstance("SHA1PRNG").generateSeed(length)
-        val hash = DigestUtils.sha256Hex(password + salt)
+        val saltAsHex = Hex.encodeHexString(salt)
+        val hash = DigestUtils.sha256Hex("$password$saltAsHex")
         return SaltedHash(
             salt = Hex.encodeHexString(salt),
             hash = hash
