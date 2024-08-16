@@ -1,4 +1,4 @@
--- V4__Add_id_column_to_user_table.sql
+-- V3__Add_id_column_to_user_table.sql
 
 -- Drop the existing primary key constraint if it exists
 ALTER TABLE public."user"
