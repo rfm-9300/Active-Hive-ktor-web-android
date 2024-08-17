@@ -8,7 +8,7 @@ val Red30 = Color(0xFFFFCDD2) // Light red
 val Red50 = Color(0xFFEF9A9A) // Medium-light red
 val Red60 = Color(0xFFE57373) // Medium red
 val Red70 = Color(0xFFEF5350) // Strong red
-val Red80 = Color(0xFFE53935) // Dark red
+val Red80 = Color(0xFF9b0000)
 val Red90 = Color(0xFFD32F2F) // Very dark red
 
 // Greens
@@ -62,7 +62,7 @@ val DarkBlue20 = Color(0xFFBBDEFB) // Light dark blue
 val DarkBlue30 = Color(0xFF90CAF9) // Medium-light dark blue
 val DarkBlue40 = Color(0xFF64B5F6) // Medium dark blue
 val DarkBlue50 = Color(0xFF42A5F5) // Strong dark blue
-val DarkBlue60 = Color(0xFF2196F3) // Dark blue
+val DarkBlue60 = Color(0xFF000027)
 val DarkBlue70 = Color(0xFF1E88E5) // Very dark blue
 val DarkBlue80 = Color(0xFF1976D2) // Darker dark blue
 val DarkBlue90 = Color(0xFF1565C0) // Very dark blue

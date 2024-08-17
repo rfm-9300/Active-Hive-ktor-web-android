@@ -3,11 +3,12 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
     id("com.google.devtools.ksp") version "2.0.10-1.0.24"
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
     namespace = "rfm.biblequizz"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "rfm.biblequizz"
@@ -79,6 +80,8 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.navigation.compose)
     ksp(libs.dagger.compiler)
     ksp(libs.hilt.compiler)
 }

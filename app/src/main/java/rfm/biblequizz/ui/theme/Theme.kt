@@ -12,17 +12,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Red40,
-    secondary = Red40,
-    tertiary = Pink80,
+    primary = Red80,
+    secondary = Teal20,
+    tertiary = PurpleGrey40,
     background = DarkBlue60
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Red40,
-    secondary = Red40,
+    primary = Red80,
+    secondary = Teal20,
     tertiary = Pink40,
-    background = Red40
+    background = DarkBlue60
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -46,11 +46,11 @@ fun BiblequizzTheme(
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             val context = LocalContext.current
             //if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-            if (darkTheme) DarkColorScheme else LightColorScheme
+            if (darkTheme) DarkColorScheme else DarkColorScheme
         }
 
         darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        else -> DarkColorScheme
     }
 
     MaterialTheme(

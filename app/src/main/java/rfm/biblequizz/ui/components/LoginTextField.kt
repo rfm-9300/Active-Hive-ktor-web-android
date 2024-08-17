@@ -1,8 +1,8 @@
 package rfm.biblequizz.ui.components
 
+
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -17,12 +17,13 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginTextField(
     modifier: Modifier = Modifier,
+    textModifier: Modifier = Modifier,
     value: String,
     onValueChange: (String) -> Unit,
     labelText: String,
@@ -39,7 +40,7 @@ fun LoginTextField(
         value = value,
         onValueChange = onValueChange,
         label = {
-            Box(modifier = Modifier.padding(start = 5.dp)) {
+            Box(modifier = textModifier) {
                 Text(labelText)
             }
         },

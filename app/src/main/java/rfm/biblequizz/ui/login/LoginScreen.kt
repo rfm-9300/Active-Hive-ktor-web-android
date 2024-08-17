@@ -1,5 +1,6 @@
 package rfm.biblequizz.ui.login
 
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,11 +29,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import rfm.biblequizz.R
 import rfm.biblequizz.ui.components.HeaderText
 import rfm.biblequizz.ui.components.LoginTextField
@@ -42,12 +47,33 @@ val defaultPadding = 30.dp
 val itemSpacing = 8.dp
 val spacingTop = 40.dp
 
+// Defining const val for the keys
+const val KEY_GOOGLE = "Google"
+const val KEY_FACEBOOK = "Facebook"
+const val KEY_INSTAGRAM = "Instagram"
+
+// Defining drawable resources as vals
+val ICON_GOOGLE = R.drawable.ic_google
+val ICON_FACEBOOK = R.drawable.ic_facebook
+val ICON_INSTAGRAM = R.drawable.ic_instagram
+
+// Creating a map with const keys and drawable resource values
+val iconsMap = mapOf(
+    KEY_GOOGLE to ICON_GOOGLE,
+    KEY_FACEBOOK to ICON_FACEBOOK,
+    KEY_INSTAGRAM to ICON_INSTAGRAM
+)
+
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    navigateToHome : () -> Unit
+) {
     val (username, setUsername) = rememberSaveable { mutableStateOf("") }
     val (password, setPassword) = rememberSaveable { mutableStateOf("") }
     val (checked, onCheckedChanged) = rememberSaveable { mutableStateOf(false) }
+
+    val context = LocalContext.current
 
     Column (
         modifier = Modifier
@@ -56,7 +82,7 @@ fun LoginScreen() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Spacer(modifier = Modifier.height(spacingTop))
-        HeaderText(text = "Login",
+        HeaderText(text = stringResource(id = R.string.login_screen_login),
             modifier = Modifier
                 .padding(top = 30.dp)
                 .align(Alignment.Start)
@@ -65,7 +91,7 @@ fun LoginScreen() {
         LoginTextField(
             value = username,
             onValueChange = setUsername,
-            labelText = "Username",
+            labelText = stringResource(id = R.string.login_screen_username),
             leadingIcon = Icons.Default.Person,
             keyboardType = KeyboardType.Email
         )
@@ -73,7 +99,7 @@ fun LoginScreen() {
         LoginTextField(
             value = password,
             onValueChange = setPassword,
-            labelText = "Password",
+            labelText = stringResource(id = R.string.login_screen_password),
             leadingIcon = Icons.Default.Lock,
             visualTransformation = PasswordVisualTransformation(),
             keyboardType = KeyboardType.Password
@@ -86,30 +112,29 @@ fun LoginScreen() {
         ) {
             Row (horizontalArrangement = Arrangement.Start) {
                 Checkbox(checked = checked, onCheckedChange = onCheckedChanged)
-                Text(text = "Remember me", modifier = Modifier.align(Alignment.CenterVertically))
+                Text(
+                    text = stringResource(id = R.string.login_screen_remember_me),
+                    modifier = Modifier.align(Alignment.CenterVertically)
+                )
             }
             TextButton(onClick = { /*TODO*/ }) {
-                Text(text = "Forgot password?")
+                Text(text = stringResource(id = R.string.login_screen_forgot_password))
             }
         }
         Spacer(modifier = Modifier.height(itemSpacing))
 
         Button(
-            onClick = { }, modifier = Modifier.fillMaxWidth(),
+            onClick = { navigateToHome() }, modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.primary
+                contentColor = MaterialTheme.colorScheme.secondary
             )) {
-            Text(text = "Login")
+            Text(text = stringResource(id = R.string.login_screen_login_button))
         }
         Spacer(modifier = Modifier.height(itemSpacing))
         AlternativeLogin(
-            onIconClick = { index ->
-                when(index) {
-                    0 -> { /*TODO*/ }
-                    1 -> { /*TODO*/ }
-                    2 -> { /*TODO*/ }
-                }
+            onIconClick = { key ->
+                Toast.makeText(context, "$key Login", Toast.LENGTH_SHORT).show()
             },
             onSignUpClick = { /*TODO*/ },
             modifier = Modifier.fillMaxSize()
@@ -120,28 +145,28 @@ fun LoginScreen() {
 
 @Composable
 fun AlternativeLogin(
-    onIconClick: (index: Int) -> Unit,
+    onIconClick: (key: String) -> Unit,
     onSignUpClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val icons = listOf(R.drawable.ic_google, R.drawable.ic_github, R.drawable.ic_instagram)
+
     Column (
         modifier = modifier.fillMaxWidth()
             .padding(bottom = 20.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Or login with")
+        Text(text = stringResource(id = R.string.login_screen_or_login_with))
         Row (
             modifier = Modifier.padding(top = itemSpacing),
         ){
-            icons.forEachIndexed { index, icon ->
+            iconsMap.forEach { (key, icon) ->
                 Icon(
                     painter = painterResource(id = icon),
-                    contentDescription = "alternative login",
+                    contentDescription = key, // You can use the key as the content description
                     modifier = Modifier
                         .size(35.dp)
-                        .clickable { onIconClick(index) }
+                        .clickable { onIconClick(key) } // Pass the key instead of index
                 )
                 Spacer(modifier = Modifier.width(itemSpacing))
             }
@@ -150,9 +175,9 @@ fun AlternativeLogin(
             modifier = Modifier.padding(top = itemSpacing),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(text = "Don't have an account?")
+            Text(text = stringResource(id = R.string.login_screen_dont_have_account))
             TextButton(onClick = onSignUpClick) {
-                Text(text = "Sign up")
+                Text(text = stringResource(id = R.string.login_screen_sign_up))
             }
         }
 
@@ -163,12 +188,12 @@ fun AlternativeLogin(
 @Preview(showSystemUi = true)
 @Composable
 fun LoginScreenPreview() {
-    BiblequizzTheme () {
+    BiblequizzTheme  {
         Surface (
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            LoginScreen()
+            LoginScreen { }
         }
 
     }
