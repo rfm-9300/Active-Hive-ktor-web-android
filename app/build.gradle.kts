@@ -57,10 +57,14 @@ dependencies {
     val okhttp_version = "4.9.2"
     val retrofit_version = "2.9.0"
     val moshi_version = "1.15.0"
-    val room_version = "2.6.0"
+    val room_version = "2.6.1"
 
     implementation("androidx.room:room-runtime:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+
+    // To use Kotlin Symbol Processing (KSP)
+    ksp("androidx.room:room-compiler:$room_version")
 
     implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
     implementation("com.squareup.retrofit2:converter-moshi:$retrofit_version")
@@ -84,4 +88,5 @@ dependencies {
     implementation(libs.navigation.compose)
     ksp(libs.dagger.compiler)
     ksp(libs.hilt.compiler)
+
 }

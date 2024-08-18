@@ -25,6 +25,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -37,6 +38,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import rfm.biblequizz.R
 import rfm.biblequizz.ui.components.HeaderText
@@ -67,8 +69,11 @@ val iconsMap = mapOf(
 
 @Composable
 fun LoginScreen(
+    viewModel: LoginViewModel = hiltViewModel(),
     navigateToHome : () -> Unit
 ) {
+    val uiState = viewModel.uiState.collectAsState()
+
     val (username, setUsername) = rememberSaveable { mutableStateOf("") }
     val (password, setPassword) = rememberSaveable { mutableStateOf("") }
     val (checked, onCheckedChanged) = rememberSaveable { mutableStateOf(false) }
@@ -107,7 +112,8 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(itemSpacing))
         Row (
             horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(top = 20.dp)
         ) {
             Row (horizontalArrangement = Arrangement.Start) {
@@ -137,7 +143,8 @@ fun LoginScreen(
                 Toast.makeText(context, "$key Login", Toast.LENGTH_SHORT).show()
             },
             onSignUpClick = { /*TODO*/ },
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .wrapContentSize(align = Alignment.BottomCenter)
         )
     }
@@ -151,7 +158,8 @@ fun AlternativeLogin(
 ) {
 
     Column (
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
             .padding(bottom = 20.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally

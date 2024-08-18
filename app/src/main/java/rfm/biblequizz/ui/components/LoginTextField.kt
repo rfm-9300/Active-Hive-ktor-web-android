@@ -19,7 +19,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginTextField(
     modifier: Modifier = Modifier,
@@ -31,10 +30,6 @@ fun LoginTextField(
     keyboardType: KeyboardType = KeyboardType.Text,
     visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
-    val textFieldColors = TextFieldDefaults.outlinedTextFieldColors(
-        focusedBorderColor = Color.Red,
-        cursorColor = Color.Red
-    )
     OutlinedTextField(
         modifier = modifier.fillMaxWidth(),
         value = value,

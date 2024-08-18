@@ -2,6 +2,8 @@ package rfm.biblequizz.ui.signup
 
 
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.Animation
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,16 +21,22 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.TextLinkStyles
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.withLink
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -40,13 +48,13 @@ import rfm.biblequizz.ui.theme.BiblequizzTheme
 
 val defaultPadding = 30.dp
 val itemSpacing = 8.dp
-val spacingTop = 10.dp
 
 
 
 @Composable
 fun SignUpScreen(
-
+    navigateToSignIn: () -> Unit,
+    navigateToHome: () -> Unit
 ) {
 
     val context = LocalContext.current
@@ -58,6 +66,10 @@ fun SignUpScreen(
     val (confirmPassword, setConfirmPassword) = rememberSaveable { mutableStateOf("") }
     val (checked, setChecked) = rememberSaveable { mutableStateOf(false) }
 
+    var isPasswordValid by remember { mutableStateOf(false) }
+    var isEmailValid by remember { mutableStateOf(false) }
+    var isConfirmPasswordValid by remember { mutableStateOf(true) }
+
     Column (
         modifier = Modifier
             .fillMaxSize()
@@ -65,6 +77,12 @@ fun SignUpScreen(
             .padding(defaultPadding),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        AnimatedVisibility(!isConfirmPasswordValid) {
+            Text(
+                text = stringResource(id = R.string.sign_up_screen_passwords_do_not_match),
+                color = MaterialTheme.colorScheme.error,
+            )
+        }
         HeaderText(text = stringResource(id = R.string.sign_up_screen_sign_up),
             modifier = Modifier
                 .padding(top = 30.dp)
@@ -118,15 +136,19 @@ fun SignUpScreen(
             val privacyText = stringResource(id = R.string.sign_up_screen_privacy)
             val policyText = stringResource(id = R.string.sign_up_screen_policy)
             val andText = stringResource(id = R.string.sign_up_screen_and)
+            val link =
+                LinkAnnotation.Url(
+                    "",
+                    TextLinkStyles(SpanStyle(color = MaterialTheme.colorScheme.primary))
+                ) {
+                    Toast.makeText(context, "Link clicked", Toast.LENGTH_SHORT).show()
+                }
             val annotatedString = buildAnnotatedString {
                 withStyle(SpanStyle(color = MaterialTheme.colorScheme.onBackground)) {
                     append(agreeText)
                 }
                 append(" ")
-                withStyle(SpanStyle(color = MaterialTheme.colorScheme.primary)) {
-                    pushStringAnnotation(tag = privacyText, annotation = privacyText)
-                    append(privacyText)
-                }
+                withLink(link) { append(privacyText) }
                 append(" ")
                 withStyle(SpanStyle(color = MaterialTheme.colorScheme.onBackground)) {
                     append(andText)
@@ -139,39 +161,31 @@ fun SignUpScreen(
             }
 
             Checkbox(checked = checked, onCheckedChange = setChecked)
-            ClickableText(
+            Text(
                 text = annotatedString,
                 modifier = Modifier.align(Alignment.CenterVertically)
-            ) { offset ->
-                annotatedString.getStringAnnotations(tag = privacyText, start = offset, end = offset)
-                    .firstOrNull()?.let {
-                        // Handle privacy click
-                        Toast.makeText(context, "Privacy clicked", Toast.LENGTH_SHORT).show()
-                    }
-                annotatedString.getStringAnnotations(tag = policyText, start = offset, end = offset)
-                    .firstOrNull()?.let {
-                        // Handle policy click
-                        Toast.makeText(context, "Policy clicked", Toast.LENGTH_SHORT).show()
-                    }
-
-            }
+            )
         }
         Spacer(modifier = Modifier.height(4 * itemSpacing))
         // sing in button change color if all fields are filled
-        val buttonColor = if (firstName.isNotEmpty() && lastName.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty() && confirmPassword.isNotEmpty() && checked) {
-            MaterialTheme.colorScheme.primary
-        } else {
-            MaterialTheme.colorScheme.tertiary
-        }
+        val areFieldsEmpty = firstName.isEmpty() || lastName.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()
         Button(
-            onClick = { },
+            onClick = {
+                isPasswordValid = password.length >= 8
+                isConfirmPasswordValid = password == confirmPassword
+                isEmailValid = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+                if (isPasswordValid && isEmailValid && isConfirmPasswordValid) {
+                    navigateToHome()
+                }
+            },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(
-                containerColor = buttonColor,
+                containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.secondary
-            )
+            ),
+            enabled = !areFieldsEmpty
         ) {
-            Text(text = stringResource(id = R.string.sign_up_screen_sign_in))
+            Text(text = stringResource(id = R.string.sign_up_screen_sign_up))
         }
         Spacer(modifier = Modifier.height(itemSpacing))
         val signInText = stringResource(id = R.string.sign_up_screen_already_have_account)
@@ -206,12 +220,15 @@ fun SignUpScreen(
 @Preview(showSystemUi = true)
 @Composable
 fun LoginScreenPreview() {
-    BiblequizzTheme () {
+    BiblequizzTheme  {
         Surface (
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            SignUpScreen()
+            SignUpScreen(
+                navigateToSignIn = {},
+                navigateToHome = {}
+            )
         }
 
     }
