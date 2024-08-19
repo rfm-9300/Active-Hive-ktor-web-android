@@ -2,7 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
-    id("com.google.devtools.ksp") version "2.0.10-1.0.24"
+    id("com.google.dagger.hilt.android")
+    id("com.google.devtools.ksp")
     alias(libs.plugins.kotlin.serialization)
 }
 
@@ -72,7 +73,6 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.dagger.hilt)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
@@ -86,7 +86,15 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.navigation.compose)
-    ksp(libs.dagger.compiler)
-    ksp(libs.hilt.compiler)
+
+    implementation("com.squareup.okhttp3:okhttp:$okhttp_version")
+    implementation("com.squareup.okhttp3:logging-interceptor:$okhttp_version")
+
+    implementation("com.jakewharton.timber:timber:5.0.1")
+
+
+    implementation("com.google.dagger:hilt-android:2.51.1")
+    ksp("com.google.dagger:hilt-compiler:2.51.1")
+
 
 }

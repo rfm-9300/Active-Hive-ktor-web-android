@@ -1,7 +1,6 @@
-package rfm.biblequizz
+package rfm.biblequizz.ui
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -19,10 +18,12 @@ fun Navigation(navHostController: NavHostController) {
         composable<LoginScreen> {
             LoginScreen(
                 navigateToHome = {
-                    navHostController.navigate(HomeScreenNav(
+                    navHostController.navigate(
+                        HomeScreenNav(
                         name = "test",
                         email = "working",
-                    ))
+                    )
+                    )
                 }
             )
         }

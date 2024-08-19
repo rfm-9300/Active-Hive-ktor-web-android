@@ -23,4 +23,7 @@ interface LoginApi {
     suspend fun authenticate(
         @Header("Authorization") token: String
     )
+
+    @GET("/")
+    suspend fun test()
 }

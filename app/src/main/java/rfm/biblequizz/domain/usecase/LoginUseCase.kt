@@ -10,8 +10,7 @@ class LoginUseCase (
     private val loginRepository: LoginRepository,
     private val dispatcher:CoroutineDispatcher= Dispatchers.IO
 ) {
-    suspend operator fun invoke(username: String, password: String): Boolean = withContext(dispatcher) {
-        val response = loginRepository.login(username, password)
-        return@withContext response is AuthResult.Authorized
+    suspend operator fun invoke(username: String, password: String): AuthResult<Unit>  = withContext(dispatcher) {
+        loginRepository.login(username, password)
     }
 }

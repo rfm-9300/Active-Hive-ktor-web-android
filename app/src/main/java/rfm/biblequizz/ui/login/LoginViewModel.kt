@@ -6,8 +6,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import rfm.biblequizz.data.model.AuthResult
 import rfm.biblequizz.domain.usecase.LoginUseCase
 import javax.inject.Inject
 
@@ -18,6 +21,9 @@ class LoginViewModel @Inject constructor(
 
     private val _uiState = MutableStateFlow(LoginUiState())
     val uiState: StateFlow<LoginUiState> = _uiState.asStateFlow()
+
+    private val resultChannel = Channel<AuthResult<Unit>>()
+    val authResults = resultChannel.receiveAsFlow()
 
     fun onEvent(event: LoginUiEvent) {
         when(event) {
@@ -46,8 +52,9 @@ class LoginViewModel @Inject constructor(
 
     private fun login(username: String, password: String) {
         viewModelScope.launch {
-            val result = loginUseCase(username, password)
             _uiState.value = _uiState.value.copy(isLoading = false)
+            val result = loginUseCase(username, password)
+            resultChannel.send(result)
         }
     }
 }

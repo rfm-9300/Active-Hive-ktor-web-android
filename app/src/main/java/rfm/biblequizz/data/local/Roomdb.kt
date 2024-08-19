@@ -12,12 +12,14 @@ import rfm.biblequizz.data.local.entity.UserEntity
     entities = [UserEntity::class]
 )
 abstract class Roomdb: RoomDatabase() {
+    companion object{
+        fun build(context: Context) = Room.databaseBuilder(
+            context,
+            Roomdb::class.java,
+            "courier.db"
+        ).build()
+    }
 
-    fun build(context: Context) = Room.databaseBuilder(
-        context,
-        Roomdb::class.java,
-        "courier.db"
-    )
 
     abstract val userDao: UserDao
 

@@ -1,6 +1,5 @@
 [versions]
 agp = "8.5.2"
-daggerCompiler = "2.52"
 kotlin = "2.0.10"
 coreKtx = "1.13.1"
 junit = "4.13.2"
@@ -17,8 +16,6 @@ composeNavigation = "2.8.0-beta07"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
-dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "daggerCompiler" }
-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "hilt" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

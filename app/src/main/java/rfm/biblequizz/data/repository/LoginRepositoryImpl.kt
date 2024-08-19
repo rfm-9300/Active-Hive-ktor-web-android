@@ -1,8 +1,10 @@
 package rfm.biblequizz.data.repository
 
+import androidx.compose.material3.TimeInput
 import retrofit2.HttpException
 import rfm.biblequizz.data.local.Roomdb
 import rfm.biblequizz.data.local.entity.UserEntity
+import rfm.biblequizz.data.log.Timber
 import rfm.biblequizz.data.model.AuthRequest
 import rfm.biblequizz.data.model.AuthResult
 import rfm.biblequizz.data.remote.LoginApi
@@ -39,6 +41,7 @@ class LoginRepositoryImpl(
                     password = password
                 )
             )
+            Timber.i("Login response: $response")
             val newUser  = UserEntity(
                 username = username,
                 token = response.token
@@ -47,11 +50,14 @@ class LoginRepositoryImpl(
             AuthResult.Authorized()
         } catch(e: HttpException) {
             if(e.code() == 401) {
+                Timber.i("Login error: Unauthorized")
                 AuthResult.Unauthorized()
             } else {
+                Timber.i("Login error: Unknown")
                 AuthResult.UnknownError()
             }
         } catch (e: Exception) {
+            Timber.i("Login error: $e")
             AuthResult.UnknownError()
         }
     }
