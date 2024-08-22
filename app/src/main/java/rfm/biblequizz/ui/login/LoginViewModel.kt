@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import rfm.biblequizz.data.model.AuthResult
+import rfm.biblequizz.domain.model.UseCaseResult
 import rfm.biblequizz.domain.usecase.LoginUseCase
 import javax.inject.Inject
 
@@ -47,14 +48,26 @@ class LoginViewModel @Inject constructor(
             is LoginUiEvent.SignInUsernameChanged -> {
                 _uiState.value = _uiState.value.copy(signInUsername = event.value)
             }
+
         }
     }
 
     private fun login(username: String, password: String) {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = false)
-            val result = loginUseCase(username, password)
-            resultChannel.send(result)
+            val loginResult = loginUseCase(username, password)
+            when(loginResult) {
+              is UseCaseResult.Success -> {
+                  resultChannel.send(AuthResult.Authorized())
+              }
+                is UseCaseResult.Error -> {
+                    resultChannel.send(AuthResult.Unauthorized())
+                }
+            }
         }
+    }
+
+    fun validateFields(username: String, password: String): Boolean {
+        return username.isNotEmpty() && password.isNotEmpty()
     }
 }

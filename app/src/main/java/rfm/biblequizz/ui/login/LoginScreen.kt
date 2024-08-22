@@ -99,6 +99,9 @@ fun LoginScreen(
     }
 
     fun doLogin(){
+        val areFieldsValid = viewModel.validateFields(username = username, password= password)
+        if (!areFieldsValid) return
+
         // event change login and password
         viewModel.onEvent(LoginUiEvent.SignInUsernameChanged(username))
         viewModel.onEvent(LoginUiEvent.SignInPasswordChanged(password))
@@ -132,7 +135,7 @@ fun LoginScreen(
             labelText = stringResource(id = R.string.login_screen_password),
             leadingIcon = Icons.Default.Lock,
             visualTransformation = PasswordVisualTransformation(),
-            keyboardType = KeyboardType.Password
+            keyboardType = KeyboardType.Password,
         )
         Spacer(modifier = Modifier.height(itemSpacing))
         Row (

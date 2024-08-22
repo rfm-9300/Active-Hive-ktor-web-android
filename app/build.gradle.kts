@@ -54,23 +54,17 @@ android {
 }
 
 dependencies {
+    testImplementation(libs.junit.junit)
     debugImplementation(libs.ui.tooling)
-    val okhttp_version = "4.9.2"
-    val retrofit_version = "2.9.0"
-    val moshi_version = "1.15.0"
-    val room_version = "2.6.1"
-
-    implementation("androidx.room:room-runtime:$room_version")
-    implementation("androidx.room:room-ktx:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
-
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    annotationProcessor(libs.room.compiler)
     // To use Kotlin Symbol Processing (KSP)
-    ksp("androidx.room:room-compiler:$room_version")
+    ksp(libs.room.compiler)
 
-    implementation("com.squareup.retrofit2:retrofit:$retrofit_version")
-    implementation("com.squareup.retrofit2:converter-moshi:$retrofit_version")
-    implementation("com.squareup.retrofit2:converter-scalars:$retrofit_version")
-
+    implementation(libs.retrofit)
+    implementation(libs.converter.moshi)
+    implementation(libs.converter.scalars)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
@@ -80,21 +74,25 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+
+
+    implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.navigation.compose)
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
+    implementation(libs.timber)
+    implementation(libs.hilt.android.v2511)
+    ksp(libs.hilt.compiler)
 
-    implementation("com.squareup.okhttp3:okhttp:$okhttp_version")
-    implementation("com.squareup.okhttp3:logging-interceptor:$okhttp_version")
+    androidTestImplementation(platform(libs.androidx.compose.bom.v20230601))
+    androidTestImplementation(libs.androidx.junit)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
 
-    implementation("com.jakewharton.timber:timber:5.0.1")
-
-
-    implementation("com.google.dagger:hilt-android:2.51.1")
-    ksp("com.google.dagger:hilt-compiler:2.51.1")
-
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.inline)
+    testImplementation(libs.androidx.core.testing) // For testing LiveData or StateFlow
+    testImplementation(libs.kotlinx.coroutines.test) // For testing coroutines
 
 }
