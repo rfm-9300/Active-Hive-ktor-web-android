@@ -41,8 +41,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import rfm.biblequizz.R
 import rfm.biblequizz.data.model.AuthResult
+import rfm.biblequizz.ui.HomeScreenNav
 import rfm.biblequizz.ui.components.HeaderText
 import rfm.biblequizz.ui.components.LoginTextField
 import rfm.biblequizz.ui.theme.BiblequizzTheme
@@ -72,7 +74,7 @@ val iconsMap = mapOf(
 @Composable
 fun LoginScreen(
     viewModel: LoginViewModel = hiltViewModel(),
-    navigateToHome : () -> Unit
+    navHostController: NavHostController
 ) {
     val uiState = viewModel.uiState.collectAsState()
 
@@ -86,13 +88,25 @@ fun LoginScreen(
             when(result) {
                 is AuthResult.Authorized -> {
                     Toast.makeText(context, "Authorized", Toast.LENGTH_SHORT).show()
-                    navigateToHome()
+                    navHostController.navigate(
+                        HomeScreenNav(
+                            name = "test",
+                            email = "working",
+                        )
+                    )
                 }
                 is AuthResult.Unauthorized -> {
                     Toast.makeText(context, "Unauthorized", Toast.LENGTH_SHORT).show()
                 }
                 is AuthResult.UnknownError -> {
                     Toast.makeText(context, "Unknown Error", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+        viewModel.uiState.collect { state ->
+            when {
+                state.isLoading -> {
+                    Toast.makeText(context, "Loading", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -232,7 +246,9 @@ fun LoginScreenPreview() {
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background
         ) {
-            LoginScreen { }
+            LoginScreen (
+                navHostController = NavHostController(LocalContext.current)
+            )
         }
 
     }

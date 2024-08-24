@@ -8,6 +8,7 @@ import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
 import rfm.biblequizz.ui.home.HomeScreen
 import rfm.biblequizz.ui.login.LoginScreen
+import rfm.biblequizz.ui.signup.SignUpScreen
 
 @Composable
 fun Navigation(navHostController: NavHostController) {
@@ -16,16 +17,7 @@ fun Navigation(navHostController: NavHostController) {
         startDestination = LoginScreen
     ) {
         composable<LoginScreen> {
-            LoginScreen(
-                navigateToHome = {
-                    navHostController.navigate(
-                        HomeScreenNav(
-                        name = "test",
-                        email = "working",
-                    )
-                    )
-                }
-            )
+            LoginScreen(navHostController = navHostController)
         }
         composable<HomeScreenNav> {
             val args = it.toRoute<HomeScreenNav>()
@@ -37,8 +29,9 @@ fun Navigation(navHostController: NavHostController) {
                     )
                 }
             }
-
-
+        }
+        composable<SignUpScreenNav> {
+            SignUpScreen(navHost = navHostController)
         }
 
     }
@@ -52,3 +45,5 @@ data class HomeScreenNav(
     val email: String? = "",
     val password: String? = ""
 )
+@Serializable
+object SignUpScreenNav

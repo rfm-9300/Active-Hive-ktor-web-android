@@ -3,7 +3,6 @@ package rfm.biblequizz.ui.signup
 
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.Animation
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -41,9 +40,13 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
+import dagger.hilt.android.lifecycle.HiltViewModel
 import rfm.biblequizz.R
 import rfm.biblequizz.ui.components.HeaderText
 import rfm.biblequizz.ui.components.LoginTextField
+import rfm.biblequizz.ui.login.LoginViewModel
 import rfm.biblequizz.ui.theme.BiblequizzTheme
 
 val defaultPadding = 30.dp
@@ -53,8 +56,8 @@ val itemSpacing = 8.dp
 
 @Composable
 fun SignUpScreen(
-    navigateToSignIn: () -> Unit,
-    navigateToHome: () -> Unit
+    navHost: NavHostController,
+    viewModel: SignUpViewModel = hiltViewModel()
 ) {
 
     val context = LocalContext.current
@@ -175,7 +178,7 @@ fun SignUpScreen(
                 isConfirmPasswordValid = password == confirmPassword
                 isEmailValid = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
                 if (isPasswordValid && isEmailValid && isConfirmPasswordValid) {
-                    navigateToHome()
+
                 }
             },
             modifier = Modifier.fillMaxWidth(),
@@ -226,8 +229,8 @@ fun LoginScreenPreview() {
             color = MaterialTheme.colorScheme.background
         ) {
             SignUpScreen(
-                navigateToSignIn = {},
-                navigateToHome = {}
+                navHost = NavHostController(LocalContext.current),
+                viewModel = SignUpViewModel()
             )
         }
 
