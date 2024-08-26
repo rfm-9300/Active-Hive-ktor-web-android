@@ -73,54 +73,24 @@ val iconsMap = mapOf(
 
 @Composable
 fun LoginScreen(
-    viewModel: LoginViewModel = hiltViewModel(),
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    uiState: LoginUiState,
+    onEvent: (LoginUiEvent) -> Unit
 ) {
-    val uiState = viewModel.uiState.collectAsState()
+
+    val context = LocalContext.current
 
     val (username, setUsername) = rememberSaveable { mutableStateOf("") }
     val (password, setPassword) = rememberSaveable { mutableStateOf("") }
     val (checked, onCheckedChanged) = rememberSaveable { mutableStateOf(false) }
 
-    val context = LocalContext.current
-    LaunchedEffect(viewModel, context) {
-        viewModel.authResults.collect { result ->
-            when(result) {
-                is AuthResult.Authorized -> {
-                    Toast.makeText(context, "Authorized", Toast.LENGTH_SHORT).show()
-                    navHostController.navigate(
-                        HomeScreenNav(
-                            name = "test",
-                            email = "working",
-                        )
-                    )
-                }
-                is AuthResult.Unauthorized -> {
-                    Toast.makeText(context, "Unauthorized", Toast.LENGTH_SHORT).show()
-                }
-                is AuthResult.UnknownError -> {
-                    Toast.makeText(context, "Unknown Error", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-        viewModel.uiState.collect { state ->
-            when {
-                state.isLoading -> {
-                    Toast.makeText(context, "Loading", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
+    if (uiState.isAuthorized) {
+        navHostController.navigate(HomeScreenNav(
+            name = "test",
+            email = "working",
+        ))
     }
 
-    fun doLogin(){
-        val areFieldsValid = viewModel.validateFields(username = username, password= password)
-        if (!areFieldsValid) return
-
-        // event change login and password
-        viewModel.onEvent(LoginUiEvent.SignInUsernameChanged(username))
-        viewModel.onEvent(LoginUiEvent.SignInPasswordChanged(password))
-        viewModel.onEvent(LoginUiEvent.Login)
-    }
 
     Column (
         modifier = Modifier
@@ -172,7 +142,7 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(itemSpacing))
 
         Button(
-            onClick = { doLogin() },
+            onClick = { onEvent(LoginUiEvent.LoginButtonClicked(username, password)) },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.primary,
@@ -247,7 +217,9 @@ fun LoginScreenPreview() {
             color = MaterialTheme.colorScheme.background
         ) {
             LoginScreen (
-                navHostController = NavHostController(LocalContext.current)
+                navHostController = NavHostController(LocalContext.current),
+                uiState = LoginUiState(),
+                onEvent = {}
             )
         }
 
