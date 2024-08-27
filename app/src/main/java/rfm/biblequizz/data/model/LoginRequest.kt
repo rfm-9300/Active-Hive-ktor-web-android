@@ -1,6 +1,6 @@
 package rfm.biblequizz.data.model
 
-data class AuthRequest(
+data class LoginRequest(
     val username: String,
     val password: String
 )

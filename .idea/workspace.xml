@@ -16,9 +16,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e4519137-0073-4f24-a2e7-1050ec904c00" name="Changes" comment="Development()">
-      <change beforePath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/deploymentTargetSelector.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="e4519137-0073-4f24-a2e7-1050ec904c00" name="Changes" comment="Development()&#10;- refactoring login viewmodel and screen to better adapt best practices and architecture">
       <change beforePath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/ui/login/LoginScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/ui/login/LoginScreen.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -29,7 +27,7 @@
   <component name="ClangdSettings">
     <option name="formatViaClangd" value="false" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=PhysicalDevice, isTemplate=false, identifier=serial=R8YW40Q1PED)]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[DeviceId(pluginId=LocalEmulator, isTemplate=false, identifier=path=/Users/rodrigomartins/.android/avd/Pixel_3a_API_34_extension_level_7_arm64-v8a.avd)]" />
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
       <ProjectState />
@@ -42,6 +40,9 @@
           <activation />
         </task>
         <task path="$PROJECT_DIR$/app">
+          <activation />
+        </task>
+        <task path="$PROJECT_DIR$">
           <activation />
         </task>
         <projects_view>
@@ -170,7 +171,7 @@
       <recent name="rfm.biblequizz.domain.model" />
     </key>
   </component>
-  <component name="RunManager" selected="Android App.MainActivity">
+  <component name="RunManager" selected="Android App.app">
     <configuration name="MainActivity" type="AndroidRunConfigurationType" factoryName="Android App" temporary="true">
       <module name="biblequizz.app.main" />
       <option name="DEPLOY" value="true" />
@@ -568,7 +569,15 @@
       <option name="project" value="LOCAL" />
       <updated>1724480935458</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Development()&#10;- refactoring login viewmodel and screen to better adapt best practices and architecture">
+      <option name="closed" value="true" />
+      <created>1724698684503</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1724698684503</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -580,6 +589,7 @@
     <MESSAGE value="retrofit, okhttp, dagger hilt, room and login finished working fine with the remote api" />
     <MESSAGE value="Development(UnitTests)&#10;- started unit tests, LoginViewModel" />
     <MESSAGE value="Development()" />
-    <option name="LAST_COMMIT_MESSAGE" value="Development()" />
+    <MESSAGE value="Development()&#10;- refactoring login viewmodel and screen to better adapt best practices and architecture" />
+    <option name="LAST_COMMIT_MESSAGE" value="Development()&#10;- refactoring login viewmodel and screen to better adapt best practices and architecture" />
   </component>
 </project>

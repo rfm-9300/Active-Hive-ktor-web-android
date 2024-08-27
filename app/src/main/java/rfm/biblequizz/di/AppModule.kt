@@ -6,14 +6,17 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 import rfm.biblequizz.data.local.Roomdb
 import rfm.biblequizz.data.remote.LoginApi
 import rfm.biblequizz.data.remote.LoginClient
+import rfm.biblequizz.data.remote.QuizzApi
+import rfm.biblequizz.data.remote.QuizzClient
+import rfm.biblequizz.data.remote.interceptor.MockRequestInterceptor
 import rfm.biblequizz.data.repository.LoginRepositoryImpl
+import rfm.biblequizz.data.repository.QuestionRepositoryImpl
 import rfm.biblequizz.domain.repository.LoginRepository
-import rfm.biblequizz.domain.usecase.LoginUseCase
+import rfm.biblequizz.domain.repository.QuestionRepository
+
 import javax.inject.Singleton
 
 
@@ -35,13 +38,33 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideLoginUseCase(loginApi: LoginApi, loginRepository: LoginRepository): LoginUseCase {
-        return LoginUseCase(loginRepository = loginRepository)
+    fun provideLoginRepository(loginApi: LoginApi, db: Roomdb): LoginRepository {
+        return LoginRepositoryImpl(api = loginApi, db = db)
     }
 
     @Provides
     @Singleton
-    fun provideLoginRepository(loginApi: LoginApi, db: Roomdb): LoginRepository {
-        return LoginRepositoryImpl(api = loginApi, db = db)
+    fun provideContext(@ApplicationContext appContext: Context): Context {
+        return appContext
     }
+
+    @Provides
+    @Singleton
+    fun provideQuizApi(mockRequestInterceptor: MockRequestInterceptor): QuizzApi {
+        return QuizzClient.build(mockRequestInterceptor)
+    }
+
+    @Provides
+    @Singleton
+    fun provideMockRequestInterceptor(@ApplicationContext appContext: Context): MockRequestInterceptor {
+        return MockRequestInterceptor(appContext)
+    }
+
+    @Provides
+    @Singleton
+    fun provideQuestion(quizApi: QuizzApi, db: Roomdb): QuestionRepository {
+        return QuestionRepositoryImpl(db = db, quizzApi = quizApi)
+    }
+
+
 }

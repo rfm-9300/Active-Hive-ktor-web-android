@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
 import rfm.biblequizz.ui.home.HomeScreen
+import rfm.biblequizz.ui.home.HomeViewModel
 import rfm.biblequizz.ui.login.LoginScreen
 import rfm.biblequizz.ui.login.LoginViewModel
 import rfm.biblequizz.ui.signup.SignUpScreen
@@ -31,12 +32,15 @@ fun Navigation(navHostController: NavHostController) {
                 )
         }
         composable<HomeScreenNav> {
+            val homeViewModel = hiltViewModel<HomeViewModel>()
+
             val args = it.toRoute<HomeScreenNav>()
             args.email?.let { it1 ->
                 args.name?.let { it2 ->
                     HomeScreen(
                         name = it2,
-                        email = it1
+                        email = it1,
+                        getQuestion = homeViewModel::getQuestions
                     )
                 }
             }

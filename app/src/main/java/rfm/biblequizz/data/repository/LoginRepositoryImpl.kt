@@ -1,42 +1,44 @@
 package rfm.biblequizz.data.repository
 
-import androidx.compose.material3.TimeInput
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import rfm.biblequizz.data.local.Roomdb
 import rfm.biblequizz.data.local.entity.UserEntity
 import rfm.biblequizz.data.log.Timber
-import rfm.biblequizz.data.model.AuthRequest
-import rfm.biblequizz.data.model.AuthResult
+import rfm.biblequizz.data.model.LoginRequest
+import rfm.biblequizz.data.model.LoginResult
 import rfm.biblequizz.data.remote.LoginApi
+import rfm.biblequizz.domain.model.Result
 import rfm.biblequizz.domain.repository.LoginRepository
 
 class LoginRepositoryImpl(
     private val db : Roomdb,
     private val api: LoginApi
 ): LoginRepository {
-    override suspend fun signUp(username: String, password: String): AuthResult<Unit> {
-        return try {
+    override suspend fun signUp(username: String, password: String): Result<LoginResult<Unit>> = withContext(Dispatchers.IO) {
+        return@withContext try {
             api.signUp(
-                request = AuthRequest(
+                request = LoginRequest(
                     username = username,
                     password = password)
             )
             login(username, password)
         } catch (e: HttpException) {
             if(e.code() == 401) {
-                AuthResult.Unauthorized()
+                Result.Error(LoginResult.Unauthorized())
             } else {
-                AuthResult.UnknownError()
+                Result.Error(LoginResult.UnknownError())
             }
         } catch (e: Exception) {
-            AuthResult.UnknownError()
+            Result.Error(LoginResult.UnknownError())
         }
     }
 
-    override suspend fun login(username: String, password: String): AuthResult<Unit> {
-        return try {
+    override suspend fun login(username: String, password: String): Result<LoginResult<Unit>> = withContext(Dispatchers.IO) {
+        return@withContext try {
             val response = api.login(
-                request = AuthRequest(
+                request = LoginRequest(
                     username = username,
                     password = password
                 )
@@ -46,37 +48,39 @@ class LoginRepositoryImpl(
                 username = username,
                 token = response.token
             )
+            val oldUser = db.userDao.get()
+            db.userDao.delete(oldUser)
             db.userDao.save(newUser)
-            AuthResult.Authorized()
+            Result.Success(LoginResult.Authorized())
         } catch(e: HttpException) {
             if(e.code() == 401) {
                 Timber.i("Login error: Unauthorized")
-                AuthResult.Unauthorized()
+                Result.Error(LoginResult.Unauthorized())
             } else {
                 Timber.i("Login error: Unknown")
-                AuthResult.UnknownError()
+                Result.Error(LoginResult.UnknownError())
             }
         } catch (e: Exception) {
             Timber.i("Login error: $e")
-            AuthResult.UnknownError()
+            Result.Error(LoginResult.UnknownError())
         }
     }
 
-    override suspend fun authenticate(): AuthResult<Unit> {
-        return try {
+    override suspend fun authenticate(): Result<LoginResult<Unit>> = withContext(Dispatchers.IO) {
+        return@withContext try {
             val user = db.userDao.get()
 
             api.authenticate("Bearer ${user.token}")
-            AuthResult.Authorized()
+            Result.Success(LoginResult.Authorized())
 
         } catch(e: HttpException) {
             if(e.code() == 401) {
-                AuthResult.Unauthorized()
+                Result.Error(LoginResult.Unauthorized())
             } else {
-                AuthResult.UnknownError()
+                Result.Error(LoginResult.UnknownError())
             }
         } catch (e: Exception) {
-            AuthResult.UnknownError()
+            Result.Error(LoginResult.UnknownError())
         }
     }
 }

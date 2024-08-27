@@ -3,6 +3,7 @@ package rfm.biblequizz.ui.login
 import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,15 +20,20 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,13 +44,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import rfm.biblequizz.R
-import rfm.biblequizz.data.model.AuthResult
 import rfm.biblequizz.ui.HomeScreenNav
+import rfm.biblequizz.ui.components.AppSnackbarHost
 import rfm.biblequizz.ui.components.HeaderText
 import rfm.biblequizz.ui.components.LoginTextField
 import rfm.biblequizz.ui.theme.BiblequizzTheme
@@ -75,7 +78,8 @@ val iconsMap = mapOf(
 fun LoginScreen(
     navHostController: NavHostController,
     uiState: LoginUiState,
-    onEvent: (LoginUiEvent) -> Unit
+    onEvent: (LoginUiEvent) -> Unit,
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
 ) {
 
     val context = LocalContext.current
@@ -84,14 +88,78 @@ fun LoginScreen(
     val (password, setPassword) = rememberSaveable { mutableStateOf("") }
     val (checked, onCheckedChanged) = rememberSaveable { mutableStateOf(false) }
 
-    if (uiState.isAuthorized) {
-        navHostController.navigate(HomeScreenNav(
-            name = "test",
-            email = "working",
-        ))
+
+
+    LaunchedEffect(uiState.isAuthorized) {
+        if (uiState.isAuthorized) {
+            navHostController.navigate(
+                HomeScreenNav(name = "test", email = "working")
+            ) {
+                // Clear back stack to avoid navigation issues
+                popUpTo("loginScreen") { inclusive = true }
+            }
+        }
     }
 
+    if (uiState.isLoading) {
+        FullScreenLoading()
+    } else {
+        Scaffold(
+            snackbarHost = { AppSnackbarHost(hostState = snackbarHostState) }
+        ) {
+            LoginContent(
+                username = username,
+                setUsername = setUsername,
+                password = password,
+                setPassword = setPassword,
+                checked = checked,
+                onCheckedChanged = onCheckedChanged,
+                onEvent = onEvent
+            )
+        }
 
+    }
+
+    // Process the error messages
+    if (uiState.errorMessages.isNotEmpty()) {
+        // function to dismiss the error
+        val onErrorDismiss = { id: Long -> onEvent(LoginUiEvent.ErrorDismissed(id)) }
+
+        // If onErrorDismiss change while the LaunchedEffect is running,
+        // don't restart the effect and use the latest lambda values.
+        val onErrorDismissState by rememberUpdatedState(newValue = onErrorDismiss)
+
+        // Remember the errorMessage to show
+        val errorMessage = remember(uiState) { uiState.errorMessages[0] }
+
+        // Get the text from the string resource
+        val errorMessageText = stringResource(id = errorMessage.messageId)
+        val retryMessageText = stringResource(id = R.string.retry)
+
+        // Effect to show the dialog
+        LaunchedEffect(key1 = errorMessage, key2 = errorMessageText, key3 = snackbarHostState) {
+            // toast(errorMessageText)
+            Toast.makeText(context, errorMessageText, Toast.LENGTH_SHORT).show()
+
+            snackbarHostState.showSnackbar(
+                message = errorMessageText,
+                actionLabel = retryMessageText
+            )
+
+            // Remove the error message from the state
+            onErrorDismissState(errorMessage.id)
+        }
+
+    }
+
+}
+
+
+
+@Composable
+fun LoginContent(username: String, setUsername: (String) -> Unit, password: String, setPassword: (String) -> Unit, checked: Boolean, onCheckedChanged: (Boolean) -> Unit, onEvent: (LoginUiEvent) -> Unit) {
+    setUsername("aaa")
+    setPassword("aaaaaaaa")
     Column (
         modifier = Modifier
             .fillMaxSize()
@@ -152,9 +220,7 @@ fun LoginScreen(
         }
         Spacer(modifier = Modifier.height(itemSpacing))
         AlternativeLogin(
-            onIconClick = { key ->
-                Toast.makeText(context, "$key Login", Toast.LENGTH_SHORT).show()
-            },
+            onIconClick = { /*TODO*/ },
             onSignUpClick = { /*TODO*/ },
             modifier = Modifier
                 .fillMaxSize()
@@ -163,6 +229,19 @@ fun LoginScreen(
     }
 }
 
+/**
+ * Full screen circular progress indicator
+ */
+@Composable
+private fun FullScreenLoading() {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .wrapContentSize(Alignment.Center)
+    ) {
+        CircularProgressIndicator()
+    }
+}
 
 
 @Composable
