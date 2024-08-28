@@ -1,10 +1,14 @@
 package rfm.biblequizz.domain.model
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Question(
-    val id: Int,
+    val uuid: String,
     val question: String,
-    val correctAnswer: String,
-    val wrongAnswers: List<String>
+    @SerialName(value = "correct_answer") val correctAnswer: String,
+    @SerialName(value = "wrong_answers") val wrongAnswers: List<String>
 ) {
 
 }

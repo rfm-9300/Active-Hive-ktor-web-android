@@ -13,15 +13,17 @@ import rfm.biblequizz.ui.home.HomeScreen
 import rfm.biblequizz.ui.home.HomeViewModel
 import rfm.biblequizz.ui.login.LoginScreen
 import rfm.biblequizz.ui.login.LoginViewModel
+import rfm.biblequizz.ui.quizz.QuizzScreen
+import rfm.biblequizz.ui.quizz.QuizzViewModel
 import rfm.biblequizz.ui.signup.SignUpScreen
 
 @Composable
 fun Navigation(navHostController: NavHostController) {
     NavHost(
         navController = navHostController,
-        startDestination = LoginScreen
+        startDestination = LoginScreenNav
     ) {
-        composable<LoginScreen> {
+        composable<LoginScreenNav> {
             val loginViewModel = hiltViewModel<LoginViewModel>()
             val uiState by loginViewModel.uiState.collectAsStateWithLifecycle()
 
@@ -40,7 +42,7 @@ fun Navigation(navHostController: NavHostController) {
                     HomeScreen(
                         name = it2,
                         email = it1,
-                        getQuestion = homeViewModel::getQuestions
+                        navigateToQuizz = { navHostController.navigate(QuizzScreenNav) }
                     )
                 }
             }
@@ -48,12 +50,21 @@ fun Navigation(navHostController: NavHostController) {
         composable<SignUpScreenNav> {
             SignUpScreen(navHost = navHostController)
         }
+        composable<QuizzScreenNav> {
+            val quizzViewModel = hiltViewModel<QuizzViewModel>()
+            val uiState by quizzViewModel.uiState.collectAsStateWithLifecycle()
+
+            QuizzScreen(
+                uiState = uiState,
+                onEvent = quizzViewModel::onEvent,
+            )
+        }
 
     }
 }
 
 @Serializable
-object LoginScreen
+object LoginScreenNav
 @Serializable
 data class HomeScreenNav(
     val name: String? = "test",
@@ -62,3 +73,5 @@ data class HomeScreenNav(
 )
 @Serializable
 object SignUpScreenNav
+@Serializable
+object QuizzScreenNav

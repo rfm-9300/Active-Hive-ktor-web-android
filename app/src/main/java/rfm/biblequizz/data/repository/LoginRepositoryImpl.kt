@@ -49,7 +49,9 @@ class LoginRepositoryImpl(
                 token = response.token
             )
             val oldUser = db.userDao.get()
-            db.userDao.delete(oldUser)
+            oldUser?.let {
+                db.userDao.delete(oldUser)
+            }
             db.userDao.save(newUser)
             Result.Success(LoginResult.Authorized())
         } catch(e: HttpException) {
@@ -68,8 +70,7 @@ class LoginRepositoryImpl(
 
     override suspend fun authenticate(): Result<LoginResult<Unit>> = withContext(Dispatchers.IO) {
         return@withContext try {
-            val user = db.userDao.get()
-
+            val user = db.userDao.get() ?: return@withContext Result.Error(LoginResult.Unauthorized())
             api.authenticate("Bearer ${user.token}")
             Result.Success(LoginResult.Authorized())
 

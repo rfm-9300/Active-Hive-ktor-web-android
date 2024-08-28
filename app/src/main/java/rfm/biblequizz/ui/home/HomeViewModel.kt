@@ -13,15 +13,14 @@ class HomeViewModel @Inject constructor(
     private val questionRepository: QuestionRepository
 ): ViewModel() {
 
-   // init
     init {
         getQuestions()
     }
 
-    fun getQuestions() {
+    private fun getQuestions() {
         viewModelScope.launch {
             Timber.i("Fetching questions from HomeViewModel")
-            questionRepository.getQuestions()
+            questionRepository.getQuestionsFromRemote()
         }
 
     }

@@ -42,6 +42,7 @@ object AppModule {
         return LoginRepositoryImpl(api = loginApi, db = db)
     }
 
+
     @Provides
     @Singleton
     fun provideContext(@ApplicationContext appContext: Context): Context {

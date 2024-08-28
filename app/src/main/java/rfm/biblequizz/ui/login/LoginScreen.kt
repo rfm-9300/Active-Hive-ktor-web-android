@@ -94,10 +94,7 @@ fun LoginScreen(
         if (uiState.isAuthorized) {
             navHostController.navigate(
                 HomeScreenNav(name = "test", email = "working")
-            ) {
-                // Clear back stack to avoid navigation issues
-                popUpTo("loginScreen") { inclusive = true }
-            }
+            )
         }
     }
 
@@ -106,8 +103,9 @@ fun LoginScreen(
     } else {
         Scaffold(
             snackbarHost = { AppSnackbarHost(hostState = snackbarHostState) }
-        ) {
+        ) { paddingValues ->
             LoginContent(
+                modifier = Modifier.padding(paddingValues),
                 username = username,
                 setUsername = setUsername,
                 password = password,
@@ -157,11 +155,23 @@ fun LoginScreen(
 
 
 @Composable
-fun LoginContent(username: String, setUsername: (String) -> Unit, password: String, setPassword: (String) -> Unit, checked: Boolean, onCheckedChanged: (Boolean) -> Unit, onEvent: (LoginUiEvent) -> Unit) {
+fun LoginContent(
+    modifier: Modifier,
+    username: String,
+    setUsername: (String) -> Unit,
+    password: String,
+    setPassword: (String) -> Unit,
+    checked: Boolean,
+    onCheckedChanged: (Boolean) -> Unit,
+    onEvent: (LoginUiEvent) -> Unit
+) {
+    // if debug mode is enabled, fill the fields with some default values
     setUsername("aaa")
     setPassword("aaaaaaaa")
+
+
     Column (
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(defaultPadding),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -233,7 +243,7 @@ fun LoginContent(username: String, setUsername: (String) -> Unit, password: Stri
  * Full screen circular progress indicator
  */
 @Composable
-private fun FullScreenLoading() {
+fun FullScreenLoading() {
     Box(
         modifier = Modifier
             .fillMaxSize()

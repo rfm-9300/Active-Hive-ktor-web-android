@@ -5,7 +5,16 @@ import rfm.biblequizz.domain.model.Question
 
 fun Question.toEntity(): QuestionEntity {
     return QuestionEntity(
-        id = id,
+        uuid = uuid,
+        question = question,
+        correctAnswer = correctAnswer,
+        wrongAnswers = wrongAnswers
+    )
+}
+
+fun QuestionEntity.toDomain(): Question {
+    return Question(
+        uuid = uuid,
         question = question,
         correctAnswer = correctAnswer,
         wrongAnswers = wrongAnswers

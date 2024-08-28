@@ -8,10 +8,10 @@ import rfm.biblequizz.data.local.entity.QuestionEntity
 interface QuestionDao: RoomDao<QuestionEntity> {
 
     @Query("SELECT * FROM question")
-    fun get(): QuestionEntity
+    fun getAll(): List<QuestionEntity>
 
-    @Query("SELECT * FROM question WHERE id = :id")
-    fun getById(id: Int): QuestionEntity
+    @Query("SELECT * FROM question WHERE uuid = :uuid")
+    fun getById(uuid: String): QuestionEntity
 
     @Query("SELECT * FROM question WHERE level = :level")
     fun getByLevel(level: Int): QuestionEntity

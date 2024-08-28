@@ -64,7 +64,6 @@ dependencies {
 
     implementation(libs.retrofit)
     implementation(libs.converter.moshi)
-    implementation(libs.converter.scalars)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
@@ -74,7 +73,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
 
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
