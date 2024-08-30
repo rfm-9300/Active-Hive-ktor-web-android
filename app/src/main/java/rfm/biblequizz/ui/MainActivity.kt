@@ -23,12 +23,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             BiblequizzTheme (darkTheme = false,
                 dynamicColor = false) {
-                val navController = rememberNavController()
                 Surface (
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    Navigation(navHostController = navController)
+                    Navigation()
                 }
 
             }

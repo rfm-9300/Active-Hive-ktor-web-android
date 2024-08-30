@@ -16,24 +16,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e4519137-0073-4f24-a2e7-1050ec904c00" name="Changes" comment="Development()&#10;refactor login viewmodel and screen,&#10;started questions">
-      <change afterPath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/ui/quizz/QuizzScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/build.gradle.kts" beforeDir="false" afterPath="$PROJECT_DIR$/app/build.gradle.kts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/data/local/dao/QuestionDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/data/local/dao/QuestionDao.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/data/local/dao/UserDao.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/data/local/dao/UserDao.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/data/local/dataMappers.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/data/local/dataMappers.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/data/local/entity/QuestionEntity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/data/local/entity/QuestionEntity.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/data/remote/QuizzClient.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/data/remote/QuizzClient.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/data/repository/LoginRepositoryImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/data/repository/LoginRepositoryImpl.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/data/repository/QuestionRepositoryImpl.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/data/repository/QuestionRepositoryImpl.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/domain/model/Question.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/domain/model/Question.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/ui/Navigation.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/ui/Navigation.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/ui/home/HomeScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/ui/home/HomeScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/ui/home/HomeViewModel.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/ui/home/HomeViewModel.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/ui/login/LoginScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/ui/login/LoginScreen.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/libs.versions.toml" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/libs.versions.toml" afterDir="false" />
-    </list>
+    <list default="true" id="e4519137-0073-4f24-a2e7-1050ec904c00" name="Changes" comment="Development()&#10;started quizz" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -101,8 +84,8 @@
         <option value="JUnit4 Test Class" />
         <option value="Kotlin Interface" />
         <option value="Kotlin Object" />
-        <option value="Kotlin Class" />
         <option value="Kotlin File" />
+        <option value="Kotlin Class" />
       </list>
     </option>
   </component>
@@ -605,7 +588,15 @@
       <option name="project" value="LOCAL" />
       <updated>1724788376394</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Development()&#10;started quizz">
+      <option name="closed" value="true" />
+      <created>1724873337233</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1724873337233</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -619,6 +610,7 @@
     <MESSAGE value="Development()" />
     <MESSAGE value="Development()&#10;- refactoring login viewmodel and screen to better adapt best practices and architecture" />
     <MESSAGE value="Development()&#10;refactor login viewmodel and screen,&#10;started questions" />
-    <option name="LAST_COMMIT_MESSAGE" value="Development()&#10;refactor login viewmodel and screen,&#10;started questions" />
+    <MESSAGE value="Development()&#10;started quizz" />
+    <option name="LAST_COMMIT_MESSAGE" value="Development()&#10;started quizz" />
   </component>
 </project>

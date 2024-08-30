@@ -21,24 +21,53 @@ data class QuizzUiEvent(
 
 data class QuizzUiState (
     val isLoading: Boolean = false,
-    val questions: List<Question> = emptyList(),
-    val isFinished: Boolean = false
+    val isFinished: Boolean = false,
+    val currentQuestionIndex: Int = 0,
+    val selectedAnswer: String? = null,
+    val showCorrectAnswer: Boolean = false,
+    val questionTitle : String = "",
+    val correctAnswer: String = "",
+    val answers: List<String> = emptyList(),
+    val totalQuestions: Int = 0
 )
 
 private data class QuizzViewModelState(
     val isLoading : Boolean = true,
+    val isFinished : Boolean = false,
+    val currentQuestionIndex: Int = 0,
     val questions: List<Question> = emptyList(),
-    val isFinished : Boolean = false
+    val selectedAnswer: String? = null,
+    val showCorrectAnswer: Boolean = false
 ){
     /**
      * Converts this [QuizzViewModelState] to a [QuizzUiState] for use in the UI layer.
      */
     fun toUiState(): QuizzUiState {
-        return QuizzUiState(
-            isLoading = isLoading,
-            questions = questions,
-            isFinished = isFinished
-        )
+        // in case there are no questions, because we are still loading or there was an error
+        return if (questions.isEmpty()) {
+            QuizzUiState(
+                isLoading = isLoading,
+                isFinished = isFinished,
+                currentQuestionIndex = currentQuestionIndex,
+                selectedAnswer = selectedAnswer,
+                showCorrectAnswer = showCorrectAnswer,
+                questionTitle = "",
+                correctAnswer = "",
+                answers = emptyList()
+            )
+        } else {
+            QuizzUiState(
+                isLoading = isLoading,
+                questionTitle = questions[currentQuestionIndex].title,
+                isFinished = isFinished,
+                currentQuestionIndex = currentQuestionIndex,
+                selectedAnswer = selectedAnswer,
+                showCorrectAnswer = showCorrectAnswer,
+                correctAnswer = questions[currentQuestionIndex].correctAnswer,
+                answers = questions[currentQuestionIndex].wrongAnswers + questions[currentQuestionIndex].correctAnswer,
+                totalQuestions = questions.size
+            )
+        }
     }
 }
 
@@ -88,5 +117,13 @@ class QuizzViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun onNextQuestion() {
+        if (viewModelState.value.currentQuestionIndex == viewModelState.value.questions.size - 1) {
+            viewModelState.update { it.copy(isFinished = true) }
+            return
+        }
+        viewModelState.update { it.copy(currentQuestionIndex = it.currentQuestionIndex + 1) }
     }
 }

@@ -4,23 +4,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
 import rfm.biblequizz.ui.home.HomeScreen
 import rfm.biblequizz.ui.home.HomeViewModel
 import rfm.biblequizz.ui.login.LoginScreen
 import rfm.biblequizz.ui.login.LoginViewModel
-import rfm.biblequizz.ui.quizz.QuizzScreen
-import rfm.biblequizz.ui.quizz.QuizzViewModel
+import rfm.biblequizz.ui.quizz.quizzGraph
 import rfm.biblequizz.ui.signup.SignUpScreen
 
 @Composable
-fun Navigation(navHostController: NavHostController) {
+fun Navigation() {
+    val navController = rememberNavController()
     NavHost(
-        navController = navHostController,
+        navController = navController,
         startDestination = LoginScreenNav
     ) {
         composable<LoginScreenNav> {
@@ -28,7 +28,7 @@ fun Navigation(navHostController: NavHostController) {
             val uiState by loginViewModel.uiState.collectAsStateWithLifecycle()
 
             LoginScreen(
-                navHostController = navHostController,
+                navHostController = navController,
                 uiState = uiState,
                 onEvent = loginViewModel::onEvent
                 )
@@ -42,23 +42,15 @@ fun Navigation(navHostController: NavHostController) {
                     HomeScreen(
                         name = it2,
                         email = it1,
-                        navigateToQuizz = { navHostController.navigate(QuizzScreenNav) }
+                        navigateToQuizz = { navController.navigate(QuizzGraph) }
                     )
                 }
             }
         }
         composable<SignUpScreenNav> {
-            SignUpScreen(navHost = navHostController)
+            SignUpScreen(navHost = navController)
         }
-        composable<QuizzScreenNav> {
-            val quizzViewModel = hiltViewModel<QuizzViewModel>()
-            val uiState by quizzViewModel.uiState.collectAsStateWithLifecycle()
-
-            QuizzScreen(
-                uiState = uiState,
-                onEvent = quizzViewModel::onEvent,
-            )
-        }
+        quizzGraph(navController)
 
     }
 }
@@ -74,4 +66,13 @@ data class HomeScreenNav(
 @Serializable
 object SignUpScreenNav
 @Serializable
-object QuizzScreenNav
+object QuizzGraph
+
+sealed class QuizzNav {
+    @Serializable
+    object QuizzHome : QuizzNav()
+    @Serializable
+    object QuizzQuestion : QuizzNav()
+    @Serializable
+    object QuizzResult : QuizzNav()
+}
