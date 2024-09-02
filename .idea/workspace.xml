@@ -16,7 +16,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e4519137-0073-4f24-a2e7-1050ec904c00" name="Changes" comment="Development()&#10;started quizz" />
+    <list default="true" id="e4519137-0073-4f24-a2e7-1050ec904c00" name="Changes" comment="Development()&#10;improved quizz, added nested navigation" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -84,8 +84,8 @@
         <option value="JUnit4 Test Class" />
         <option value="Kotlin Interface" />
         <option value="Kotlin Object" />
-        <option value="Kotlin File" />
         <option value="Kotlin Class" />
+        <option value="Kotlin File" />
       </list>
     </option>
   </component>
@@ -596,7 +596,15 @@
       <option name="project" value="LOCAL" />
       <updated>1724873337233</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Development()&#10;improved quizz, added nested navigation">
+      <option name="closed" value="true" />
+      <created>1725050670745</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1725050670745</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -611,6 +619,7 @@
     <MESSAGE value="Development()&#10;- refactoring login viewmodel and screen to better adapt best practices and architecture" />
     <MESSAGE value="Development()&#10;refactor login viewmodel and screen,&#10;started questions" />
     <MESSAGE value="Development()&#10;started quizz" />
-    <option name="LAST_COMMIT_MESSAGE" value="Development()&#10;started quizz" />
+    <MESSAGE value="Development()&#10;improved quizz, added nested navigation" />
+    <option name="LAST_COMMIT_MESSAGE" value="Development()&#10;improved quizz, added nested navigation" />
   </component>
 </project>

@@ -15,6 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,17 +38,25 @@ val spacingTop = 40.dp
 fun QuizzQuestionScreen(
     uiState: QuizzUiState,
     onEvent: (QuizzUiEvent) -> Unit,
-    onNextQuestion: () -> Unit
+    onFinished: () -> Unit
 ) {
-
-    //var answers by remember { mutableStateOf<List<String>>(emptyList()) }
     var selectedAnswer by remember { mutableStateOf<String?>(null) }
 
+    // navigate to result screen when the quizz is finished
+    LaunchedEffect(uiState) {
+        if(uiState.isFinished){
+            Timber.i("QuizzScreen: Finished")
+            onFinished()
+        }
+    }
 
+
+    // Display loading screen
     if (uiState.isLoading){
         Timber.i("QuizzScreen: Loading")
         FullScreenLoading()
     }else {
+        // Display the quizz content
         QuizzContent(
             uiState = uiState,
             onAnswerSelected = { answer ->
@@ -55,7 +64,7 @@ fun QuizzQuestionScreen(
             },
             onNextQuestion = {
                 if (selectedAnswer != null) {
-                    onNextQuestion()
+                    onEvent(QuizzUiEvent.NextButtonClick)
                 }
             },
             selectedAnswer = selectedAnswer,
@@ -110,7 +119,7 @@ fun QuizzContent(
                 AnswerButton(
                     answerText = answer,
                     isSelected = selectedAnswer == answer,
-                    isCorrect = answer == uiState.correctAnswer && showCorrectAnswer,
+                    isCorrect = answer == uiState.currentCorrectAnswer && showCorrectAnswer,
                     onClick = { onAnswerSelected(answer) }
                 )
             }
@@ -212,11 +221,11 @@ fun QuizzScreenPreview() {
                     selectedAnswer = null,
                     showCorrectAnswer = false,
                     questionTitle = "What is the capital of France?",
-                    correctAnswer = "Paris",
+                    currentCorrectAnswer = "Paris",
                     answers = listOf("Paris", "London", "Berlin", "Madrid")
                 ),
                 onEvent = {},
-                onNextQuestion = {}
+                onFinished = {}
             )
         }
     }

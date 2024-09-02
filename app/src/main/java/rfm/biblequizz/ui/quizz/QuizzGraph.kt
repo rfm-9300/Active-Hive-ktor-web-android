@@ -1,6 +1,7 @@
 package rfm.biblequizz.ui.quizz
 
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
@@ -19,17 +20,32 @@ fun NavGraphBuilder.quizzGraph(
 
         }
         composable<QuizzNav.QuizzQuestion> {
-            val quizzViewModel = hiltViewModel<QuizzViewModel>()
+            val parentEntry = remember(it){
+                navController.getBackStackEntry(QuizzNav.QuizzQuestion)
+            }
+            val quizzViewModel = hiltViewModel<QuizzViewModel>(parentEntry)
             val uiState by quizzViewModel.uiState.collectAsStateWithLifecycle()
+            // when the quizz is finished, navigate to the result screen
+            val onFinished = { navController.navigate(QuizzNav.QuizzResult) }
 
             QuizzQuestionScreen(
                 uiState = uiState,
                 onEvent = quizzViewModel::onEvent,
-                onNextQuestion = quizzViewModel::onNextQuestion,
+                onFinished = onFinished
             )
         }
         composable<QuizzNav.QuizzResult> {
+            val parentEntry = remember(it){
+                navController.getBackStackEntry(QuizzNav.QuizzQuestion)
+            }
 
+            val quizzViewModel = hiltViewModel<QuizzViewModel>(parentEntry)
+            val uiState by quizzViewModel.uiState.collectAsStateWithLifecycle()
+
+            QuizzResultScreen(
+                uiState = uiState,
+                onEvent = quizzViewModel::onEvent
+            )
         }
     }
 }

@@ -15,9 +15,9 @@ import rfm.biblequizz.domain.model.Question
 import rfm.biblequizz.domain.repository.QuestionRepository
 import rfm.biblequizz.domain.model.Result
 
-data class QuizzUiEvent(
-    val onAnswerSelected: (String) -> Unit
-)
+sealed class QuizzUiEvent{
+    data object NextButtonClick : QuizzUiEvent()
+}
 
 data class QuizzUiState (
     val isLoading: Boolean = false,
@@ -26,9 +26,11 @@ data class QuizzUiState (
     val selectedAnswer: String? = null,
     val showCorrectAnswer: Boolean = false,
     val questionTitle : String = "",
-    val correctAnswer: String = "",
+    val currentCorrectAnswer: String = "",
     val answers: List<String> = emptyList(),
-    val totalQuestions: Int = 0
+    val totalQuestions: Int = 0,
+    val totalCorrectAnswers: Int = 0,
+    val totalWrongAnswers: Int = 0
 )
 
 private data class QuizzViewModelState(
@@ -37,7 +39,9 @@ private data class QuizzViewModelState(
     val currentQuestionIndex: Int = 0,
     val questions: List<Question> = emptyList(),
     val selectedAnswer: String? = null,
-    val showCorrectAnswer: Boolean = false
+    val showCorrectAnswer: Boolean = false,
+    val totalCorrectAnswers: Int = 0,
+    val totalWrongAnswers: Int = 0
 ){
     /**
      * Converts this [QuizzViewModelState] to a [QuizzUiState] for use in the UI layer.
@@ -52,7 +56,7 @@ private data class QuizzViewModelState(
                 selectedAnswer = selectedAnswer,
                 showCorrectAnswer = showCorrectAnswer,
                 questionTitle = "",
-                correctAnswer = "",
+                currentCorrectAnswer = "",
                 answers = emptyList()
             )
         } else {
@@ -63,9 +67,11 @@ private data class QuizzViewModelState(
                 currentQuestionIndex = currentQuestionIndex,
                 selectedAnswer = selectedAnswer,
                 showCorrectAnswer = showCorrectAnswer,
-                correctAnswer = questions[currentQuestionIndex].correctAnswer,
+                currentCorrectAnswer = questions[currentQuestionIndex].correctAnswer,
                 answers = questions[currentQuestionIndex].wrongAnswers + questions[currentQuestionIndex].correctAnswer,
-                totalQuestions = questions.size
+                totalQuestions = questions.size,
+                totalCorrectAnswers = totalCorrectAnswers,
+                totalWrongAnswers = totalWrongAnswers
             )
         }
     }
@@ -76,6 +82,10 @@ private data class QuizzViewModelState(
 class QuizzViewModel @Inject constructor(
     private val questionRepository: QuestionRepository
 ): ViewModel() {
+
+    init {
+        Timber.i("QuizzViewModel created")
+    }
 
     private val viewModelState = MutableStateFlow(QuizzViewModelState())
 
@@ -92,9 +102,7 @@ class QuizzViewModel @Inject constructor(
 
     fun onEvent(event: QuizzUiEvent) {
         when(event) {
-            else -> {
-                event.onAnswerSelected("answer")
-            }
+            QuizzUiEvent.NextButtonClick -> onNextQuestion()
         }
     }
 
@@ -119,11 +127,29 @@ class QuizzViewModel @Inject constructor(
         }
     }
 
-    fun onNextQuestion() {
+    private fun onNextQuestion() {
+        // check if we are at the last question
+        if (viewModelState.value.isFinished) return // Avoid any further updates if finished
         if (viewModelState.value.currentQuestionIndex == viewModelState.value.questions.size - 1) {
+            Timber.i("Quizz finished")
+            updateAnswerCount()
             viewModelState.update { it.copy(isFinished = true) }
             return
         }
+        updateAnswerCount()
         viewModelState.update { it.copy(currentQuestionIndex = it.currentQuestionIndex + 1) }
+    }
+
+    private fun updateAnswerCount() {
+        // check if the selected answer is correct
+        val currentQuestion = viewModelState.value.questions[viewModelState.value.currentQuestionIndex]
+        val isCorrect = viewModelState.value.selectedAnswer == currentQuestion.correctAnswer
+        if (isCorrect) {
+            viewModelState.update { it.copy(totalCorrectAnswers = it.totalCorrectAnswers + 1) }
+            Timber.i("Correct answer, total correct answers: ${viewModelState.value.totalCorrectAnswers}")
+        } else {
+            viewModelState.update { it.copy(totalWrongAnswers = it.totalWrongAnswers + 1) }
+            Timber.i("Wrong answer, total wrong answers: ${viewModelState.value.totalWrongAnswers}")
+        }
     }
 }
