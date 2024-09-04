@@ -2,36 +2,38 @@ package rfm.biblequizz.repositories
 
 import rfm.biblequizz.data.model.LoginResult
 import rfm.biblequizz.domain.repository.LoginRepository
+import rfm.biblequizz.domain.model.Result
 
 class FakeLoginRepository : LoginRepository {
 
-    // Define the initial states or configurations for tests
-    private var signUpResult: LoginResult<Unit> = LoginResult.Authorized()
-    private var loginResult: LoginResult<Unit> = LoginResult.Authorized()
-    private var authenticateResult: LoginResult<Unit> = LoginResult.Authorized()
+    private var shouldReturnError = false
 
-   //Set the results of the tests
-    fun setSignUpResult(result: LoginResult<Unit>) {
-        signUpResult = result
+    fun setReturnError(value: Boolean) {
+        shouldReturnError = value
     }
 
-    fun setLoginResult(result: LoginResult<Unit>) {
-        loginResult = result
+    override suspend fun signUp(username: String, password: String): Result<LoginResult<Unit>> {
+        return if (shouldReturnError) {
+            Result.Error(LoginResult.Unauthorized())
+        } else {
+            Result.Success(LoginResult.Authorized())
+        }
     }
 
-    fun setAuthenticateResult(result: LoginResult<Unit>) {
-        authenticateResult = result
+    override suspend fun login(username: String, password: String): Result<LoginResult<Unit>> {
+        return if (shouldReturnError) {
+            Result.Error(LoginResult.Unauthorized())
+        } else {
+            Result.Success(LoginResult.Authorized())
+        }
     }
 
-    override suspend fun signUp(username: String, password: String): LoginResult<Unit> {
-        return signUpResult
-    }
-
-    override suspend fun login(username: String, password: String): LoginResult<Unit> {
-        return loginResult
-    }
-
-    override suspend fun authenticate(): LoginResult<Unit> {
-        return authenticateResult
+    override suspend fun authenticate(): Result<LoginResult<Unit>> {
+        return if (shouldReturnError) {
+            Result.Error(LoginResult.Unauthorized())
+        } else {
+            Result.Success(LoginResult.Authorized())
+        }
     }
 }
+
