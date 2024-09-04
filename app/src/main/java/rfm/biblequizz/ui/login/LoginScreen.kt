@@ -1,6 +1,8 @@
 package rfm.biblequizz.ui.login
 
+import AppTheme
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
@@ -37,6 +40,8 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -50,7 +55,6 @@ import rfm.biblequizz.ui.HomeScreenNav
 import rfm.biblequizz.ui.components.AppSnackbarHost
 import rfm.biblequizz.ui.components.HeaderText
 import rfm.biblequizz.ui.components.LoginTextField
-import rfm.biblequizz.ui.theme.BiblequizzTheme
 
 val defaultPadding = 30.dp
 val itemSpacing = 8.dp
@@ -173,69 +177,80 @@ fun LoginContent(
     Column (
         modifier = modifier
             .fillMaxSize()
-            .padding(defaultPadding),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(defaultPadding)
+            .clip(RoundedCornerShape(16.dp)),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Spacer(modifier = Modifier.height(spacingTop))
-        HeaderText(text = stringResource(id = R.string.login_screen_login),
-            modifier = Modifier
-                .padding(top = 30.dp)
-                .align(Alignment.Start)
-        )
-        Spacer(modifier = Modifier.height(itemSpacing))
-        LoginTextField(
-            value = username,
-            onValueChange = setUsername,
-            labelText = stringResource(id = R.string.login_screen_username),
-            leadingIcon = Icons.Default.Person,
-            keyboardType = KeyboardType.Email
-        )
-        Spacer(modifier = Modifier.height(itemSpacing))
-        LoginTextField(
-            value = password,
-            onValueChange = setPassword,
-            labelText = stringResource(id = R.string.login_screen_password),
-            leadingIcon = Icons.Default.Lock,
-            visualTransformation = PasswordVisualTransformation(),
-            keyboardType = KeyboardType.Password,
-        )
-        Spacer(modifier = Modifier.height(itemSpacing))
-        Row (
-            horizontalArrangement = Arrangement.SpaceBetween,
+        Column (
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 20.dp)
-        ) {
-            Row (horizontalArrangement = Arrangement.Start) {
-                Checkbox(checked = checked, onCheckedChange = onCheckedChanged)
-                Text(
-                    text = stringResource(id = R.string.login_screen_remember_me),
-                    modifier = Modifier.align(Alignment.CenterVertically)
-                )
-            }
-            TextButton(onClick = { /*TODO*/ }) {
-                Text(text = stringResource(id = R.string.login_screen_forgot_password))
-            }
-        }
-        Spacer(modifier = Modifier.height(itemSpacing))
+                .background(MaterialTheme.colorScheme.primary)
+                .clip(RoundedCornerShape(16.dp))
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
 
-        Button(
-            onClick = { onEvent(LoginUiEvent.LoginButtonClicked(username, password)) },
-            modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.secondary
-            )) {
-            Text(text = stringResource(id = R.string.login_screen_login_button))
+        ) {
+            Spacer(modifier = Modifier.height(spacingTop))
+            HeaderText(text = stringResource(id = R.string.login_screen_login),
+                modifier = Modifier
+                    .padding(top = 30.dp)
+                    .align(Alignment.Start)
+            )
+            Spacer(modifier = Modifier.height(itemSpacing))
+            LoginTextField(
+                value = username,
+                onValueChange = setUsername,
+                labelText = stringResource(id = R.string.login_screen_username),
+                leadingIcon = Icons.Default.Person,
+                keyboardType = KeyboardType.Email
+            )
+            Spacer(modifier = Modifier.height(itemSpacing))
+            LoginTextField(
+                value = password,
+                onValueChange = setPassword,
+                labelText = stringResource(id = R.string.login_screen_password),
+                leadingIcon = Icons.Default.Lock,
+                visualTransformation = PasswordVisualTransformation(),
+                keyboardType = KeyboardType.Password,
+            )
+            Spacer(modifier = Modifier.height(itemSpacing))
+            Row (
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 20.dp)
+            ) {
+                Row (horizontalArrangement = Arrangement.Start) {
+                    Checkbox(checked = checked, onCheckedChange = onCheckedChanged)
+                    Text(
+                        text = stringResource(id = R.string.login_screen_remember_me),
+                        modifier = Modifier.align(Alignment.CenterVertically)
+                    )
+                }
+                TextButton(onClick = { /*TODO*/ }) {
+                    Text(text = stringResource(id = R.string.login_screen_forgot_password))
+                }
+            }
+            Spacer(modifier = Modifier.height(itemSpacing))
+
+            Button(
+                onClick = { onEvent(LoginUiEvent.LoginButtonClicked(username, password)) },
+                modifier = Modifier.fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.secondary
+                )) {
+                Text(text = stringResource(id = R.string.login_screen_login_button))
+            }
+            Spacer(modifier = Modifier.height(itemSpacing))
+            AlternativeLogin(
+                onIconClick = { /*TODO*/ },
+                onSignUpClick = { /*TODO*/ },
+                modifier = Modifier
+                    .fillMaxSize()
+                    .wrapContentSize(align = Alignment.BottomCenter)
+            )
         }
-        Spacer(modifier = Modifier.height(itemSpacing))
-        AlternativeLogin(
-            onIconClick = { /*TODO*/ },
-            onSignUpClick = { /*TODO*/ },
-            modifier = Modifier
-                .fillMaxSize()
-                .wrapContentSize(align = Alignment.BottomCenter)
-        )
     }
 }
 
@@ -300,17 +315,11 @@ fun AlternativeLogin(
 @Preview(showSystemUi = true)
 @Composable
 fun LoginScreenPreview() {
-    BiblequizzTheme  {
-        Surface (
-            modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
-        ) {
-            LoginScreen (
-                navHostController = NavHostController(LocalContext.current),
-                uiState = LoginUiState(),
-                onEvent = {}
-            )
-        }
-
+    AppTheme  {
+        LoginScreen (
+            navHostController = NavHostController(LocalContext.current),
+            uiState = LoginUiState(),
+            onEvent = {}
+        )
     }
 }

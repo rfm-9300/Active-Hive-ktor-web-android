@@ -1,6 +1,7 @@
 package rfm.biblequizz.ui.signup
 
 
+import AppTheme
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
@@ -42,12 +43,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import dagger.hilt.android.lifecycle.HiltViewModel
 import rfm.biblequizz.R
 import rfm.biblequizz.ui.components.HeaderText
 import rfm.biblequizz.ui.components.LoginTextField
-import rfm.biblequizz.ui.login.LoginViewModel
-import rfm.biblequizz.ui.theme.BiblequizzTheme
 
 val defaultPadding = 30.dp
 val itemSpacing = 8.dp
@@ -184,7 +182,7 @@ fun SignUpScreen(
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(
                 containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.secondary
+                contentColor = MaterialTheme.colorScheme.onPrimary
             ),
             enabled = !areFieldsEmpty
         ) {
@@ -223,7 +221,7 @@ fun SignUpScreen(
 @Preview(showSystemUi = true)
 @Composable
 fun LoginScreenPreview() {
-    BiblequizzTheme  {
+    AppTheme  {
         Surface (
             modifier = Modifier.fillMaxSize(),
             color = MaterialTheme.colorScheme.background

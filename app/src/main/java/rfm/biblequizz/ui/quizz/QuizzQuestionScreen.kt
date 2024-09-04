@@ -1,6 +1,7 @@
 package rfm.biblequizz.ui.quizz
 
 
+import AppTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -133,7 +134,7 @@ fun QuizzContent(
             Text(
                 text = "Next",
                 style = MaterialTheme.typography.bodyMedium,
-                color = Green20
+                color = MaterialTheme.colorScheme.onPrimary
             )
         }
     }
@@ -154,9 +155,9 @@ fun AnswerButton(
     }
 
     val textColor = when {
-        isCorrect -> Green90
-        isSelected -> PurpleGrey40
-        else -> Green20
+        isCorrect -> MaterialTheme.colorScheme.onPrimary
+        isSelected -> MaterialTheme.colorScheme.onSecondary
+        else -> MaterialTheme.colorScheme.onPrimary
     }
 
     Button(
@@ -208,7 +209,7 @@ fun QuizProgressBar(
 @Preview(showBackground = true)
 @Composable
 fun QuizzScreenPreview() {
-    BiblequizzTheme(
+    AppTheme(
         darkTheme = false,
         dynamicColor = false
     ) {

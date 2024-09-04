@@ -94,4 +94,6 @@ dependencies {
     testImplementation(libs.androidx.core.testing) // For testing LiveData or StateFlow
     testImplementation(libs.kotlinx.coroutines.test) // For testing coroutines
 
+    implementation("androidx.compose.ui:ui-text-google-fonts:1.6.8")
+
 }
