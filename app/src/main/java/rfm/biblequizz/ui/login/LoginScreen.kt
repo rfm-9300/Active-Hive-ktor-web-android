@@ -184,9 +184,8 @@ fun LoginContent(
         Column (
             modifier = Modifier
                 .fillMaxWidth()
-                .background(MaterialTheme.colorScheme.primary)
-                .clip(RoundedCornerShape(16.dp))
-                .padding(16.dp),
+                .background(MaterialTheme.colorScheme.surface)
+                .clip(RoundedCornerShape(16.dp)),
             horizontalAlignment = Alignment.CenterHorizontally,
 
         ) {
@@ -237,10 +236,15 @@ fun LoginContent(
                 onClick = { onEvent(LoginUiEvent.LoginButtonClicked(username, password)) },
                 modifier = Modifier.fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    contentColor = MaterialTheme.colorScheme.secondary
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    contentColor = MaterialTheme.colorScheme.onPrimaryContainer
                 )) {
-                Text(text = stringResource(id = R.string.login_screen_login_button))
+                Text(
+                    text = stringResource(id = R.string.login_screen_login_button),
+                    modifier = Modifier.padding(5.dp),
+                    fontSize = MaterialTheme.typography.labelLarge.fontSize,
+                    fontFamily = MaterialTheme.typography.labelLarge.fontFamily,
+                )
             }
             Spacer(modifier = Modifier.height(itemSpacing))
             AlternativeLogin(
