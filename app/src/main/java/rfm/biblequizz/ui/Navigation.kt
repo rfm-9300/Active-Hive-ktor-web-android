@@ -13,6 +13,7 @@ import rfm.biblequizz.ui.home.HomeScreen
 import rfm.biblequizz.ui.home.HomeViewModel
 import rfm.biblequizz.ui.login.LoginScreen
 import rfm.biblequizz.ui.login.LoginViewModel
+import rfm.biblequizz.ui.login.loginGraph
 import rfm.biblequizz.ui.quizz.quizzGraph
 import rfm.biblequizz.ui.signup.SignUpScreen
 
@@ -21,8 +22,9 @@ fun Navigation() {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = LoginScreenNav
+        startDestination = LoginGraph
     ) {
+        loginGraph(navController)
         composable<LoginScreenNav> {
             val loginViewModel = hiltViewModel<LoginViewModel>()
             val uiState by loginViewModel.uiState.collectAsStateWithLifecycle()
@@ -67,6 +69,8 @@ data class HomeScreenNav(
 object SignUpScreenNav
 @Serializable
 object QuizzGraph
+@Serializable
+object LoginGraph
 
 sealed class QuizzNav {
     @Serializable
