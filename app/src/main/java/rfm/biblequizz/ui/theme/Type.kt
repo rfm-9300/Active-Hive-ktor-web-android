@@ -1,15 +1,14 @@
-package rfm.biblequizz.ui.theme
+package com.example.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.googlefonts.Font
-import androidx.compose.ui.text.googlefonts.GoogleFont
 import androidx.compose.ui.unit.sp
-import rfm.biblequizz.R
 
-const val BODY_FONT_FAMILY = "Rubik"
+import androidx.compose.ui.text.googlefonts.GoogleFont
+import androidx.compose.ui.text.googlefonts.Font
+import rfm.biblequizz.R
 
 val provider = GoogleFont.Provider(
     providerAuthority = "com.google.android.gms.fonts",
@@ -19,14 +18,14 @@ val provider = GoogleFont.Provider(
 
 val bodyFontFamily = FontFamily(
     Font(
-        googleFont = GoogleFont("Rubik"),
+        googleFont = GoogleFont("Actor"),
         fontProvider = provider,
     )
 )
 
 val displayFontFamily = FontFamily(
     Font(
-        googleFont = GoogleFont("Alegreya"),
+        googleFont = GoogleFont("Libre Baskerville"),
         fontProvider = provider,
     )
 )

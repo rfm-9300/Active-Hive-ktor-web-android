@@ -71,6 +71,8 @@ object SignUpScreenNav
 object QuizzGraph
 @Serializable
 object LoginGraph
+@Serializable
+object HomeGraph
 
 sealed class QuizzNav {
     @Serializable

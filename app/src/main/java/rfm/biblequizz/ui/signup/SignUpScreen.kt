@@ -1,7 +1,7 @@
 package rfm.biblequizz.ui.signup
 
 
-import AppTheme
+
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.times
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.compose.AppTheme
 import rfm.biblequizz.R
 import rfm.biblequizz.ui.components.HeaderText
 import rfm.biblequizz.ui.components.LoginTextField

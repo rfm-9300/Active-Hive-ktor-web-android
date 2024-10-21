@@ -1,6 +1,6 @@
 package rfm.biblequizz.ui.login
 
-import AppTheme
+
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -48,6 +48,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.compose.AppTheme
 import rfm.biblequizz.R
 import rfm.biblequizz.ui.HomeScreenNav
 import rfm.biblequizz.ui.components.AppSnackbarHost

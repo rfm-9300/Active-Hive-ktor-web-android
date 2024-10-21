@@ -16,8 +16,19 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e4519137-0073-4f24-a2e7-1050ec904c00" name="Changes" comment="Development()&#10;refactoring theme">
+    <list default="true" id="e4519137-0073-4f24-a2e7-1050ec904c00" name="Changes" comment="Development()&#10;started hillsong app">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/ui/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/ui/MainActivity.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/ui/login/LandingScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/ui/login/LandingScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/ui/login/LoginScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/ui/login/LoginScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/ui/quizz/QuizzQuestionScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/ui/quizz/QuizzQuestionScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/ui/signup/SignUpScreen.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/ui/signup/SignUpScreen.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/ui/theme/Color.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/ui/theme/Color.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/ui/theme/Theme.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/ui/theme/Theme.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/ui/theme/Type.kt" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/ui/theme/Type.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/src/main/res/values/font_certs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/app/src/main/res/values/font_certs.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,9 +97,9 @@
         <option value="JUnit4 Test Class" />
         <option value="Kotlin Interface" />
         <option value="Kotlin Object" />
-        <option value="Kotlin File" />
         <option value="Kotlin Class" />
         <option value="valueResourceFile" />
+        <option value="Kotlin File" />
       </list>
     </option>
   </component>
@@ -120,47 +131,45 @@
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Android App.MainActivity.executor&quot;: &quot;Run&quot;,
-    &quot;Android App.app.executor&quot;: &quot;Run&quot;,
-    &quot;Compose Preview.LoginScreenPreview (1).executor&quot;: &quot;Run&quot;,
-    &quot;Compose Preview.LoginScreenPreview.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.LoginViewModelTest.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.LoginViewModelTest.login success updates authResults with Authorized.executor&quot;: &quot;Run&quot;,
-    &quot;PROJECT_TRUSTED_KEY&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
-    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;com.google.services.firebase.aqiPopupShown&quot;: &quot;true&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit4&quot;,
-    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4&quot;: &quot;&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_directory_selection&quot;: &quot;/Users/rodrigomartins/Desktop/Software Developer/kotlin/BibleQuizz/app/src/test/java/rfm/biblequizz/ui/login&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/rodrigomartins/Desktop/Software Developer/kotlin/BibleQuizz&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.17&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;live.edit.configurable&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Android App.MainActivity.executor": "Run",
+    "Android App.app.executor": "Run",
+    "Compose Preview.LoginScreenPreview (1).executor": "Run",
+    "Compose Preview.LoginScreenPreview.executor": "Run",
+    "Gradle.LoginViewModelTest.executor": "Run",
+    "Gradle.LoginViewModelTest.login success updates authResults with Authorized.executor": "Run",
+    "PROJECT_TRUSTED_KEY": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "com.google.services.firebase.aqiPopupShown": "true",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit4",
+    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4": "",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_directory_selection": "/Users/rodrigomartins/Desktop/Software Developer/kotlin/BibleQuizz/app/src/test/java/rfm/biblequizz/ui/login",
+    "last_opened_file_path": "/Users/rodrigomartins/Desktop/Software Developer/kotlin/BibleQuizz",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.17",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "live.edit.configurable"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;com.android.tools.idea.sqlite.queryhistory&quot;: [
-      &quot;delete from user&quot;
-    ],
-    &quot;kotlin-gradle-user-dirs&quot;: [
-      &quot;/Users/rodrigomartins/.gradle&quot;
+  "keyToStringList": {
+    "com.android.tools.idea.sqlite.queryhistory": [
+      "delete from user"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/ui/theme" />
+      <recent name="$PROJECT_DIR$/app/src/main/res/values" />
+      <recent name="$PROJECT_DIR$/app/src/main/res/drawable" />
       <recent name="$PROJECT_DIR$/app/src/main" />
       <recent name="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/ui" />
-      <recent name="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz/di" />
-      <recent name="$PROJECT_DIR$/app/src/main/java/rfm/biblequizz" />
     </key>
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="" />
@@ -191,6 +200,8 @@
       <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
       <option name="ACTIVITY_EXTRA_FLAGS" value="" />
       <option name="MODE" value="specific_activity" />
+      <option name="RESTORE_ENABLED" value="false" />
+      <option name="RESTORE_FILE" value="" />
       <option name="CLEAR_LOGCAT" value="false" />
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
       <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
@@ -257,6 +268,8 @@
       <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
       <option name="ACTIVITY_EXTRA_FLAGS" value="" />
       <option name="MODE" value="default_activity" />
+      <option name="RESTORE_ENABLED" value="false" />
+      <option name="RESTORE_FILE" value="" />
       <option name="CLEAR_LOGCAT" value="false" />
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
       <option name="TARGET_SELECTION_MODE" value="DEVICE_AND_SNAPSHOT_COMBO_BOX" />
@@ -323,6 +336,8 @@
       <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
       <option name="ACTIVITY_EXTRA_FLAGS" value="--es composable rfm.biblequizz.ui.signup.SignUpScreenKt.LoginScreenPreview" />
       <option name="MODE" value="specific_activity" />
+      <option name="RESTORE_ENABLED" value="false" />
+      <option name="RESTORE_FILE" value="" />
       <option name="CLEAR_LOGCAT" value="false" />
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
       <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
@@ -390,6 +405,8 @@
       <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
       <option name="ACTIVITY_EXTRA_FLAGS" value="--es composable rfm.biblequizz.ui.login.LoginScreenKt.LoginScreenPreview" />
       <option name="MODE" value="specific_activity" />
+      <option name="RESTORE_ENABLED" value="false" />
+      <option name="RESTORE_FILE" value="" />
       <option name="CLEAR_LOGCAT" value="false" />
       <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
       <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
@@ -639,7 +656,15 @@
       <option name="project" value="LOCAL" />
       <updated>1725874808529</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Development()&#10;started hillsong app">
+      <option name="closed" value="true" />
+      <created>1728758536278</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1728758536278</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -658,6 +683,7 @@
     <MESSAGE value="Development()&#10;result screen and shared viewmodel" />
     <MESSAGE value="Development()&#10;refactor tests after viewmodel changes" />
     <MESSAGE value="Development()&#10;refactoring theme" />
-    <option name="LAST_COMMIT_MESSAGE" value="Development()&#10;refactoring theme" />
+    <MESSAGE value="Development()&#10;started hillsong app" />
+    <option name="LAST_COMMIT_MESSAGE" value="Development()&#10;started hillsong app" />
   </component>
 </project>

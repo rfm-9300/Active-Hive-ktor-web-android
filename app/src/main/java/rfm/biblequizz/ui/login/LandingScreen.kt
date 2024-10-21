@@ -1,6 +1,6 @@
 package rfm.biblequizz.ui.login
 
-import AppTheme
+
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -32,6 +31,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.example.compose.AppTheme
 import rfm.biblequizz.R
 import rfm.biblequizz.ui.components.AppSnackbarHost
 
@@ -49,8 +49,8 @@ fun LandingScreen(
             snackbarHost = { AppSnackbarHost(hostState = snackbarHostState) }
         ) { paddingValues ->
             LandingContent(
-                modifier = Modifier.padding(paddingValues),
-            )
+                modifier = Modifier.padding(paddingValues)
+            ) { navHostController.navigate(LoginNav.LoginScreen) }
         }
 
     }
@@ -59,6 +59,7 @@ fun LandingScreen(
     @Composable
     fun LandingContent(
         modifier: Modifier = Modifier,
+        navigateToLogin: () -> Unit
     ) {
         val gradientBrush = Brush.verticalGradient(
             colors = listOf(
@@ -101,10 +102,10 @@ fun LandingScreen(
                         text = "Bem vindo à Hillsong Portugal",
                         style = MaterialTheme.typography.displayMedium.copy(
                             textAlign = TextAlign.Center,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
                         ))
                     Button(
-                        onClick = { /* Handle button click here */ },
+                        onClick = { navigateToLogin() },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color.Black, // Button background color
                             contentColor = Color.White // Text color
@@ -112,7 +113,7 @@ fun LandingScreen(
                         modifier = Modifier.padding(vertical = 40.dp, horizontal = 30.dp)
                             .fillMaxWidth()// Optional padding above the button
                     ) {
-                        Text(text = "Get Started") // Button text
+                        Text(text = "Começar") // Button text
                     }
                 }
 
