@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    namespace = "rfm.biblequizz"
+    namespace = "rfm.hillsongpt"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "rfm.biblequizz"
+        applicationId = "rfm.hillsongpt"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

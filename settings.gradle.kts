@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "biblequizz"
+rootProject.name = "hillsong-pt-android-app"
 include(":app")
  
