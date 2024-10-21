@@ -12,7 +12,7 @@ import kotlinx.serialization.Serializable
 import rfm.biblequizz.ui.LoginGraph
 
 fun NavGraphBuilder.loginGraph(
-    navController: NavHostController
+    rootNavController: NavHostController
 ){
     navigation<LoginGraph>(startDestination = LoginNav.LandingScreen) {
         composable<LoginNav.LandingScreen> {
@@ -20,7 +20,7 @@ fun NavGraphBuilder.loginGraph(
             val uiState by loginViewModel.uiState.collectAsStateWithLifecycle()
 
             LandingScreen(
-                navHostController = navController,
+                navHostController = rootNavController,
                 uiState = uiState,
                 onEvent = loginViewModel::onEvent
             )
@@ -30,7 +30,7 @@ fun NavGraphBuilder.loginGraph(
             val uiState by loginViewModel.uiState.collectAsStateWithLifecycle()
 
             LoginScreen(
-                navHostController = navController,
+                navHostController = rootNavController,
                 uiState = uiState,
                 onEvent = loginViewModel::onEvent
             )

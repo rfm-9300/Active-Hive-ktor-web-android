@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.compose.AppTheme
 import rfm.biblequizz.R
+import rfm.biblequizz.ui.MainNavHost
 import rfm.biblequizz.ui.components.AppSnackbarHost
 
 @Composable
@@ -50,7 +51,7 @@ fun LandingScreen(
         ) { paddingValues ->
             LandingContent(
                 modifier = Modifier.padding(paddingValues)
-            ) { navHostController.navigate(LoginNav.LoginScreen) }
+            ) { navHostController.navigate(MainNavHost) }
         }
 
     }

@@ -50,10 +50,11 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.compose.AppTheme
 import rfm.biblequizz.R
-import rfm.biblequizz.ui.HomeScreenNav
+import rfm.biblequizz.ui.MainNavHost
 import rfm.biblequizz.ui.components.AppSnackbarHost
 import rfm.biblequizz.ui.components.HeaderText
 import rfm.biblequizz.ui.components.LoginTextField
+import rfm.biblequizz.ui.home.MainNavHost
 
 val defaultPadding = 30.dp
 val itemSpacing = 8.dp
@@ -95,9 +96,7 @@ fun LoginScreen(
 
     LaunchedEffect(uiState.isAuthorized) {
         if (uiState.isAuthorized) {
-            navHostController.navigate(
-                HomeScreenNav(name = "test", email = "working")
-            )
+
         }
     }
 
