@@ -10,14 +10,20 @@ import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Badge
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemColors
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import rfm.hillsongpt.ui.BottomNavigationItem
 
 val bottomNavigationItems = listOf(
@@ -44,7 +50,11 @@ val bottomNavigationItems = listOf(
 
 @Composable
 fun AppBottomBar (){
-    NavigationBar {
+    NavigationBar (
+        containerColor = MaterialTheme.colorScheme.primaryContainer,
+        contentColor = MaterialTheme.colorScheme.primaryContainer,
+        tonalElevation = 0.dp
+    ) {
         var selectedItemIndex by rememberSaveable {
             mutableStateOf(0)
         }
@@ -54,6 +64,9 @@ fun AppBottomBar (){
                 onClick = {
                     selectedItemIndex = index
                 },
+                colors = NavigationBarItemDefaults.colors().copy(
+                    selectedIndicatorColor = Color.Transparent,
+                ),
                 label = { Text(text = item.title) },
                 alwaysShowLabel = false,
                 icon = {
