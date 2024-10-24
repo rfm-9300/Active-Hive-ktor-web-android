@@ -17,17 +17,18 @@ import androidx.compose.ui.unit.dp
 import com.example.compose.AppTheme
 import rfm.hillsongpt.ui.RootNavigation
 import rfm.hillsongpt.ui.components.AppBottomBar
+import rfm.hillsongpt.ui.components.AppTopBar
 
 @Composable
 fun HomeScreen(
+    modifier: Modifier,
     name: String,
     email: String,
     navigateToQuizz: () -> Unit
 ) {
 
     Column(
-        modifier = Modifier.fillMaxSize()
-            .padding(16.dp),
+        modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Button(
@@ -49,9 +50,15 @@ fun PreviewHomeScreen() {
             color = MaterialTheme.colorScheme.background
         ) {
             Scaffold (
-                bottomBar = { AppBottomBar() }
-            ){
-                HomeScreen("John Doe", "seila", {})
+                bottomBar = { AppBottomBar() },
+                topBar = { AppTopBar() }
+            ){ values ->
+                HomeScreen(
+                    modifier = Modifier.padding(values),
+                    name = "test",
+                    email = "test",
+                    navigateToQuizz = {  }
+                )
             }
 
 
