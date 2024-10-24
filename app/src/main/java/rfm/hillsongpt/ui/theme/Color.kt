@@ -1,8 +1,8 @@
 package com.example.compose
 import androidx.compose.ui.graphics.Color
 
-val primaryLight = Color(0xFF8F4C38)
-val onPrimaryLight = Color(0xFFFFFFFF)
+val primaryLight = Color(0xFFFFFFFF)
+val onPrimaryLight = Color(0xFF000000)
 val primaryContainerLight = Color(0xFFFEFEFE)
 val onPrimaryContainerLight = Color(0xFF3A0B01)
 val secondaryLight = Color(0xFF77574E)

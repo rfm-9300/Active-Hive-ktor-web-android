@@ -30,5 +30,8 @@
     <string name="sign_up_screen_passwords_do_not_match">Passwords does not match</string>
     <string name="retry">Retry</string>
 
+    <!-- Home Screen -->
+    <string name="home_screen_title">Hillsong Portugal Online</string>
+
 
 </resources>

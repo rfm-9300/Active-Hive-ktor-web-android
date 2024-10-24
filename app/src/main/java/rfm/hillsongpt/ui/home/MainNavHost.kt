@@ -4,29 +4,33 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 
 import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
 import rfm.hillsongpt.ui.components.AppBottomBar
 import rfm.hillsongpt.ui.components.AppTopBar
+import rfm.hillsongpt.ui.home.connectgroups.ConnectGroupScreen
+import rfm.hillsongpt.ui.home.serving.ServingScreen
 
 @Composable
 fun MainNavHost(){
-    val homeNavController = rememberNavController()
+    val mainNavController = rememberNavController()
     Scaffold (
-        bottomBar = { AppBottomBar() },
+        bottomBar = { AppBottomBar(
+            navController = mainNavController,
+            currentRoute = mainNavController.currentBackStackEntryAsState().value?.destination?.route
+        ) },
         topBar = { AppTopBar() }
     ){ paddingValues ->
         NavHost(
-            navController = homeNavController,
+            navController = mainNavController,
             startDestination = MainNav.HomeScreen()
         ) {
             composable<MainNav.HomeScreen> {
-                val homeViewModel = hiltViewModel<HomeViewModel>()
 
                 val args = it.toRoute<MainNav.HomeScreen>()
                 args.email?.let { it1 ->
@@ -39,6 +43,12 @@ fun MainNavHost(){
                         )
                     }
                 }
+            }
+            composable<MainNav.ConnectGroupScreen> {
+                ConnectGroupScreen(modifier = Modifier.padding(paddingValues))
+            }
+            composable<MainNav.ServiceScreen> {
+                ServingScreen(modifier = Modifier.padding(paddingValues))
             }
         }
     }
@@ -56,4 +66,8 @@ sealed class MainNav {
         val email: String? = "",
         val password: String? = ""
     ) : MainNav()
+    @Serializable
+    data object ConnectGroupScreen : MainNav()
+    @Serializable
+    data object ServiceScreen : MainNav()
 }
