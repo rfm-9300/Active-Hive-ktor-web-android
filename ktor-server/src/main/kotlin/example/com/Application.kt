@@ -1,6 +1,5 @@
 package example.com
 
-
 import example.com.data.user.PostgresUserRepository
 import example.com.plugins.*
 import example.com.security.hashing.SHA256HashingService

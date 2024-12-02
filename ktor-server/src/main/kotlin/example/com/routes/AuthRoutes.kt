@@ -1,4 +1,4 @@
-package example.com
+package example.com.routes
 
 import example.com.data.requests.AuthRequest
 import example.com.data.responses.AuthResponse

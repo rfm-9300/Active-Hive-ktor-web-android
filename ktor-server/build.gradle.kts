@@ -44,7 +44,7 @@ application {
     mainClass.set("io.ktor.server.netty.EngineMain")
 
     val isDevelopment: Boolean = project.ext.has("development")
-    applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
+    applicationDefaultJvmArgs = listOf("-Dio.ktor.development=true")
 }
 
 repositories {
@@ -84,6 +84,8 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
 
+    implementation("org.jetbrains.exposed:exposed-java-time:0.30.1")
+
     implementation("commons-codec:commons-codec:$commons_codec_version")
 
     implementation("io.ktor:ktor-server-auth-jvm:$ktor_version")
@@ -93,6 +95,9 @@ dependencies {
     implementation("io.ktor:ktor-server-status-pages:$ktor_version")
 
     implementation("io.github.cdimascio:dotenv-kotlin:6.2.2") // Adjust the version if necessary
+
+    implementation("io.ktor:ktor-server-html-builder:$ktor_version")
+
 
 
     testImplementation("io.ktor:ktor-server-test-host-jvm")

@@ -16,7 +16,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e4519137-0073-4f24-a2e7-1050ec904c00" name="Changes" comment="Development: &#10;added app top bar" />
+    <list default="true" id="e4519137-0073-4f24-a2e7-1050ec904c00" name="Changes" comment="Development: &#10;home screen" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -691,7 +691,15 @@
       <option name="project" value="LOCAL" />
       <updated>1729760894930</updated>
     </task>
-    <option name="localTasksCounter" value="23" />
+    <task id="LOCAL-00023" summary="Development: &#10;home screen">
+      <option name="closed" value="true" />
+      <created>1729784853395</created>
+      <option name="number" value="00023" />
+      <option name="presentableId" value="LOCAL-00023" />
+      <option name="project" value="LOCAL" />
+      <updated>1729784853395</updated>
+    </task>
+    <option name="localTasksCounter" value="24" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -716,6 +724,7 @@
     <MESSAGE value="Development()&#10;changed projects name" />
     <MESSAGE value="Development()&#10;adjusting design" />
     <MESSAGE value="Development: &#10;added app top bar" />
-    <option name="LAST_COMMIT_MESSAGE" value="Development: &#10;added app top bar" />
+    <MESSAGE value="Development: &#10;home screen" />
+    <option name="LAST_COMMIT_MESSAGE" value="Development: &#10;home screen" />
   </component>
 </project>
