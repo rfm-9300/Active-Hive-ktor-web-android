@@ -1,27 +1,34 @@
 package example.com.views.layout
 
-import example.com.views.navbar.navbar
+
+import io.ktor.http.*
+import io.ktor.http.ContentDisposition.Companion.File
+import io.ktor.server.application.*
+import io.ktor.server.http.content.*
+import io.ktor.server.routing.*
 import kotlinx.html.*
+import java.io.File
 
 fun HTML.layout(e: BODY.() -> Unit) {
     head {
         // Add Tailwind CSS CDN
         script(src = "https://cdn.tailwindcss.com") {}
 
-        link(rel = "stylesheet", href = "https://cdn.simplecss.org/simple.min.css")
         link(rel = "stylesheet", href = "/styles.css", type = "text/css")
+        //script(src = "https://unpkg.com/htmx.org@2.0.3/dist/htmx.js") {}
 
-        val htmx = { e: String -> "webjars/htmx.org/1.9.4/$e" }
-        script(src = htmx("dist/htmx.min.js")) {}
-        script(src = htmx("dist/ext/json-enc.js")) {}
-        script(src = htmx("dist/ext/sse.js")) {}
-        script(src = "https://plausible.gmmz.dev/js/script.js") {
-            defer = true
-            attributes["data-domain"] = "htmx-ktor.gmmz.dev"
-        }
+        // Add Htmx path
+        script(src = "/file/htmx.js") {}
+
     }
 
     body {
         e()
+    }
+}
+
+fun Application.configureHtmx() = routing {
+    staticFiles("/file", File("files")){
+        default("htmx.js")
     }
 }

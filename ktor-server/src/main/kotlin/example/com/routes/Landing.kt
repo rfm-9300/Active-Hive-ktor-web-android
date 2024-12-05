@@ -4,6 +4,7 @@ import example.com.views.home.homePage
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.html.*
+import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.html.body
 import kotlinx.html.h1
@@ -15,6 +16,13 @@ fun Route.landingRoute(){
         val name = "Hive"
         call.respondHtml(HttpStatusCode.OK){
             homePage()
+        }
+    }
+    get("/feed") {
+        call.respondHtml{
+            body {
+                h1 { +"Feed" }
+            }
         }
     }
 }

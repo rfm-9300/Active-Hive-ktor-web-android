@@ -5,6 +5,7 @@ import example.com.plugins.*
 import example.com.security.hashing.SHA256HashingService
 import example.com.security.token.JwtTokenService
 import example.com.security.token.TokenConfig
+import example.com.views.layout.configureHtmx
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.engine.*
@@ -42,4 +43,5 @@ fun Application.module() {
         tokenService = tokenService,
         tokenConfig = tokenConfig
     )
+    configureHtmx()
 }
