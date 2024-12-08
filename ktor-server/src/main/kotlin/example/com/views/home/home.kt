@@ -2,11 +2,14 @@ package example.com.views.home
 
 import example.com.views.layout.layout
 import example.com.views.navbar.navbar
+import example.com.views.topbar.topbar
 import kotlinx.html.*
 
 fun HTML.homePage() {
     layout {
         div(classes = "w-full px-4 py-8") {
+            // Top bar
+            topbar()
             // Navigation Bar
             navbar()
 

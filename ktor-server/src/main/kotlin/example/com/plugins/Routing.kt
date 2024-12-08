@@ -5,9 +5,7 @@ import example.com.routes.*
 import example.com.security.hashing.HashingService
 import example.com.security.token.TokenConfig
 import example.com.security.token.TokenService
-import io.ktor.http.*
 import io.ktor.server.application.*
-import io.ktor.server.html.*
 import io.ktor.server.routing.*
 
 
@@ -19,7 +17,7 @@ fun Application.configureRouting(
     tokenConfig: TokenConfig
 ) {
     routing {
-        landingRoute()
+        homeRoute()
         login(hashingService, userRepository, tokenService, tokenConfig)
         singUp(hashingService, userRepository)
         authenticate()

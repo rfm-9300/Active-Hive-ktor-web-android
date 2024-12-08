@@ -14,21 +14,12 @@ fun HTML.layout(e: BODY.() -> Unit) {
         // Add Tailwind CSS CDN
         script(src = "https://cdn.tailwindcss.com") {}
 
-        link(rel = "stylesheet", href = "/styles.css", type = "text/css")
-        //script(src = "https://unpkg.com/htmx.org@2.0.3/dist/htmx.js") {}
-
         // Add Htmx path
-        script(src = "/file/htmx.js") {}
+        script(src = "/resources/htmx.js") {}
 
     }
 
     body {
         e()
-    }
-}
-
-fun Application.configureHtmx() = routing {
-    staticFiles("/file", File("files")){
-        default("htmx.js")
     }
 }
