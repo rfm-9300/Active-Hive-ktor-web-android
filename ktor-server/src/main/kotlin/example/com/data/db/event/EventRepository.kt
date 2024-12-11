@@ -1,4 +1,4 @@
-package example.com.data.event
+package example.com.data.db.event
 
 interface EventRepository {
     suspend fun addEvent(event: Event) : Boolean

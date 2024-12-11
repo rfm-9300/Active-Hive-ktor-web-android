@@ -2,8 +2,8 @@ package example.com.routes
 
 import example.com.data.requests.AuthRequest
 import example.com.data.responses.AuthResponse
-import example.com.data.user.User
-import example.com.data.user.UserRepository
+import example.com.data.db.user.User
+import example.com.data.db.user.UserRepository
 import example.com.security.hashing.HashingService
 import example.com.security.hashing.SaltedHash
 import example.com.security.token.TokenClaim

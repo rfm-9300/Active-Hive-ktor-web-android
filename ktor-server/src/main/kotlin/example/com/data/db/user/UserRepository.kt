@@ -1,4 +1,4 @@
-package example.com.data.user
+package example.com.data.db.user
 
 interface UserRepository {
     suspend fun getUser(username: String): User?

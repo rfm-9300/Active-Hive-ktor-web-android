@@ -1,6 +1,6 @@
 package example.com
 
-import example.com.data.user.PostgresUserRepository
+import example.com.data.db.user.PostgresUserRepository
 import example.com.plugins.*
 import example.com.security.hashing.SHA256HashingService
 import example.com.security.token.JwtTokenService

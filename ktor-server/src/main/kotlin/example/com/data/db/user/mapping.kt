@@ -1,6 +1,5 @@
-package example.com.data.db
+package example.com.data.db.user
 
-import example.com.data.user.User
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass

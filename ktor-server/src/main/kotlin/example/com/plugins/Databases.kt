@@ -1,5 +1,8 @@
 package example.com.plugins
 
+import example.com.data.db.event.EventAttendeeTable
+import example.com.data.db.event.EventTable
+import example.com.data.db.user.UserTable
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.config.*
@@ -10,7 +13,9 @@ import java.sql.*
 import kotlinx.coroutines.*
 import org.flywaydb.core.Flyway
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
+import org.jetbrains.exposed.sql.transactions.transaction
 
 fun Application.configureDatabases(config: ApplicationConfig) {
     val databaseName = config.property("storage.name").getString()
@@ -20,8 +25,7 @@ fun Application.configureDatabases(config: ApplicationConfig) {
     val dbUser = config.property("storage.user").getString()
     val dbPassword = config.property("storage.password").getString()
 
-    val flyway = Flyway.configure().dataSource(jdbcURL, dbUser, dbPassword).load()
-    flyway.migrate()
+
 
     Database.connect(url = jdbcURL, user = dbUser, password = dbPassword, driver = driverClassName)
 }

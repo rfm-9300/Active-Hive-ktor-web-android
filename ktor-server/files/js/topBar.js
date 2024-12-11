@@ -1,10 +1,17 @@
-// Select the element with ID 'logo-container'
+// Select elements
 const logoContainer = document.getElementById('logo-container');
+const dropdown = document.getElementById('dropdown');
 
-function toggleDropdown() {
-        const dropdown = document.getElementById('dropdown');
-        dropdown.classList.toggle('hidden'); // Toggle the 'hidden' class
-    }
+// Toggle dropdown when clicking on the logo container
+logoContainer.addEventListener('click', function (event) {
+  event.stopPropagation(); // Prevent the click from propagating to the document
+  dropdown.classList.toggle('hidden');
+});
 
-// Attach the click event listener
-logoContainer.addEventListener('click', toggleDropdown);
+// Close the dropdown when clicking anywhere outside the logoContainer or dropdown
+document.addEventListener('click', function (event) {
+  const isClickInside = logoContainer.contains(event.target) || dropdown.contains(event.target);
+  if (!isClickInside) {
+    dropdown.classList.add('hidden');
+  }
+});

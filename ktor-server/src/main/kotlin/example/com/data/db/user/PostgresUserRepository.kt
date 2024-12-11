@@ -1,9 +1,4 @@
-package example.com.data.user
-
-import example.com.data.db.UserDao
-import example.com.data.db.UserTable
-import example.com.data.db.suspendTransaction
-import example.com.data.db.toUser
+package example.com.data.db.user
 
 class PostgresUserRepository: UserRepository {
     override suspend fun getUser(username: String): User? = suspendTransaction {

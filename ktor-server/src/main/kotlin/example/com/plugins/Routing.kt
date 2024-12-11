@@ -1,6 +1,6 @@
 package example.com.plugins
 
-import example.com.data.user.UserRepository
+import example.com.data.db.user.UserRepository
 import example.com.routes.*
 import example.com.security.hashing.HashingService
 import example.com.security.token.TokenConfig
