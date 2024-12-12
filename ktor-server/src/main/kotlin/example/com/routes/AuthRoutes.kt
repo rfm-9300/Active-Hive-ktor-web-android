@@ -118,7 +118,10 @@ fun Route.loginRoutes(
         get("secret") {
             val principal = call.principal<JWTPrincipal>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
             val userId = principal.getClaim("userId", String::class) ?: return@get call.respond(HttpStatusCode.Unauthorized)
-            call.respond(HttpStatusCode.OK, "userID is: $userId")
+            call.respond(
+                status = HttpStatusCode.OK,
+                message = AuthResponse(token = userId)
+            )
         }
     }
 }

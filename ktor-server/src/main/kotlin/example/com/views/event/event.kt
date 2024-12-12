@@ -17,7 +17,12 @@ fun HTML.eventPage() {
                 }
             }
 
-            form(action = "/events/create", method = FormMethod.post, classes = "w-full bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" ) {
+            form(
+                action = "#",
+                method = FormMethod.post,
+                classes = "w-full bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4"
+            ) {
+                id = "event-form"
                 attributes["name"] =  "eventForm"
                 div(classes = "mb-4") {
                     label(classes = "block text-gray-700 text-sm font-bold mb-2") {

@@ -17,7 +17,8 @@ fun main(args: Array<String>) {
         Netty,
         port = 8080,
         host = "0.0.0.0",
-        module = Application::module
+        module = Application::module,
+        watchPaths = listOf("classes", "resources")
     ).start(wait = true)
 }
 

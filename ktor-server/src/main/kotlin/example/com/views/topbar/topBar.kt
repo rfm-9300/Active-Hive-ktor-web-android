@@ -1,12 +1,11 @@
 package example.com.views.topbar
 
+import example.com.views.svgIcon
 import example.com.views.utils.Strings
 import kotlinx.html.*
-import java.io.File
 
 fun HtmlBlockTag.topbar() {
     val title = Strings.Home.COMMUNITY_NAME
-
 
     div(classes = "flex items-center justify-between relative") {
         // logo container
@@ -23,6 +22,15 @@ fun HtmlBlockTag.topbar() {
                 }
             }
 
+        }
+        // profile container
+        div(classes = "relative") {
+            id = "profile-container"
+            div(classes = "w-8 h-8 rounded-full overflow-hidden cursor-pointer") {
+                svgIcon("menu")
+            }
+            // profile menu
+            profileMenu()
         }
         // hidden menu
         logoMenu()
