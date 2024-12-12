@@ -6,7 +6,7 @@ import kotlinx.html.*
 fun HTML.eventPage() {
     layout{
         div(classes = "flex flex-col justify-center items-center mx-auto max-w-4xl") {
-            id = "main-content"
+            id = "event-content"
             div(classes = "flex justify-between items-center mb-8") {
                 div {
                     h1(classes = "text-3xl font-bold") { +"Create New Event" }
@@ -17,11 +17,8 @@ fun HTML.eventPage() {
                 }
             }
 
-            form(action = "/events/create", method = FormMethod.post, classes = "w-full bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4") {
-                attributes["hx-post"] = "/events/create" // Send POST request
-                attributes["hx-target"] = "#main-content" // Update the main content with the response
-                attributes["hx-swap"] = "innerHTML" // Replace the inner content of #main-content with the response
-
+            form(action = "/events/create", method = FormMethod.post, classes = "w-full bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" ) {
+                attributes["name"] =  "eventForm"
                 div(classes = "mb-4") {
                     label(classes = "block text-gray-700 text-sm font-bold mb-2") {
                         attributes["for"] = "title"
@@ -30,6 +27,7 @@ fun HTML.eventPage() {
                     input(classes = "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700") {
                         attributes["type"] = "text"
                         attributes["name"] = "title"
+                        attributes["id"] = "title"
                         attributes["required"] = "true"
                     }
                 }
@@ -41,6 +39,7 @@ fun HTML.eventPage() {
                     }
                     textArea(classes = "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700") {
                         attributes["name"] = "description"
+                        attributes["id"] = "description"
                         attributes["rows"] = "4"
                     }
                 }
@@ -53,6 +52,7 @@ fun HTML.eventPage() {
                     input(classes = "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700") {
                         attributes["type"] = "datetime-local"
                         attributes["name"] = "date"
+                        attributes["id"] = "date"
                         attributes["required"] = "true"
                     }
                 }
@@ -65,16 +65,19 @@ fun HTML.eventPage() {
                     input(classes = "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700") {
                         attributes["type"] = "text"
                         attributes["name"] = "location"
+                        attributes["id"] = "location"
                     }
                 }
 
                 div(classes = "flex items-center justify-center") {
                     button(classes = "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded") {
-                        attributes["type"] = "submit"
+                        attributes["type"] = "button"
+                        attributes["id"] = "submit-btn"
                         +"Create Event"
                     }
                 }
             }
         }
+        script(src = "/resources/js/eventPage.js" ) {}
     }
 }

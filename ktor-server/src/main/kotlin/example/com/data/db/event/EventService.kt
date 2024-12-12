@@ -11,7 +11,7 @@ class EventService: EventRepository {
             description = event.description
             date = event.date
             location = event.location
-            organizer = UserDao[event.organizer.id!!]
+            organizer = UserDao[event.organizerId]
         }.id.value
 
         // If you want to add attendees

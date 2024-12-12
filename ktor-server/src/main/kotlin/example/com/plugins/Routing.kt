@@ -17,11 +17,8 @@ fun Application.configureRouting(
     tokenConfig: TokenConfig
 ) {
     routing {
-        homeRoute()
-        login(hashingService, userRepository, tokenService, tokenConfig)
-        singUp(hashingService, userRepository)
-        authenticate()
-        getSecretInfo()
+        homeRoutes()
+        loginRoutes(hashingService, userRepository, tokenService, tokenConfig)
     }
 }
 

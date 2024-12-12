@@ -13,6 +13,7 @@ fun HtmlBlockTag.navbar()  {
                     "Events" to "/events",
                     "People" to "/people",
                     "About" to "/about",
+                    "login" to "/login",
                 )
                 tabs.forEach { (label, url) ->
                     li(classes = "cursor-pointer hover:text-blue-600 transition"){

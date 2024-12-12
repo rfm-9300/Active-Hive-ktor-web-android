@@ -13,7 +13,6 @@ import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.`java-time`.datetime
-import java.util.*
 import java.time.LocalDateTime
 
 @Serializable
@@ -26,7 +25,7 @@ data class Event(
     val date: LocalDateTime,
     val location: String,
     val attendees: List<User> = emptyList(),
-    val organizer: User,
+    val organizerId: Int,
     val isPublic: Boolean = true,
     val isCancelled: Boolean = false,
     val isArchived: Boolean = false,
@@ -66,6 +65,6 @@ fun EventDao.toEvent() = Event(
     description = description,
     date = date,
     location = location,
-    organizer = organizer.toUser(),
+    organizerId = organizer.id.value,
     attendees = attendees.map { it.toUser() }
 )

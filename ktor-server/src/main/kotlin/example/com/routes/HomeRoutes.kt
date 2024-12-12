@@ -1,9 +1,9 @@
 package example.com.routes
 
 import example.com.data.db.event.Event
-import example.com.data.db.event.EventRepository
 import example.com.data.db.event.EventService
 import example.com.data.db.user.User
+import example.com.data.requests.CreateEventRequest
 import example.com.views.event.eventPage
 import example.com.views.home.homePage
 import io.ktor.http.*
@@ -11,13 +11,14 @@ import io.ktor.server.application.*
 import io.ktor.server.html.*
 import io.ktor.server.http.content.*
 import io.ktor.server.request.*
+import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.html.body
 import kotlinx.html.h1
 import java.io.File
 import java.time.LocalDateTime
 
-fun Route.homeRoute(){
+fun Route.homeRoutes(){
     get("/") {
         call.respondHtml(HttpStatusCode.OK){
             homePage()
@@ -42,22 +43,22 @@ fun Route.homeRoute(){
     }
 
     post("/events/create") {
-        val params = call.receiveParameters()
-        val title = params["title"]
-        val description = params["description"]
-        var dateTime = params["date"]
-        val location = params["location"]
 
-        val date = LocalDateTime.parse(dateTime)
+        val request = kotlin.runCatching { call.receiveNullable<CreateEventRequest>() }.getOrNull() ?: return@post call.respond(HttpStatusCode.BadRequest)
+
 
         val eventRepository = EventService()
-        eventRepository.addEvent(Event(title = title!!, description = description!!, date = date, location = location!!, organizer = User(
-            id = 1,
-            username = "admin",
-            password = "admin",
-            salt = "salt"
-            )))
+        val event = Event(
+            title = request.title,
+            description = request.description,
+            date = LocalDateTime.now(),
+            location = request.location,
+            organizerId = 2
+        )
+
+        eventRepository.addEvent(event)
     }
+
     staticFiles("/resources", File("files")){
         default("htmx.js")
     }
