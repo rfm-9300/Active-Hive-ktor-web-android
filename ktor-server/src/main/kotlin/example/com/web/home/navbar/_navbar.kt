@@ -1,4 +1,4 @@
-package example.com.views.home.navbar
+package example.com.web.home.navbar
 
 import kotlinx.html.*
 

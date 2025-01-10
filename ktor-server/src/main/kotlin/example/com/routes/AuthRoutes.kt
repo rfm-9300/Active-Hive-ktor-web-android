@@ -9,7 +9,7 @@ import example.com.security.hashing.SaltedHash
 import example.com.security.token.TokenClaim
 import example.com.security.token.TokenConfig
 import example.com.security.token.TokenService
-import example.com.views.login.loginPage
+import example.com.web.login.loginPage
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -115,7 +115,7 @@ fun Route.loginRoutes(
     }
 
     authenticate {
-        get("secret") {
+        get("user") {
             val principal = call.principal<JWTPrincipal>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
             val userId = principal.getClaim("userId", String::class) ?: return@get call.respond(HttpStatusCode.Unauthorized)
             call.respond(

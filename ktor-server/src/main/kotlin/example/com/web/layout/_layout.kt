@@ -1,13 +1,7 @@
-package example.com.views.layout
+package example.com.web.layout
 
 
-import io.ktor.http.*
-import io.ktor.http.ContentDisposition.Companion.File
-import io.ktor.server.application.*
-import io.ktor.server.http.content.*
-import io.ktor.server.routing.*
 import kotlinx.html.*
-import java.io.File
 
 fun HTML.layout(e: BODY.() -> Unit) {
     head {

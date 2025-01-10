@@ -1,4 +1,4 @@
-package example.com.views.utils
+package example.com.web.utils
 
 object Strings {
     object Home {

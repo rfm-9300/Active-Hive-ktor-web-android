@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const token = localStorage.getItem('authToken');
 
     if (token) {
-        fetch('/secret', {
+        fetch('/user', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

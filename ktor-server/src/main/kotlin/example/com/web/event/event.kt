@@ -1,6 +1,6 @@
-package example.com.views.event
+package example.com.web.event
 
-import example.com.views.layout.layout
+import example.com.web.layout.layout
 import kotlinx.html.*
 
 fun HTML.eventPage() {

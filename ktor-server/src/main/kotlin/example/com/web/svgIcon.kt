@@ -1,4 +1,4 @@
-package example.com.views
+package example.com.web
 
 import kotlinx.html.*
 

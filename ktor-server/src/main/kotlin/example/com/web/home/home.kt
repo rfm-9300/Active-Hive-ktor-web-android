@@ -1,15 +1,15 @@
-package example.com.views.home
+package example.com.web.home
 
-import example.com.views.layout.layout
-import example.com.views.home.navbar.navbar
-import example.com.views.topbar.topbar
+import example.com.web.layout.layout
+import example.com.web.home.navbar.navbar
+import example.com.web.topbar.topbar
 import kotlinx.html.*
 
 fun HTML.homePage() {
     layout {
         script(src = "/resources/js/homePage.js" ) {}
 
-        div(classes = "w-full px-4 py-8") {
+        div(classes = "w-full px-4 py-4") {
             // Top bar
             topbar()
             // Navigation Bar

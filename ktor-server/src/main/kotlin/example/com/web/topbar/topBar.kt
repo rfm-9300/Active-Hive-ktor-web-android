@@ -1,10 +1,12 @@
-package example.com.views.topbar
+package example.com.web.topbar
 
-import example.com.views.svgIcon
-import example.com.views.utils.Strings
+import example.com.data.db.user.User
+import example.com.web.models.UserUi
+import example.com.web.svgIcon
+import example.com.web.utils.Strings
 import kotlinx.html.*
 
-fun HtmlBlockTag.topbar() {
+fun HtmlBlockTag.topbar(user: UserUi? = null) {
     val title = Strings.Home.COMMUNITY_NAME
 
     div(classes = "flex items-center justify-between relative") {
@@ -24,9 +26,14 @@ fun HtmlBlockTag.topbar() {
 
         }
         // profile container
-        div(classes = "relative") {
+        div(classes = "relative flex flex-row items-center gap-2") {
             id = "profile-container"
-            div(classes = "w-8 h-8 rounded-full overflow-hidden cursor-pointer") {
+            user?.let {
+                div(classes = "w-8 h-8 rounded-full overflow-hidden cursor-pointer") {
+                    img(classes = "object-cover w-full h-full", src = "/resources/default-user-image.webp", alt = "Active Hive Logo")
+                }
+            }
+            div(classes = "w-6 h-6 rounded-full overflow-hidden cursor-pointer") {
                 svgIcon("menu")
             }
             // profile menu

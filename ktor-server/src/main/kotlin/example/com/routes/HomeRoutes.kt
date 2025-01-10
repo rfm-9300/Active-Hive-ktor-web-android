@@ -2,11 +2,10 @@ package example.com.routes
 
 import example.com.data.db.event.Event
 import example.com.data.db.event.EventService
-import example.com.data.db.user.User
 import example.com.data.requests.CreateEventRequest
 import example.com.data.responses.CreateEventResponse
-import example.com.views.event.eventPage
-import example.com.views.home.homePage
+import example.com.web.event.eventPage
+import example.com.web.home.homePage
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*

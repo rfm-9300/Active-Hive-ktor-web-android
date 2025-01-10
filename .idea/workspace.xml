@@ -16,7 +16,11 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e4519137-0073-4f24-a2e7-1050ec904c00" name="Changes" comment="Development: &#10;home screen" />
+    <list default="true" id="e4519137-0073-4f24-a2e7-1050ec904c00" name="Changes" comment="Development: &#10;home screen">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ktor-server/src/main/kotlin/example/com/views/login/loginPage.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ktor-server/src/main/kotlin/example/com/views/login/loginPage.kt" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -45,30 +49,7 @@
         </task>
         <projects_view>
           <tree_state>
-            <expand>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="hillsong-pt-android-app" type="f1a62948:ProjectNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="hillsong-pt-android-app" type="f1a62948:ProjectNode" />
-                <item name="app" type="2d1252cf:ModuleNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="hillsong-pt-android-app" type="f1a62948:ProjectNode" />
-                <item name="app" type="2d1252cf:ModuleNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-              </path>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="hillsong-pt-android-app" type="f1a62948:ProjectNode" />
-                <item name="app" type="2d1252cf:ModuleNode" />
-                <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="other" type="c8890929:TasksNode$1" />
-              </path>
-            </expand>
+            <expand />
             <select />
           </tree_state>
         </projects_view>
@@ -138,7 +119,7 @@
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
     &quot;last_directory_selection&quot;: &quot;/Users/rodrigomartins/Desktop/Software Developer/kotlin/BibleQuizz/app/src/test/java/rfm/biblequizz/ui/login&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/rodrigomartins/Desktop/Software Developer/kotlin/hillsong-pt-android-app&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/rodrigomartins/Desktop/Dev/kotlin/hillsong-pt-android-app&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.17&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
@@ -147,6 +128,9 @@
   &quot;keyToStringList&quot;: {
     &quot;com.android.tools.idea.sqlite.queryhistory&quot;: [
       &quot;delete from user&quot;
+    ],
+    &quot;kotlin-gradle-user-dirs&quot;: [
+      &quot;/Users/rodrigomartins/.gradle&quot;
     ]
   }
 }</component>
@@ -173,7 +157,7 @@
       <recent name="rfm.biblequizz.domain.model" />
     </key>
   </component>
-  <component name="RunManager" selected="Android App.app">
+  <component name="RunManager" selected="Gradle.LoginViewModelTest">
     <configuration name="MainActivity" type="AndroidRunConfigurationType" factoryName="Android App" temporary="true">
       <module name="biblequizz.app.main" />
       <option name="DEPLOY" value="true" />
@@ -499,10 +483,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Gradle.LoginViewModelTest" />
-        <item itemvalue="Android App.MainActivity" />
         <item itemvalue="Gradle.LoginViewModelTest.login success updates authResults with Authorized" />
-        <item itemvalue="Compose Preview.LoginScreenPreview (1)" />
-        <item itemvalue="Compose Preview.LoginScreenPreview" />
       </list>
     </recent_temporary>
   </component>
