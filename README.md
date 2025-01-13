@@ -1,2 +1,2 @@
-# BibleQuizz
-Android App / Bible Quizz
+# Active Hive
+Ktor server rendering html pages 
