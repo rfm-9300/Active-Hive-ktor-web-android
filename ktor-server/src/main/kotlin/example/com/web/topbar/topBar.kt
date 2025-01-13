@@ -6,7 +6,7 @@ import example.com.web.svgIcon
 import example.com.web.utils.Strings
 import kotlinx.html.*
 
-fun HtmlBlockTag.topbar(user: UserUi? = null) {
+fun HtmlBlockTag.topbar() {
     val title = Strings.Home.COMMUNITY_NAME
 
     div(classes = "flex items-center justify-between relative") {
@@ -28,10 +28,8 @@ fun HtmlBlockTag.topbar(user: UserUi? = null) {
         // profile container
         div(classes = "relative flex flex-row items-center gap-2") {
             id = "profile-container"
-            user?.let {
-                div(classes = "w-8 h-8 rounded-full overflow-hidden cursor-pointer") {
-                    img(classes = "object-cover w-full h-full", src = "/resources/default-user-image.webp", alt = "Active Hive Logo")
-                }
+            div(classes = "w-8 h-8 rounded-full overflow-hidden cursor-pointer") {
+                id = "user-profile-icon"
             }
             div(classes = "w-6 h-6 rounded-full overflow-hidden cursor-pointer") {
                 svgIcon("menu")

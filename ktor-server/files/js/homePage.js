@@ -1,35 +1,40 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Try to get token from localStorage
     const token = localStorage.getItem('authToken');
 
     if (token) {
-        fetch('/user', {
+        fetch('/home/user-info', {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
         })
         .then(response => {
             if (!response.ok) {
-                // If token is invalid, remove it
-                //localStorage.removeItem('auth_token');
-                //window.location.href = '/login';
+                throw new Error('Network response was not ok');
             }
-            return response.json();
+            return response.text();
         })
-        .then(data => {
-            // Handle successful auth
-            console.log('Authenticated:', data);
+        .then(html => {
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = html;
+
+             // If there's no body tag, use the entire HTML content
+            const bodyContent = tempDiv.querySelector('body') ?
+            tempDiv.querySelector('body').innerHTML :
+            tempDiv.innerHTML;
+
+            const targetDiv = document.getElementById('user-profile-icon');
+            targetDiv.innerHTML = bodyContent;
         })
         .catch(error => {
-            console.error('Auth error:', error);
-            //localStorage.removeItem('auth_token');
-            //window.location.href = '/login';
+            console.error('Error:', error);
+            // Don't swap HTML on error
+            // const targetDiv = document.getElementById('user-profile-icon');
+            // targetDiv.innerHTML = '<p>Error loading user info</p>';
         });
     } else {
-        // No token found, redirect to login
-        //window.location.href = '/login';
-        console.log("No token found")
+        console.log("No token found");
+        // const targetDiv = document.getElementById('user-profile-icon');
+        // targetDiv.innerHTML = '<p>Please log in</p>';
     }
 });
