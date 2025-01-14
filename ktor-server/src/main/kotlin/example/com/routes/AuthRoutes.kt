@@ -109,12 +109,6 @@ fun Route.loginRoutes(
     }
 
     authenticate {
-        get("authenticate") {
-            call.respond(HttpStatusCode.OK)
-        }
-    }
-
-    authenticate {
         get("user") {
             val principal = call.principal<JWTPrincipal>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
             val userId = principal.getClaim("userId", String::class) ?: return@get call.respond(HttpStatusCode.Unauthorized)

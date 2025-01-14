@@ -25,6 +25,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
             const targetDiv = document.getElementById('user-profile-icon');
             targetDiv.innerHTML = bodyContent;
+
+            // add events
+            const profileContainer = document.getElementById('profile-container');
+            const profileDropdown = document.getElementById('profile-menu-dropdown');
+
+            // Toggle dropdown when clicking on the profile container
+            profileContainer.addEventListener('click', function (event) {
+            event.stopPropagation(); // Prevent the click from propagating to the document
+            profileDropdown.classList.toggle('hidden');
+            });
+
+            // Close the dropdown when clicking outside of it
+            document.addEventListener('click', function () {
+            profileDropdown.classList.add('hidden');
+            });
         })
         .catch(error => {
             console.error('Error:', error);

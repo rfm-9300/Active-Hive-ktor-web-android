@@ -8,6 +8,7 @@ import example.com.data.responses.CreateEventResponse
 import example.com.web.event.eventPage
 import example.com.web.home.homePage
 import example.com.web.layout.layout
+import example.com.web.topbar.profileMenu
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -36,16 +37,6 @@ fun Route.homeRoutes(){
             }
         }
     }
-    get("/home") {
-        call.respondHtml{
-            homePage()
-        }
-    }
-    get("/events") {
-        call.respondHtml{
-            eventPage()
-        }
-    }
 
     authenticate {
         get("/home/user-info") {
@@ -53,7 +44,7 @@ fun Route.homeRoutes(){
             val userId = principal.getClaim("userId", String::class) ?: return@get call.respond(HttpStatusCode.Unauthorized)
             call.respondHtml(HttpStatusCode.OK) {
                 body {
-                    img(classes = "object-cover w-full h-full", src = "/resources/default-user-image.webp", alt = "Active Hive Logo")
+                    profileMenu()
                 }
             }
         }

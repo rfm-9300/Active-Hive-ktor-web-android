@@ -7,8 +7,6 @@ import kotlinx.html.*
 
 fun HTML.homePage() {
     layout {
-        script(src = "/resources/js/homePage.js" ) {}
-
         div(classes = "w-full px-4 py-4") {
             // Top bar
             topbar()
@@ -86,5 +84,6 @@ fun HTML.homePage() {
                 }
             }
         }
+        script(src = "/resources/js/homePage.js" ) {}
     }
 }
