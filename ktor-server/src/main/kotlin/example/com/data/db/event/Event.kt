@@ -38,7 +38,7 @@ object EventTable : IntIdTable("event")  {
     val description = text("description")
     val date = datetime("date")
     val location = varchar("location", 255)
-    val organizer = reference("organizer_id", UserTable)
+    val organizerId = reference("organizer_id", UserTable)
 }
 
 object EventAttendeeTable : Table("event_attendee") {
@@ -54,7 +54,7 @@ class EventDao(id: EntityID<Int>) : IntEntity(id) {
     var description by EventTable.description
     var date by EventTable.date
     var location by EventTable.location
-    var organizer by UserDao referencedOn EventTable.organizer
+    var organizer by UserDao referencedOn EventTable.organizerId
 
     val attendees by UserDao via EventAttendeeTable
 }

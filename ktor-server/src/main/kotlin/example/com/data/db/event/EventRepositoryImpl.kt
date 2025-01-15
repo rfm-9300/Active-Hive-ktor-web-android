@@ -2,9 +2,8 @@ package example.com.data.db.event
 
 import example.com.data.db.user.UserDao
 import example.com.data.db.user.suspendTransaction
-import org.jetbrains.exposed.sql.insert
 
-class EventService: EventRepository {
+class EventRepositoryImpl: EventRepository {
     override suspend fun addEvent(event: Event): Boolean = suspendTransaction {
         val eventId = EventDao.new {
             title = event.title
@@ -26,6 +25,6 @@ class EventService: EventRepository {
     }
 
     override suspend fun getAllEvents(): List<Event> {
-        TODO("Not yet implemented")
+        return EventDao.all().map { it.toEvent() }
     }
 }

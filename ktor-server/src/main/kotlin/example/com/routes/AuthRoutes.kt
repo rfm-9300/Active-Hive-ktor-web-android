@@ -9,7 +9,7 @@ import example.com.security.hashing.SaltedHash
 import example.com.security.token.TokenClaim
 import example.com.security.token.TokenConfig
 import example.com.security.token.TokenService
-import example.com.web.login.loginPage
+import example.com.web.pages.login.loginPage
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*

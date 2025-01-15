@@ -1,9 +1,9 @@
-package example.com.web.event
+package example.com.web.pages.homePage.eventTab
 
-import example.com.web.layout.layout
+import example.com.web.components.layout.layout
 import kotlinx.html.*
 
-fun HTML.eventPage() {
+fun HTML.eventTab() {
     layout{
         div(classes = "flex flex-col justify-center items-center mx-auto max-w-4xl") {
             id = "event-content"

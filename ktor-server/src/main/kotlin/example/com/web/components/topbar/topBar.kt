@@ -1,13 +1,13 @@
-package example.com.web.topbar
+package example.com.web.components.topbar
 
-import example.com.web.svgIcon
+import example.com.web.components.svgIcon
 import example.com.web.utils.Strings
 import kotlinx.html.*
 
 fun HtmlBlockTag.topbar() {
     val title = Strings.Home.COMMUNITY_NAME
 
-    div(classes = "flex items-center justify-between relative") {
+    div(classes = "flex items-center justify-between relative px-4") {
         // logo container
         div (classes = "h-auto, flex items-center cursor-pointer rounded-xl hover:bg-gray-200 hover:text-gray-900 transition-all duration-300") {
             id = "logo-container"
@@ -38,6 +38,5 @@ fun HtmlBlockTag.topbar() {
         logoMenu()
     }
     script(src = "/resources/js/topBar.js" ) {}
-
 
 }

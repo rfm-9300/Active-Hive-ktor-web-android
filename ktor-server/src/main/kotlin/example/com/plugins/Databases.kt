@@ -2,6 +2,9 @@ package example.com.plugins
 
 import example.com.data.db.event.EventAttendeeTable
 import example.com.data.db.event.EventTable
+import example.com.data.db.post.PostCommentTable
+import example.com.data.db.post.PostLikeTable
+import example.com.data.db.post.PostTable
 import example.com.data.db.user.UserTable
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -28,6 +31,18 @@ fun Application.configureDatabases(config: ApplicationConfig) {
 
 
     Database.connect(url = jdbcURL, user = dbUser, password = dbPassword, driver = driverClassName)
+
+    // create tables if they don't exist
+    transaction {
+        SchemaUtils.create(
+            UserTable,
+            EventTable,
+            EventAttendeeTable,
+            PostTable,
+            PostLikeTable,
+            PostCommentTable
+        )
+    }
 }
 
 /**

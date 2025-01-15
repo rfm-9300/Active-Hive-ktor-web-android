@@ -1,4 +1,4 @@
-package example.com.web.layout
+package example.com.web.components.layout
 
 
 import kotlinx.html.*

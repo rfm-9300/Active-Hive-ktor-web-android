@@ -1,6 +1,6 @@
-package example.com.web.login
+package example.com.web.pages.login
 
-import example.com.web.layout.layout
+import example.com.web.components.layout.layout
 import kotlinx.html.*
 import kotlinx.html.InputType.*
 

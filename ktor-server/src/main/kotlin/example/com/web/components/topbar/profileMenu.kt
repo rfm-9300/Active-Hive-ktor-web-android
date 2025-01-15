@@ -1,4 +1,4 @@
-package example.com.web.topbar
+package example.com.web.components.topbar
 
 import kotlinx.html.*
 

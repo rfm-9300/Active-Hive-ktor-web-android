@@ -1,3 +1,5 @@
+@file:JvmName("UserKt")
+
 package example.com.data.db.user
 
 import kotlinx.coroutines.Dispatchers

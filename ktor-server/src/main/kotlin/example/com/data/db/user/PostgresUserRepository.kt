@@ -18,4 +18,8 @@ class PostgresUserRepository: UserRepository {
         }
     }
 
+    override suspend fun getUserProfile(userId: Int): Int {
+        return 1
+    }
+
 }
