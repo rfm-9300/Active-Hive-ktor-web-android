@@ -17,7 +17,7 @@ fun HTML.homePage() {
                 // content
                 div( classes = "flex flex-col justify-center items-center mx-auto max-w-xl bg-zinc-50 mt-1 py-2") {
                     id = "main-content"
-                    //homeTab()
+                    homeTab()
                 }
             }
         }
