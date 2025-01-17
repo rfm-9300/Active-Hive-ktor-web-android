@@ -53,3 +53,35 @@ document.addEventListener('DOMContentLoaded', function() {
         // targetDiv.innerHTML = '<p>Please log in</p>';
     }
 });
+
+//////////////
+//Server sent events
+///////
+
+// Create connection to SSE endpoint
+const eventSource = new EventSource('/home/sse');
+
+// Listen to specific event type 'data-test'
+eventSource.addEventListener('like-update', (event) => {
+    console.log('Received data:', event.data);
+    // Handle the data here
+});
+
+// Listen to all events
+eventSource.onmessage = (event) => {
+    console.log('Received message:', event.data);
+};
+
+// Handle connection open
+eventSource.onopen = (event) => {
+    console.log('Connection opened');
+};
+
+// Handle errors
+eventSource.onerror = (event) => {
+    if (eventSource.readyState === EventSource.CLOSED) {
+        console.log('Connection closed');
+    } else {
+        console.error('Error occurred:', event);
+    }
+};

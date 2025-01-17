@@ -1,6 +1,7 @@
 package example.com
 
 import example.com.data.db.user.PostgresUserRepository
+import example.com.di.appModule
 import example.com.plugins.*
 import example.com.security.hashing.SHA256HashingService
 import example.com.security.token.JwtTokenService
@@ -9,6 +10,9 @@ import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import io.ktor.server.sse.*
+import org.koin.ktor.plugin.Koin
+import org.koin.ktor.ext.get
 
 
 fun main(args: Array<String>) {
@@ -23,6 +27,10 @@ fun main(args: Array<String>) {
 }
 
 fun Application.module() {
+    install(Koin){
+        modules(appModule)
+    }
+    install(SSE)
     install(Authentication)
 
     val tokenService = JwtTokenService()
@@ -41,6 +49,8 @@ fun Application.module() {
         userRepository = PostgresUserRepository(),
         hashingService = hashingService,
         tokenService = tokenService,
-        tokenConfig = tokenConfig
+        tokenConfig = tokenConfig,
+        likeEventManager = get(),
+        eventRepository = get()
     )
 }

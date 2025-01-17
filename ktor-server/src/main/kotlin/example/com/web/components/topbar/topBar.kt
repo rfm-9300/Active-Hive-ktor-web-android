@@ -1,5 +1,6 @@
 package example.com.web.components.topbar
 
+import example.com.web.components.SvgIcon
 import example.com.web.components.svgIcon
 import example.com.web.utils.Strings
 import kotlinx.html.*
@@ -30,7 +31,7 @@ fun HtmlBlockTag.topbar() {
                 id = "user-profile-icon"
             }
             div(classes = "w-6 h-6 rounded-full overflow-hidden cursor-pointer") {
-                svgIcon("menu")
+                svgIcon(SvgIcon.MENU)
             }
 
         }

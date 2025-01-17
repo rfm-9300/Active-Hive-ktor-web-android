@@ -1,6 +1,7 @@
 package example.com.routes
 
 import example.com.data.db.event.Event
+import example.com.data.db.event.EventRepository
 import example.com.data.db.event.EventRepositoryImpl
 import example.com.data.requests.CreateEventRequest
 import example.com.data.responses.CreateEventResponse
@@ -17,11 +18,17 @@ import io.ktor.server.http.content.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import io.ktor.server.sse.*
+import io.ktor.sse.*
+import kotlinx.coroutines.delay
 import kotlinx.html.body
 import java.io.File
 import java.time.LocalDateTime
 
-fun Route.homeRoutes(){
+fun Route.homeRoutes(
+    likeEventManager: LikeEventManager,
+    eventRepository: EventRepository
+){
     get("/") {
         call.respondHtml(HttpStatusCode.OK){
             homePage()
@@ -37,6 +44,26 @@ fun Route.homeRoutes(){
             body {
                 homeTab()
             }
+        }
+    }
+    get("/likes") {
+        // Emit event
+        val postId = 2
+        val likesCount = 10
+        likeEventManager.emitLike(postId, likesCount)
+        call.respondText("Like event emitted")
+    }
+    sse ("/home/sse") {
+        try {
+            likeEventManager.likeEvents.collect { event ->
+                send(ServerSentEvent(
+                    data = "Post ${event.postId} has ${event.likesCount} likes",
+                    event = "like-update",
+                    id = event.postId.toString()
+                ))
+            }
+        } catch (e: Exception) {
+            send(ServerSentEvent(data= "Error: ${e.message}", event = "error"))
         }
     }
 
@@ -57,8 +84,6 @@ fun Route.homeRoutes(){
 
             val request = kotlin.runCatching { call.receiveNullable<CreateEventRequest>() }.getOrNull() ?: return@post call.respond(HttpStatusCode.BadRequest)
 
-
-            val eventRepository = EventRepositoryImpl()
             val event = Event(
                 title = request.title,
                 description = request.description,

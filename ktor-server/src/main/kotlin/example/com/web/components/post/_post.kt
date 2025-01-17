@@ -1,5 +1,6 @@
 package example.com.web.components.post
 
+import example.com.web.components.SvgIcon
 import example.com.web.components.svgIcon
 import example.com.web.models.PostUi
 import kotlinx.html.*
@@ -32,13 +33,14 @@ fun HtmlBlockTag.post(post: PostUi = PostUi()) {
         // post icons div
         div(classes = "flex justify-between") {
             div(classes = "flex gap-2") {
-                +post.likes.toString()
                 div(classes = "w-6 h-6 rounded-full overflow-hidden cursor-pointer") {
-                    svgIcon("like")
+                    attributes["hx-get"] = "/likes"
+                    svgIcon(SvgIcon.LIKE)
                 }
+                +post.likes.toString()
             }
             div(classes = "w-6 h-6 rounded-full overflow-hidden cursor-pointer") {
-                svgIcon("bookmark")
+                svgIcon(SvgIcon.DEFAULT)
             }
         }
     }

@@ -5,10 +5,11 @@ val postgres_version: String by project
 val h2_version: String by project
 val exposed_version: String by project
 val commons_codec_version: String by project
+val koinVersion: String by project
 
 plugins {
-    kotlin("jvm") version "2.0.0"
-    id("io.ktor.plugin") version "2.3.12"
+    kotlin("jvm") version "2.0.20"
+    id("io.ktor.plugin") version "3.0.3"
     id("org.jetbrains.kotlin.plugin.serialization") version "2.0.0"
     id("com.google.cloud.tools.jib") version "3.2.1"
 }
@@ -49,6 +50,7 @@ application {
 
 repositories {
     mavenCentral()
+    maven { url = uri("https://maven.pkg.jetbrains.space/public/p/ktor/eap") }
 }
 ktor {
     fatJar {
@@ -56,7 +58,6 @@ ktor {
     }
     docker {
         jreVersion.set(JavaVersion.VERSION_19)
-
     }
     jib {
         from {
@@ -97,10 +98,15 @@ dependencies {
     implementation("io.github.cdimascio:dotenv-kotlin:6.2.2") // Adjust the version if necessary
 
     implementation("io.ktor:ktor-server-html-builder:$ktor_version")
+    implementation("io.ktor:ktor-server-sse:$ktor_version")
 
 
 
     testImplementation("io.ktor:ktor-server-test-host-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+
+    // Koin
+    implementation("io.insert-koin:koin-ktor:$koinVersion")
+    implementation("io.insert-koin:koin-logger-slf4j:$koinVersion")
 }
 
