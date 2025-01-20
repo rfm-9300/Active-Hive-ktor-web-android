@@ -12,7 +12,7 @@ import org.jetbrains.exposed.sql.`java-time`.datetime
 
 @Serializable
 data class Post(
-    val id: Int? = null,
+    val id: Int,
     val userName: String,
     val title: String,
     val content: String,

@@ -24,7 +24,7 @@ class EventRepositoryImpl: EventRepository {
         true
     }
 
-    override suspend fun getAllEvents(): List<Event> {
-        return EventDao.all().map { it.toEvent() }
+    override suspend fun getAllEvents(): List<Event> = suspendTransaction {
+        EventDao.all().map { it.toEvent() }
     }
 }

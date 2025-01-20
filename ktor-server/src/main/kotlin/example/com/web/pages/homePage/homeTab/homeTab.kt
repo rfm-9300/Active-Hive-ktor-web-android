@@ -14,6 +14,7 @@ fun HtmlBlockTag.homeTab() {
         try {
             PostRepositoryImpl().getAllPosts().map { post ->
                 PostUi(
+                    postId = post.id,
                     userName = post.userName,
                     title = post.title,
                     content = post.content,
@@ -31,7 +32,9 @@ fun HtmlBlockTag.homeTab() {
         posts.forEach { post ->
             post(post)
         }
+        script(src = "/resources/js/post.js") {}
     }
+
 }
 
 

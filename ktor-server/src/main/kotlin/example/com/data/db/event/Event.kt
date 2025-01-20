@@ -26,9 +26,6 @@ data class Event(
     val location: String,
     val attendees: List<User> = emptyList(),
     val organizerId: Int,
-    val isPublic: Boolean = true,
-    val isCancelled: Boolean = false,
-    val isArchived: Boolean = false,
     @Serializable(with = LocalDateTimeSerializer::class)
     val createdAt: LocalDateTime = LocalDateTime.now(),
 )

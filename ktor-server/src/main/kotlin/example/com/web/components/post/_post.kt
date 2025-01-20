@@ -33,8 +33,8 @@ fun HtmlBlockTag.post(post: PostUi = PostUi()) {
         // post icons div
         div(classes = "flex justify-between") {
             div(classes = "flex gap-2") {
-                div(classes = "w-6 h-6 rounded-full overflow-hidden cursor-pointer") {
-                    attributes["hx-get"] = "/likes"
+                div(classes = "w-6 h-6 rounded-full overflow-hidden cursor-pointer like-icon") {
+                    attributes["data-post-id"] = post.postId.toString()
                     svgIcon(SvgIcon.LIKE)
                 }
                 +post.likes.toString()

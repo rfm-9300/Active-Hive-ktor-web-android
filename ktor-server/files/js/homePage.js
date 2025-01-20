@@ -62,14 +62,14 @@ document.addEventListener('DOMContentLoaded', function() {
 const eventSource = new EventSource('/home/sse');
 
 // Listen to specific event type 'data-test'
-eventSource.addEventListener('like-update', (event) => {
+/* eventSource.addEventListener('like-update', (event) => {
     console.log('Received data:', event.data);
     // Handle the data here
-});
+});*/
 
 // Listen to all events
 eventSource.onmessage = (event) => {
-    console.log('Received message:', event.data);
+    console.log('sse message:', event.data);
 };
 
 // Handle connection open

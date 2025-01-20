@@ -10,6 +10,7 @@ import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import io.ktor.server.sessions.*
 import io.ktor.server.sse.*
 import org.koin.ktor.plugin.Koin
 import org.koin.ktor.ext.get
@@ -30,6 +31,7 @@ fun Application.module() {
     install(Koin){
         modules(appModule)
     }
+    install(Sessions)
     install(SSE)
     install(Authentication)
 

@@ -72,33 +72,41 @@ ktor {
 
 
 dependencies {
+    // Ktor core
     implementation("io.ktor:ktor-server-core-jvm")
+    implementation("io.ktor:ktor-server-netty-jvm")
+    implementation("io.ktor:ktor-server-config-yaml")
     implementation("io.ktor:ktor-serialization-kotlinx-json-jvm")
     implementation("io.ktor:ktor-server-content-negotiation-jvm")
-    implementation("org.postgresql:postgresql:$postgres_version")
-    implementation("com.h2database:h2:$h2_version")
-    implementation("io.ktor:ktor-server-netty-jvm")
-    implementation("ch.qos.logback:logback-classic:$logback_version")
-    implementation("io.ktor:ktor-server-config-yaml")
-    implementation("org.flywaydb:flyway-core:9.20.1")
-    implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
-    implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
-    implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
-
-    implementation("org.jetbrains.exposed:exposed-java-time:0.30.1")
-
     implementation("commons-codec:commons-codec:$commons_codec_version")
-
     implementation("io.ktor:ktor-server-auth-jvm:$ktor_version")
     implementation("io.ktor:ktor-server-auth-jwt-jvm:$ktor_version")
-
     implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
     implementation("io.ktor:ktor-server-status-pages:$ktor_version")
 
-    implementation("io.github.cdimascio:dotenv-kotlin:6.2.2") // Adjust the version if necessary
-
+    // web
     implementation("io.ktor:ktor-server-html-builder:$ktor_version")
     implementation("io.ktor:ktor-server-sse:$ktor_version")
+    implementation("io.ktor:ktor-server-sessions:$ktor_version")
+
+    // Logging
+    implementation("ch.qos.logback:logback-classic:$logback_version")
+
+    // Database
+    implementation("org.flywaydb:flyway-core:9.20.1")
+    implementation("org.postgresql:postgresql:$postgres_version")
+    implementation("com.h2database:h2:$h2_version")
+    // exposed
+    implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-dao:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
+    implementation("org.jetbrains.exposed:exposed-java-time:0.30.1")
+
+
+    // dotenv
+    implementation("io.github.cdimascio:dotenv-kotlin:6.2.2") // Adjust the version if necessary
+
+
 
 
 

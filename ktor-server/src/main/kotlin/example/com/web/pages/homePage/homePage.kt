@@ -21,6 +21,6 @@ fun HTML.homePage() {
                 }
             }
         }
-        script(src = "/resources/js/homePage.js" ) {}
+        script(src = "/resources/js/homePage.js") {}
     }
 }
