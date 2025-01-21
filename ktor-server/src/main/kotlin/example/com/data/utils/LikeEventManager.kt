@@ -1,4 +1,4 @@
-package example.com.routes
+package example.com.data.utils
 
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow

@@ -1,16 +1,18 @@
 package example.com.routes
 
+import ImageFileHandler
 import example.com.data.db.event.Event
 import example.com.data.db.event.EventRepository
-import example.com.data.db.event.EventRepositoryImpl
 import example.com.data.requests.CreateEventRequest
 import example.com.data.responses.CreateEventResponse
+import example.com.data.utils.LikeEventManager
 import example.com.web.pages.homePage.homePage
 import example.com.web.components.topbar.profileMenu
+import example.com.web.pages.homePage.eventTab.createEvent
 import example.com.web.pages.homePage.eventTab.eventTab
 import example.com.web.pages.homePage.homeTab.homeTab
 import io.ktor.http.*
-import io.ktor.server.application.*
+import io.ktor.http.content.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.html.*
@@ -20,10 +22,14 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sse.*
 import io.ktor.sse.*
-import kotlinx.coroutines.delay
+import io.ktor.util.cio.*
+import io.ktor.utils.io.*
+import io.ktor.utils.io.core.*
 import kotlinx.html.body
+import kotlinx.io.readByteArray
 import java.io.File
 import java.time.LocalDateTime
+import kotlin.text.toByteArray
 
 fun Route.homeRoutes(
     likeEventManager: LikeEventManager,
@@ -51,8 +57,9 @@ fun Route.homeRoutes(
         }
     }
     get("/post/like") {
-        val cookies = call.request.cookies
-        println("Cookies: $cookies")
+        val cookies = call.request.cookies.rawCookies
+        val cookieNames = call.request.cookies["authToken"]
+        println("Cookies: $cookieNames")
         val postId = call.parameters["postId"]?.toIntOrNull() ?: return@get call.respond(HttpStatusCode.BadRequest)
         // Emit event
         val likesCount = 10
@@ -87,30 +94,72 @@ fun Route.homeRoutes(
         }
     }
 
+
+
     authenticate {
         post("/events/create") {
+            //val request = kotlin.runCatching { call.receiveNullable<CreateEventRequest>() }.getOrNull() ?: return@post call.respond(HttpStatusCode.BadRequest)
+            //println("RequestAAAAAA: $request")
+            try {
+                val multiPart = call.receiveMultipart()
+                var source = ""
+                var title = ""
+                var description = ""
+                var date = ""
+                var location = ""
+                var image = ""
 
-            val request = kotlin.runCatching { call.receiveNullable<CreateEventRequest>() }.getOrNull() ?: return@post call.respond(HttpStatusCode.BadRequest)
+                multiPart.forEachPart {
+                    when(it) {
+                        is PartData.FormItem -> {
+                            when(it.name) {
+                                "source" -> source = it.value
+                                "title" -> title = it.value
+                                "description" -> description = it.value
+                                "date" -> date = it.value
+                                "location" -> location = it.value
+                            }
+                        }
+                        is PartData.FileItem -> {
+                            if (it.name == "image") {
+                                val fileName = it.originalFileName ?: "unnamed.jpg"
+                                val fileBytes = it.provider().readRemaining().readByteArray()
+                                image = ImageFileHandler.saveImage(fileBytes, fileName)
+                            }
+                        }
+                        else -> {}
+                    }
+                    it.dispose
 
-            val event = Event(
-                title = request.title,
-                description = request.description,
-                date = LocalDateTime.now(),
-                location = request.location,
-                organizerId = 1
-            )
 
-            eventRepository.addEvent(event)
+                    val event = Event(
+                        title = title,
+                        description = description,
+                        date = LocalDateTime.now(),
+                        location = location,
+                        organizerId = 1
+                    )
+                    eventRepository.addEvent(event)
+                    call.respond(
+                        HttpStatusCode.Created,
+                        CreateEventResponse(
+                            message = "Event created successfully"
+                        )
+                    )
 
-            call.respond(
-                HttpStatusCode.Created,
-                CreateEventResponse(
-                    message = "Event created successfully"
-                )
-            )
-
+                }
+            } catch (e: Exception) {
+                println("Error: ${e.message}")
+                call.respond(HttpStatusCode.BadRequest)
+            }
         }
     }
+    get("/home/create-event") {
+        call.respondHtml(HttpStatusCode.OK){
+            createEvent()
+        }
+    }
+
 
     staticFiles("/resources", File("files")){
         default("htmx.js")

@@ -1,6 +1,5 @@
-package example.com.data
+package example.com.data.utils
 
-import example.com.data.utils.LocalDateTimeSerializer
 import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 

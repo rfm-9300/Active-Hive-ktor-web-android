@@ -1,6 +1,6 @@
 package example.com.data.db.event
 
-import example.com.data.ImageEntity
+import example.com.data.utils.ImageEntity
 import example.com.data.db.user.User
 import example.com.data.db.user.UserDao
 import example.com.data.db.user.UserTable

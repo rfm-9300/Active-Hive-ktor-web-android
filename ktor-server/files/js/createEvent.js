@@ -1,7 +1,7 @@
 document.getElementById('submit-btn').addEventListener('click', async function(event) {
+console.log('submit-btn clicked');
     event.preventDefault();
 
-    // Get the auth token from localStorage
     const authToken = localStorage.getItem('authToken');
     if (!authToken) {
         console.error('No authentication token found');
@@ -9,61 +9,56 @@ document.getElementById('submit-btn').addEventListener('click', async function(e
         return;
     }
 
-    // Get form data
-    const title = document.getElementById('title').value;
-    const description = document.getElementById('description').value;
-    const date = document.getElementById('date').value;
-    const location = document.getElementById('location').value;
-
-    // Prepare the payload
-    const payload = {
-        source: 'web',
-        title: title,
-        description: description,
-        date: date,
-        location: location
-    };
-
     try {
-        // Send POST request with Authorization header
+        // Create FormData object
+        const formData = new FormData();
+
+        // Add all form fields
+        formData.append('source', 'web');
+        formData.append('title', document.getElementById('title').value);
+        formData.append('description', document.getElementById('description').value);
+        formData.append('date', document.getElementById('date').value);
+        formData.append('location', document.getElementById('location').value);
+
+        // Add image file if it exists
+        const fileInput = document.getElementById('image');
+        if (fileInput.files[0]) {
+            formData.append('image', fileInput.files[0]);
+        }
+
         const response = await fetch('/events/create', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${authToken}` // Add the auth token
+                'Authorization': `Bearer ${authToken}`
+                // Don't set Content-Type - browser will set it automatically with boundary
             },
-            body: JSON.stringify(payload)
+            body: formData
         });
 
-        // Handle unauthorized response
         if (response.status === 401) {
-            // Token might be expired or invalid
-            localStorage.removeItem('authToken'); // Clear the invalid token
+            localStorage.removeItem('authToken');
             document.getElementById('event-content').innerHTML = `<p class="text-red-500 font-bold">Session expired. Please log in again.</p>`;
-            // Optionally redirect to login page
-            // window.location.href = '/login';
             return;
         }
 
-        // Check if the request was successful
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
-        // Parse JSON response
         const data = await response.json();
         console.log('Response:', data);
 
-        // Handle success
-        if (data.message) {
+        if (data.success) {
             document.getElementById('event-content').innerHTML = `<p class="text-green-500 font-bold">Event Created Successfully!</p>`;
+            setTimeout(() => {
+                window.location.href = '/events';
+            }, 2000);
         } else {
-            console.error('Failed to create the event:', data.message);
-            document.getElementById('event-content').innerHTML = `<p class="text-red-500 font-bold">Failed to create the event: ${data.message}</p>`;
+            throw new Error(data.message || 'Failed to create event');
         }
 
     } catch (error) {
         console.error('Error during the event creation process:', error);
-        document.getElementById('event-content').innerHTML = `<p class="text-red-500 font-bold">An error occurred while creating the event. Please try again later.</p>`;
+        //document.getElementById('event-content').innerHTML = `<p class="text-red-500 font-bold">An error occurred while creating the event. Please try again later.</p>`;
     }
 });

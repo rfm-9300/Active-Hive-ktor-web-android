@@ -31,9 +31,15 @@ document.getElementById('login-form').addEventListener('submit', async function(
             const data = await response.json();
             console.log('Response:', data);
 
-            // Store the token (assuming the server returns it as { token: '...' })
+            // Store the token
             if (data.token) {
                 localStorage.setItem('authToken', data.token);
+                //store cookie
+                //Store the token in a cookie (valid for 1 day)
+                 const expirationDate = new Date();
+                 expirationDate.setDate(expirationDate.getDate() + 10); // 1 day
+                 document.cookie = `authToken=${data.token}; expires=${expirationDate.toUTCString()}; path=/`;
+                 console.log('Token stored in a cookie as well:', document.cookie);
                 console.log('Token stored in localStorage:', data.token);
             } else {
                 console.error('No token found in response');

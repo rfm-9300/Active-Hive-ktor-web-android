@@ -1,4 +1,4 @@
-package example.com.data
+package example.com.data.utils
 
 data class UserSession(
     val userId: Int,

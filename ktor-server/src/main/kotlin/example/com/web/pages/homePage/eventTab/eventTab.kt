@@ -8,6 +8,7 @@ import kotlinx.html.*
 fun HTML.eventTab(
     eventRepository: EventRepository
 ) {
+    // Fetch events using runBlocking
     val events = runBlocking {
         try {
             eventRepository.getAllEvents()
@@ -16,8 +17,20 @@ fun HTML.eventTab(
             emptyList()
         }
     }
-    body{
+
+    body {
+        // Container for the "Create Event" button
         div(classes = "w-full py-4") {
+            // Add a button to create a new event
+            div(classes = "flex justify-end mb-4") {
+                button(classes = "bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700") {
+                    attributes["hx-get"] = "/home/create-event"
+                    attributes["hx-target"] = "#main-content"
+                    +"Create Event"
+                }
+            }
+
+            // Render each event
             events.forEach { event ->
                 event(event)
             }
