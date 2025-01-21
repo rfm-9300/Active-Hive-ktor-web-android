@@ -1,0 +1,42 @@
+[
+  {
+    "uuid": "123e4567-e89b-12d3-a456-426614174000",
+    "question": "What is the capital of France?",
+    "correct_answer": "Paris",
+    "wrong_answers": [
+      "London",
+      "Berlin",
+      "Rome"
+    ]
+  },
+  {
+    "uuid": "123e4567-e89b-12d3-a456-426614174001",
+    "question": "Which planet is known as the Red Planet?",
+    "correct_answer": "Mars",
+    "wrong_answers": [
+      "Venus",
+      "Jupiter",
+      "Saturn"
+    ]
+  },
+  {
+    "uuid": "123e4567-e89b-12d3-a456-426614174002",
+    "question": "What is the largest ocean on Earth?",
+    "correct_answer": "Pacific Ocean",
+    "wrong_answers": [
+      "Atlantic Ocean",
+      "Indian Ocean",
+      "Arctic Ocean"
+    ]
+  },
+  {
+    "uuid": "123e4567-e89b-12d3-a456-426614174003",
+    "question": "Who wrote 'To Kill a Mockingbird'?",
+    "correct_answer": "Harper Lee",
+    "wrong_answers": [
+      "Mark Twain",
+      "F. Scott Fitzgerald",
+      "Ernest Hemingway"
+    ]
+  }
+]

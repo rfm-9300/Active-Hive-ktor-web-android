@@ -1,0 +1,37 @@
+<resources>
+    <string name="app_name">hillsongpt</string>
+
+    <!-- Login Screen -->
+    <string name="login_screen_login">Login</string>
+    <string name="login_screen_username">Username</string>
+    <string name="login_screen_password">Password</string>
+    <string name="login_screen_remember_me">Remember me</string>
+    <string name="login_screen_forgot_password">Forgot password?</string>
+    <string name="login_screen_login_button">Login</string>
+    <string name="login_screen_or_login_with">Or login with: </string>
+    <string name="login_screen_dont_have_account">Don\'t have an account?</string>
+    <string name="login_screen_sign_up">Sign up</string>
+    <string name="login_error_unauthorized">Username or Password incorrect</string>
+    <string name="login_error_unknown">Authentication error</string>
+
+    <!-- Sign Up Screen -->
+    <string name="sign_up_screen_sign_up">Sign Up</string>
+    <string name="sign_up_screen_email">Email</string>
+    <string name="sign_up_screen_password">Password</string>
+    <string name="sign_up_screen_confirm_password">Confirm Password</string>
+    <string name="sign_up_screen_first_name">First Name</string>
+    <string name="sign_up_screen_last_name">Last Name</string>
+    <string name="sign_up_screen_agree_with">I agree with</string>
+    <string name="sign_up_screen_privacy">Privacy </string>
+    <string name="sign_up_screen_and">and</string>
+    <string name="sign_up_screen_policy">Policy</string>
+    <string name="sign_up_screen_already_have_account">Already have an account?</string>
+    <string name="sign_up_screen_sign_in">Sign In</string>
+    <string name="sign_up_screen_passwords_do_not_match">Passwords does not match</string>
+    <string name="retry">Retry</string>
+
+    <!-- Home Screen -->
+    <string name="home_screen_title">Hillsong Portugal Online</string>
+
+
+</resources>
