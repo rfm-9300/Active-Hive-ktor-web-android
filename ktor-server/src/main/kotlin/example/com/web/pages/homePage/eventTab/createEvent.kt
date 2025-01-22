@@ -4,15 +4,11 @@ import kotlinx.html.*
 
 fun HTML.createEvent() {
     body {
-        div(classes = "flex flex-col justify-center items-center mx-auto max-w-3xl") {
+        div(classes = "flex flex-col justify-center items-center w-3/4") {
             id = "event-content"
             div(classes = "flex justify-between items-center mb-8") {
                 div {
                     h1(classes = "text-3xl font-bold") { +"Create New Event" }
-                    p(classes = "text-gray-600 mt-2") { +"Fill out the details for your upcoming event" }
-                }
-                a(href = "/events/create", classes = "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded") {
-                    +"+ New Event"
                 }
             }
 
