@@ -130,24 +130,25 @@ fun Route.homeRoutes(
                         else -> {}
                     }
                     it.dispose
-
-
-                    val event = Event(
-                        title = title,
-                        description = description,
-                        date = LocalDateTime.now(),
-                        location = location,
-                        organizerId = 1
-                    )
-                    eventRepository.addEvent(event)
-                    call.respond(
-                        HttpStatusCode.Created,
-                        CreateEventResponse(
-                            message = "Event created successfully"
-                        )
-                    )
-
                 }
+
+                val event = Event(
+                    title = title,
+                    description = description,
+                    date = LocalDateTime.now(),
+                    location = location,
+                    organizerId = 1,
+                    headerImagePath = image
+                )
+
+                eventRepository.addEvent(event)
+
+                call.respond(
+                    HttpStatusCode.Created,
+                    CreateEventResponse(
+                        message = "Event created successfully"
+                    )
+                )
             } catch (e: Exception) {
                 println("Error: ${e.message}")
                 call.respond(HttpStatusCode.BadRequest)

@@ -11,6 +11,7 @@ class EventRepositoryImpl: EventRepository {
             date = event.date
             location = event.location
             organizer = UserDao[event.organizerId]
+            headerImagePath = event.headerImagePath
         }.id.value
 
         // If you want to add attendees

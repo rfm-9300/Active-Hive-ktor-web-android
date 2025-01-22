@@ -3,8 +3,8 @@ package example.com.web.pages.homePage.eventTab
 import kotlinx.html.*
 
 fun HTML.createEvent() {
-    body{
-        div(classes = "flex flex-col justify-center items-center mx-auto max-w-4xl") {
+    body {
+        div(classes = "flex flex-col justify-center items-center mx-auto max-w-3xl") {
             id = "event-content"
             div(classes = "flex justify-between items-center mb-8") {
                 div {
@@ -23,7 +23,9 @@ fun HTML.createEvent() {
                 encType = FormEncType.multipartFormData
             ) {
                 id = "event-form"
-                attributes["name"] =  "eventForm"
+                attributes["name"] = "eventForm"
+
+                // Title
                 div(classes = "mb-4") {
                     label(classes = "block text-gray-700 text-sm font-bold mb-2") {
                         attributes["for"] = "title"
@@ -37,6 +39,7 @@ fun HTML.createEvent() {
                     }
                 }
 
+                // Description
                 div(classes = "mb-4") {
                     label(classes = "block text-gray-700 text-sm font-bold mb-2") {
                         attributes["for"] = "description"
@@ -49,6 +52,7 @@ fun HTML.createEvent() {
                     }
                 }
 
+                // Event date
                 div(classes = "mb-4") {
                     label(classes = "block text-gray-700 text-sm font-bold mb-2") {
                         attributes["for"] = "date"
@@ -62,6 +66,7 @@ fun HTML.createEvent() {
                     }
                 }
 
+                // Location
                 div(classes = "mb-4") {
                     label(classes = "block text-gray-700 text-sm font-bold mb-2") {
                         attributes["for"] = "location"
@@ -81,24 +86,35 @@ fun HTML.createEvent() {
                         +"Event Image"
                     }
                     div(classes = "mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md") {
-                        div(classes = "space-y-1 text-center") {
-                            div(classes = "flex text-sm text-gray-600") {
-                                label(classes = "relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500") {
+                        div(classes = "flex flex-col space-y-1 text-center") {
+                            div(classes = "flex text-sm text-gray-600 justify-center items-center") {
+                                label(classes = "relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 items-center") {
                                     input(classes = "sr-only") {
                                         attributes["type"] = "file"
                                         attributes["name"] = "image"
                                         attributes["id"] = "image"
                                         attributes["accept"] = "image/*"
                                     }
-                                    +"Upload a file"
+                                    div(classes = "items-center") {
+                                        span { +"Upload a file"}
+                                        span(classes = "pl-1") { +" or drag and drop" }
+                                    }
                                 }
-                                p(classes = "pl-1") { +" or drag and drop" }
+
                             }
-                            p(classes = "text-xs text-gray-500") { +"PNG, JPG, GIF up to 10MB" }
+                            p(classes = "text-xs text-gray-500") {
+                                id = "image-upload-text"
+                                +"PNG, JPG, GIF up to 10MB"
+                            }
+                            p(classes = "text-sm text-green-600 mt-2") {
+                                id = "upload-status"
+                                +""
+                            }
                         }
                     }
                 }
 
+                // Submit button
                 div(classes = "flex items-center justify-center") {
                     button(classes = "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded") {
                         attributes["type"] = "button"
@@ -108,6 +124,9 @@ fun HTML.createEvent() {
                 }
             }
         }
-        script(src = "/resources/js/createEvent.js" ) {}
+
+        // Import a JavaScript file for form submission or validation logic
+        script(src = "/resources/js/create-event/createEvent.js") {}
+        script(src = "/resources/js/create-event/main.js") {}
     }
 }

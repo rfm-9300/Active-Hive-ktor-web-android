@@ -19,7 +19,7 @@ import java.time.LocalDateTime
 data class Event(
     val id: Int? = null,
     val title: String,
-    val headerImage: ImageEntity? = null,
+    val headerImagePath: String,
     val description: String,
     @Serializable(with = LocalDateTimeSerializer::class)
     val date: LocalDateTime,
@@ -36,6 +36,7 @@ object EventTable : IntIdTable("event")  {
     val date = datetime("date")
     val location = varchar("location", 255)
     val organizerId = reference("organizer_id", UserTable)
+    val headerImagePath = varchar("header_image_path", 255)
 }
 
 object EventAttendeeTable : Table("event_attendee") {
@@ -52,6 +53,7 @@ class EventDao(id: EntityID<Int>) : IntEntity(id) {
     var date by EventTable.date
     var location by EventTable.location
     var organizer by UserDao referencedOn EventTable.organizerId
+    var headerImagePath by EventTable.headerImagePath
 
     val attendees by UserDao via EventAttendeeTable
 }
@@ -63,5 +65,6 @@ fun EventDao.toEvent() = Event(
     date = date,
     location = location,
     organizerId = organizer.id.value,
-    attendees = attendees.map { it.toUser() }
+    attendees = attendees.map { it.toUser() },
+    headerImagePath = headerImagePath
 )
