@@ -1,6 +1,8 @@
 package example.com.data.db.post
 
 import example.com.data.db.user.UserDao
+import example.com.data.db.user.UserProfileDao
+import example.com.data.db.user.UserProfilesTable
 import example.com.data.db.user.UserTable
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.dao.IntEntity
@@ -24,7 +26,7 @@ object PostTable: IntIdTable("post") {
     val title = varchar("title", 255)
     val content = text("content")
     val date = datetime("date")
-    val userId = reference("user_id", UserTable)
+    val userId = reference("user_id", UserProfilesTable)
 }
 object PostLikeTable: Table("post_like") {
     val postId = reference("post_id", PostTable)
@@ -44,13 +46,13 @@ class PostDao(id: EntityID<Int>): IntEntity(id) {
     var title by PostTable.title
     var content by PostTable.content
     var date by PostTable.date
-    var userId by UserDao referencedOn PostTable.userId
+    var userProfile by UserProfileDao referencedOn PostTable.userId
     var likes by UserDao via PostLikeTable
 }
 
 fun PostDao.toPost() = Post(
     id = id.value,
-    userName = userId.name,
+    userName = userProfile.firstName + " " + userProfile.lastName,
     title = title,
     content = content,
     date = date.toString(),

@@ -1,10 +1,7 @@
 package example.com.data.db.event
 
+import example.com.data.db.user.*
 import example.com.data.utils.ImageEntity
-import example.com.data.db.user.User
-import example.com.data.db.user.UserDao
-import example.com.data.db.user.UserTable
-import example.com.data.db.user.toUser
 import example.com.data.utils.LocalDateTimeSerializer
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.dao.IntEntity
@@ -36,7 +33,7 @@ object EventTable : IntIdTable("event")  {
     val description = text("description")
     val date = datetime("date")
     val location = varchar("location", 255)
-    val organizerId = reference("organizer_id", UserTable)
+    val organizerId = reference("organizer_id", UserProfilesTable)
     val headerImagePath = varchar("header_image_path", 255)
 }
 
@@ -53,7 +50,7 @@ class EventDao(id: EntityID<Int>) : IntEntity(id) {
     var description by EventTable.description
     var date by EventTable.date
     var location by EventTable.location
-    var organizer by UserDao referencedOn EventTable.organizerId
+    var organizer by UserProfileDao referencedOn EventTable.organizerId
     var headerImagePath by EventTable.headerImagePath
 
     val attendees by UserDao via EventAttendeeTable
@@ -68,5 +65,5 @@ fun EventDao.toEvent() = Event(
     organizerId = organizer.id.value,
     attendees = attendees.map { it.toUser() },
     headerImagePath = headerImagePath,
-    organizerName = organizer.name
+    organizerName = organizer.firstName + " " + organizer.lastName
 )

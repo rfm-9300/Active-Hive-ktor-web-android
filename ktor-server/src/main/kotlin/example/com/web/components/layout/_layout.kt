@@ -11,6 +11,9 @@ fun HTML.layout(e: BODY.() -> Unit) {
         // Add Htmx path
         script(src = "/resources/htmx.js") {}
 
+        // endpoints
+        script(src = "/resources/js/endpoints.js") {}
+
         script {
             unsafe {
                 +"""

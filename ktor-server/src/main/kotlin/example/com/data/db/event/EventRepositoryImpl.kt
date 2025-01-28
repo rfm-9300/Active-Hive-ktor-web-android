@@ -1,6 +1,7 @@
 package example.com.data.db.event
 
 import example.com.data.db.user.UserDao
+import example.com.data.db.user.UserProfileDao
 import example.com.data.db.user.suspendTransaction
 
 class EventRepositoryImpl: EventRepository {
@@ -10,7 +11,7 @@ class EventRepositoryImpl: EventRepository {
             description = event.description
             date = event.date
             location = event.location
-            organizer = UserDao[event.organizerId]
+            organizer = UserProfileDao[event.organizerId]
             headerImagePath = event.headerImagePath
         }.id.value
 

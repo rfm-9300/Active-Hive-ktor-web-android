@@ -3,6 +3,7 @@ package example.com.routes
 import example.com.data.requests.AuthRequest
 import example.com.data.responses.AuthResponse
 import example.com.data.db.user.User
+import example.com.data.db.user.UserProfile
 import example.com.data.db.user.UserRepository
 import example.com.security.hashing.HashingService
 import example.com.security.hashing.SaltedHash
@@ -57,7 +58,13 @@ fun Route.loginRoutes(
         val newUser = User(
             username = request.username,
             password = saltedHash.hash,
-            salt = saltedHash.salt
+            salt = saltedHash.salt,
+            profile = UserProfile(
+                firstName = "",
+                lastName = "",
+                email = "",
+                phone = ""
+            )
         )
 
         // try to add the user to the database

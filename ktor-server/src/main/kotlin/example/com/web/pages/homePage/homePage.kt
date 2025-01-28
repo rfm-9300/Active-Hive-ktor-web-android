@@ -3,6 +3,7 @@ package example.com.web.pages.homePage
 import example.com.web.components.layout.layout
 import example.com.web.pages.homePage.navbar.navbar
 import example.com.web.components.topbar.topbar
+import example.com.web.loadJs
 import example.com.web.pages.homePage.homeTab.homeTab
 import kotlinx.html.*
 
@@ -21,6 +22,6 @@ fun HTML.homePage() {
                 }
             }
         }
-        script(src = "/resources/js/homePage.js") {}
+        loadJs("home")
     }
 }

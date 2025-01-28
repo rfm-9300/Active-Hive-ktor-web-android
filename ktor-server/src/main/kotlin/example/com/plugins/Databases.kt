@@ -5,6 +5,7 @@ import example.com.data.db.event.EventTable
 import example.com.data.db.post.PostCommentTable
 import example.com.data.db.post.PostLikeTable
 import example.com.data.db.post.PostTable
+import example.com.data.db.user.UserProfilesTable
 import example.com.data.db.user.UserTable
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -36,6 +37,7 @@ fun Application.configureDatabases(config: ApplicationConfig) {
     transaction {
         SchemaUtils.create(
             UserTable,
+            UserProfilesTable,
             EventTable,
             EventAttendeeTable,
             PostTable,
