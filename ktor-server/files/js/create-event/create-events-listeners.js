@@ -16,3 +16,18 @@ document.getElementById("image").addEventListener("change", function() {
     uploadStatus.textContent = "";
   }
 });
+
+// Get the current date and time
+const now = new Date();
+
+// Format the date and time as YYYY-MM-DDTHH:MM
+const year = now.getFullYear();
+const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+const day = String(now.getDate()).padStart(2, '0');
+const hours = String(now.getHours()).padStart(2, '0');
+const minutes = String(now.getMinutes()).padStart(2, '0');
+
+const formattedDate = `${year}-${month}-${day}T${hours}:${minutes}`;
+
+// Set the value of the input
+document.getElementById("date").value = formattedDate;

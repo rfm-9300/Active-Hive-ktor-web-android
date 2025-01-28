@@ -4,6 +4,7 @@ class ApiClient {
         this.token = localStorage.getItem('authToken');
     }
 
+
     // Updates the token
     setToken(newToken) {
         this.token = newToken;

@@ -2,10 +2,11 @@ document.getElementById('submit-btn').addEventListener('click', async function(e
 console.log('submit-btn clicked');
     event.preventDefault();
 
-    const authToken = localStorage.getItem('authToken');
-    if (!authToken) {
-        console.error('No authentication token found');
-        document.getElementById('event-content').innerHTML = `<p class="text-red-500 font-bold">Please log in to create an event.</p>`;
+    const api = new ApiClient(); // Instantiate the ApiClient
+    const contentDiv = document.getElementById('event-content');
+
+    if (!api.token) {
+        contentDiv.innerHTML = `<p class="text-red-500 font-bold">Please log in to create an event.</p>`;
         return;
     }
 
@@ -48,17 +49,16 @@ console.log('submit-btn clicked');
         const data = await response.json();
         console.log('Response:', data);
 
+        const eventContent = document.getElementById('event-content');
+
         if (data.success) {
-            document.getElementById('event-content').innerHTML = `<p class="text-green-500 font-bold">Event Created Successfully!</p>`;
-            setTimeout(() => {
-                window.location.href = '/events';
-            }, 2000);
+            eventContent.innerHTML = `<p class="text-green-500 font-bold">Event created successfully!</p>`;
         } else {
-            throw new Error(data.message || 'Failed to create event');
+            eventContent.innerHTML = `<p class="text-red-500 font-bold">An error occurred while creating the event. Please try again later.</p>`;
         }
 
     } catch (error) {
         console.error('Error during the event creation process:', error);
-        //document.getElementById('event-content').innerHTML = `<p class="text-red-500 font-bold">An error occurred while creating the event. Please try again later.</p>`;
+        document.getElementById('event-content').innerHTML = `<p class="text-red-500 font-bold">An error occurred while creating the event. Please try again later.</p>`;
     }
 });

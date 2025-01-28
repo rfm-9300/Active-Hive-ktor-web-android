@@ -146,6 +146,7 @@ fun Route.homeRoutes(
                 call.respond(
                     HttpStatusCode.Created,
                     CreateEventResponse(
+                        success = true,
                         message = "Event created successfully"
                     )
                 )
