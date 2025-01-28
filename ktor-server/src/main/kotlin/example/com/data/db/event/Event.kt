@@ -28,6 +28,7 @@ data class Event(
     val organizerId: Int,
     @Serializable(with = LocalDateTimeSerializer::class)
     val createdAt: LocalDateTime = LocalDateTime.now(),
+    val organizerName: String = ""
 )
 
 object EventTable : IntIdTable("event")  {
@@ -66,5 +67,6 @@ fun EventDao.toEvent() = Event(
     location = location,
     organizerId = organizer.id.value,
     attendees = attendees.map { it.toUser() },
-    headerImagePath = headerImagePath
+    headerImagePath = headerImagePath,
+    organizerName = organizer.name
 )

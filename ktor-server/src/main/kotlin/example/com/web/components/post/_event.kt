@@ -34,7 +34,7 @@ fun HtmlBlockTag.event(event: Event){
                         div(classes = "w-4 h-4 mr-1") { svgIcon(SvgIcon.TIME, size = 12) }
                         +time
                     }
-                    p(classes = "text-sm text-gray-500") { +"With ${event.organizerId}" }
+                    p(classes = "text-sm text-gray-500") { +"With ${event.organizerName}" }
                 }
                 // image div
                 div(classes = "flex flex-row items-center") {
