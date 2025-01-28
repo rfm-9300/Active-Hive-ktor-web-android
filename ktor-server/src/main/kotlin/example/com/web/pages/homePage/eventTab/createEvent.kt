@@ -1,5 +1,6 @@
 package example.com.web.pages.homePage.eventTab
 
+import example.com.web.loadJs
 import kotlinx.html.*
 
 fun HTML.createEvent() {
@@ -121,8 +122,7 @@ fun HTML.createEvent() {
             }
         }
 
-        // Import a JavaScript file for form submission or validation logic
-        script(src = "/resources/js/create-event/createEvent.js") {}
-        script(src = "/resources/js/create-event/main.js") {}
+        // load scripts
+        loadJs("create-event")
     }
 }

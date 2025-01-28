@@ -1,3 +1,5 @@
+console.log('main LOADED');
+
 document.getElementById("image").addEventListener("change", function() {
   const fileInput = this;
   const file = fileInput.files[0];
