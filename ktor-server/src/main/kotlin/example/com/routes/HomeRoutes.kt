@@ -151,8 +151,11 @@ fun Route.homeRoutes(
                     )
                 )
             } catch (e: Exception) {
-                println("Error: ${e.message}")
-                call.respond(HttpStatusCode.BadRequest)
+                println("Error creating event: ${e.message}")
+                call.respond(HttpStatusCode.BadRequest, CreateEventResponse(
+                    success = false,
+                    message = "Error creating event: ${e.message}"
+                ))
             }
         }
     }

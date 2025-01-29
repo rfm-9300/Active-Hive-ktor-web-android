@@ -24,7 +24,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
 
             // Check if the request was successful
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                console.error('HTTP error:', response.message);
             }
 
             // Parse JSON response

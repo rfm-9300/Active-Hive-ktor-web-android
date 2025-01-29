@@ -5,7 +5,6 @@ import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.dao.*
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
-import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 
@@ -15,7 +14,7 @@ data class User(
     val username: String,
     val password: String,
     val salt: String,
-    val profile: UserProfile
+    val profile: UserProfile? = null
 )
 
 @Serializable
@@ -27,9 +26,9 @@ data class UserProfile(
     val phone: String
 )
 
-// UserTable now extends IntIdTable
+
 object UserTable : IntIdTable("user") {
-    val name = varchar("username", 128)
+    val username = varchar("username", 128)
     val password = varchar("password", 256)
     val salt = varchar("salt", 256)
 }
@@ -46,7 +45,7 @@ object UserProfilesTable : IntIdTable("user_profile") {
 class UserDao(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<UserDao>(UserTable)
 
-    var name by UserTable.name
+    var name by UserTable.username
     var password by UserTable.password
     var salt by UserTable.salt
     var profile by UserProfileDao referencedOn UserProfilesTable.userId

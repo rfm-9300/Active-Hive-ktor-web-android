@@ -27,31 +27,19 @@ console.log('submit-btn clicked');
             formData.append('image', fileInput.files[0]);
         }
 
-        const response = await fetch('/events/create', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${authToken}`
-                // Don't set Content-Type - browser will set it automatically with boundary
-            },
-            body: formData
-        });
+        const data = await api.post(ApiClient.ENDPOINTS.CREATE_EVENT, formData, {})
 
-        if (response.status === 401) {
-            localStorage.removeItem('authToken');
-            document.getElementById('event-content').innerHTML = `<p class="text-red-500 font-bold">Session expired. Please log in again.</p>`;
+        if (!data.success){
+            contentDiv.innerHTML = `<p class="text-red-500 font-bold">An error occurred while creating the event. Please try again later.</p>`;
+            console.error('Error during the event creation process:', response);
             return;
         }
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log('Response:', data);
+        console.log('Response:', response);
 
         const eventContent = document.getElementById('event-content');
 
-        if (data.success) {
+        if (response.success) {
             eventContent.innerHTML = `<p class="text-green-500 font-bold">Event created successfully!</p>`;
         } else {
             eventContent.innerHTML = `<p class="text-red-500 font-bold">An error occurred while creating the event. Please try again later.</p>`;

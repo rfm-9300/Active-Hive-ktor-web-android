@@ -28,7 +28,7 @@ fun HtmlBlockTag.homeTab() {
         }
     }
 
-    div(classes = "w-full py-4") {
+    div(classes = "w-[70%] py-4") {
         posts.forEach { post ->
             post(post)
         }

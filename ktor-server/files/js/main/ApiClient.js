@@ -1,9 +1,27 @@
 class ApiClient {
+
+    static ENDPOINTS = {
+        LOGIN: '/auth/login',
+        REGISTER: '/auth/register',
+        EVENTS: '/events',
+        EVENT: '/events/:id',
+        CREATE_EVENT: '/events/create',
+        DELETE_EVENT: '/events/:id/delete',
+        UPDATE_EVENT: '/events/:id/update',
+        RSVP: '/events/:id/rsvp',
+        CANCEL_RSVP: '/events/:id/cancel-rsvp',
+        PROFILE: '/profile',
+        PROFILE_UPDATE: '/profile/update',
+        PROFILE_IMAGE: '/profile/image',
+        PROFILE_PASSWORD: '/profile/password',
+        PROFILE_DELETE: '/profile/delete',
+        LOGOUT: '/auth/logout'
+    }
+
     constructor(baseURL = '') {
         this.baseURL = baseURL;
         this.token = localStorage.getItem('authToken');
     }
-
 
     // Updates the token
     setToken(newToken) {
@@ -20,7 +38,6 @@ class ApiClient {
     // Creates default headers with optional additional headers
     getHeaders(additionalHeaders = {}) {
         const headers = {
-            'Content-Type': 'application/json',
             ...additionalHeaders
         };
 
@@ -43,10 +60,6 @@ class ApiClient {
                 headers
             });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
             return response.text();
         } catch (error) {
             console.error('Request failed:', error);
@@ -54,7 +67,6 @@ class ApiClient {
         }
     }
 
-    
 
     // Generic request method
     async request(endpoint, options = {}) {
@@ -67,10 +79,13 @@ class ApiClient {
                 headers
             });
 
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
+            console.log('Response:', response);
 
+            if(!response.ok) {
+                const error = await response.json();
+                throw error;
+            }
+            
             const data = await response.json();
             return data;
         } catch (error) {
@@ -92,7 +107,7 @@ class ApiClient {
         return this.request(endpoint, {
             ...options,
             method: 'POST',
-            body: JSON.stringify(data)
+            body: data
         });
     }
 
