@@ -12,7 +12,7 @@ fun HtmlBlockTag.event(event: Event){
     val date = LocalDateTime.parse(event.date.toString()).format(DateTimeFormatter.ofPattern("dd MMM"))
     val dayOfWeek = LocalDateTime.parse(event.date.toString()).dayOfWeek.toString()
     val time = LocalDateTime.parse(event.date.toString()).format(DateTimeFormatter.ofPattern("hh:mm a"))
-    val url = Routes.UI.Event.DETAILS.replace("{eventId}", event.id.toString())
+    val url = Routes.Ui.Event.DETAILS.replace("{eventId}", event.id.toString())
 
     div(classes = "flex flex-row items-center justify-center w-full p-4 rounded-xl") {
         attributes["hx-get"] = url

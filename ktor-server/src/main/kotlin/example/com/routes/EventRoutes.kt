@@ -35,7 +35,7 @@ fun Route.eventRoutes(
     }
 
     authenticate {
-        post(Routes.API.Event.CREATE) {
+        post(Routes.Api.Event.CREATE) {
             try {
                 val multiPart = call.receiveMultipart()
                 var source = ""

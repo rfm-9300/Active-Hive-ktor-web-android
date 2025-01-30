@@ -1,7 +1,6 @@
 class ApiClient {
 
     static ENDPOINTS = {
-        LOGIN: '/auth/login',
         CREATE_EVENT: '%%API_CREATE_EVENT%%'
     }
 

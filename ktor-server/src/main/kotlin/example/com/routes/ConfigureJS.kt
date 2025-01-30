@@ -6,24 +6,23 @@ import io.ktor.server.routing.*
 import kotlinx.io.files.FileNotFoundException
 import java.io.File
 
-fun Route.configureJsProcessing() {
+fun Route.dynamicJsProcessing() {
     get("/js/{filename}") {
-        val directory = "files/js/main"
+        val directory = "files/js/dynamic"
         try {
             // Get the filename from the request
             val filename = call.parameters["filename"] ?: throw IllegalArgumentException("Filename not provided")
             val files = File(directory).listFiles()?.toList()?.filter { it.name.endsWith(".js") } ?: emptyList()
-            val jsFile = files.find { it.name == filename } ?: throw FileNotFoundException("File not found: $filename")
+            val jsFile = files.find { it.name == filename.lowercase() } ?: throw FileNotFoundException("File not found: $filename")
 
             // Read the JS file from your resources directory
             val jsContent = jsFile.readText()
 
             // Replace placeholders with actual values
             val processedContent = jsContent.replace(
-                mapOf(
-                    "%%API_CREATE_EVENT%%" to Routes.API.Event.CREATE
-                )
+                Routes.Placeholder.PLACEHOLDERS
             )
+
             call.respondText(
                 contentType = ContentType.Application.JavaScript,
                 text = processedContent
