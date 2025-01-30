@@ -2,20 +2,7 @@ class ApiClient {
 
     static ENDPOINTS = {
         LOGIN: '/auth/login',
-        REGISTER: '/auth/register',
-        EVENTS: '/events',
-        EVENT: '/events/:id',
-        CREATE_EVENT: '/events/create',
-        DELETE_EVENT: '/events/:id/delete',
-        UPDATE_EVENT: '/events/:id/update',
-        RSVP: '/events/:id/rsvp',
-        CANCEL_RSVP: '/events/:id/cancel-rsvp',
-        PROFILE: '/profile',
-        PROFILE_UPDATE: '/profile/update',
-        PROFILE_IMAGE: '/profile/image',
-        PROFILE_PASSWORD: '/profile/password',
-        PROFILE_DELETE: '/profile/delete',
-        LOGOUT: '/auth/logout'
+        CREATE_EVENT: '%%API_CREATE_EVENT%%'
     }
 
     constructor(baseURL = '') {

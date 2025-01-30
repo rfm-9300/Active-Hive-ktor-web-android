@@ -8,8 +8,9 @@ fun HTML.layout(e: BODY.() -> Unit) {
     head {
         // Add Tailwind CSS CDN
         script(src = "https://cdn.tailwindcss.com") {}
-
-        loadHeaderScripts()
+        script (src = "/test/resources/js/ApiClient.js"){}
+        script (src = "/resources/js/main/htmx.js"){}
+        //loadHeaderScripts()
     }
 
     body {

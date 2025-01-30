@@ -35,11 +35,11 @@ console.log('submit-btn clicked');
             return;
         }
 
-        console.log('Response:', response);
+        console.log('Response:', data);
 
         const eventContent = document.getElementById('event-content');
 
-        if (response.success) {
+        if (data.success) {
             eventContent.innerHTML = `<p class="text-green-500 font-bold">Event created successfully!</p>`;
         } else {
             eventContent.innerHTML = `<p class="text-red-500 font-bold">An error occurred while creating the event. Please try again later.</p>`;

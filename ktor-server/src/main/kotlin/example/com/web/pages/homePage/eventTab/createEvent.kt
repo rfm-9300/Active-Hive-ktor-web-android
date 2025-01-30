@@ -124,5 +124,6 @@ fun HTML.createEvent() {
 
         // load scripts
         loadJs("create-event")
+
     }
 }

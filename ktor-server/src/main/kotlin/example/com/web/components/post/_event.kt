@@ -1,7 +1,7 @@
 package example.com.web.components.post
 
 import example.com.data.db.event.Event
-import example.com.data.utils.LocalDateTimeSerializer
+import example.com.routes.Routes
 import example.com.web.components.SvgIcon
 import example.com.web.components.svgIcon
 import kotlinx.html.*
@@ -12,8 +12,10 @@ fun HtmlBlockTag.event(event: Event){
     val date = LocalDateTime.parse(event.date.toString()).format(DateTimeFormatter.ofPattern("dd MMM"))
     val dayOfWeek = LocalDateTime.parse(event.date.toString()).dayOfWeek.toString()
     val time = LocalDateTime.parse(event.date.toString()).format(DateTimeFormatter.ofPattern("hh:mm a"))
+    val url = Routes.UI.Event.DETAILS.replace("{eventId}", event.id.toString())
 
     div(classes = "flex flex-row items-center justify-center w-full p-4 rounded-xl") {
+        attributes["hx-get"] = url
         // date div
         div(classes = "flex flex-col flex-1 items-center justify-center text-center text-sm") {
             p(classes = "text-lg font-bold") {

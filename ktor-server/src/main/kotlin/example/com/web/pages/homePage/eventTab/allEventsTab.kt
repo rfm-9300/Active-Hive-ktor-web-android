@@ -5,7 +5,7 @@ import example.com.web.components.post.event
 import kotlinx.coroutines.runBlocking
 import kotlinx.html.*
 
-fun HTML.eventTab(
+fun HTML.allEventsTab(
     eventRepository: EventRepository
 ) {
     // Fetch events using runBlocking
