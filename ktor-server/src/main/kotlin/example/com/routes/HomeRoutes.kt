@@ -5,6 +5,7 @@ import example.com.data.db.event.Event
 import example.com.data.db.event.EventRepository
 import example.com.data.responses.CreateEventResponse
 import example.com.data.utils.LikeEventManager
+import example.com.plugins.Logger
 import example.com.web.pages.homePage.homePage
 import example.com.web.components.topbar.profileMenu
 import example.com.web.pages.homePage.eventTab.createEvent
@@ -12,6 +13,7 @@ import example.com.web.pages.homePage.eventTab.allEventsTab
 import example.com.web.pages.homePage.homeTab.homeTab
 import io.ktor.http.*
 import io.ktor.http.content.*
+import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.html.*
@@ -22,6 +24,10 @@ import io.ktor.server.routing.*
 import io.ktor.server.sse.*
 import io.ktor.sse.*
 import io.ktor.utils.io.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.html.body
 import kotlinx.io.readByteArray
 import java.io.File
@@ -63,17 +69,48 @@ fun Route.homeRoutes(
         call.respond(HttpStatusCode.OK)
     }
 
-    sse ("/home/sse") {
+    sse("/home/sse") {
         try {
-            likeEventManager.likeEvents.collect { event ->
-                send(ServerSentEvent(
-                    data = "Post ${event.postId} has ${event.likesCount} likes",
-                    event = "like-update",
-                    id = event.postId.toString()
-                ))
+            // Send initial connection message
+            send(ServerSentEvent(data = "sse connected"))
+
+            // Keep connection alive with a ping every 30 seconds
+            val keepAliveJob = launch {
+                while (true) {
+                    delay(30000) // 30 seconds
+                    send(ServerSentEvent(data = "ping", event = "keepalive"))
+                }
             }
+
+            // Main collection job
+            try {
+                likeEventManager.eventDeleted
+                    .onEach { event ->
+                        send(ServerSentEvent(
+                            data = "Post  likes",
+                            event = "event-deleted",
+                            id = 2.toString()
+                        ))
+                    }
+                    .catch { e ->
+                        send(ServerSentEvent(data = "Error: ${e.message}", event = "error"))
+                    }
+                    .collect {
+                        // No action needed, events are sent in onEach
+                    }
+            } finally {
+                keepAliveJob.cancel() // Clean up keep-alive job
+            }
+        } catch (e: CancellationException) {
+            // Normal disconnection, no need to send error
+            Logger.d("Client disconnected from SSE")
         } catch (e: Exception) {
-            send(ServerSentEvent(data= "Error: ${e.message}", event = "error"))
+            Logger.d("SSE error ${e.message}")
+            try {
+                send(ServerSentEvent(data = "Error: ${e.message}", event = "error"))
+            } catch (_: Exception) {
+                // Ignore send errors on connection close
+            }
         }
     }
 

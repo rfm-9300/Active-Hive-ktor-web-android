@@ -45,39 +45,58 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 });
 
+const contentDiv = document.getElementById('main-content');
+
 //////////////
 //Server sent events
 ///////
 
-// Create connection to SSE endpoint
-const eventSource = new EventSource('/home/sse');
+function setupSSE() {
+    const eventSource = new EventSource('/home/sse');
+    
+    eventSource.onopen = (event) => {
+        console.log('SSE Connection opened');
+    };
 
-// Listen to specific event type 'data-test'
-/* eventSource.addEventListener('like-update', (event) => {
-    console.log('Received data:', event.data);
-    // Handle the data here
-});*/
-const contentDiv = document.getElementById('main-content');
-// Listen to all events
-eventSource.onmessage = (event) => {
-    console.log('sse message:', event.data);
-    if (event.data === 'refresh-events') {
-        console.log('Received like update');
-        const html = api.getHtml('/home/events-tab');
+    eventSource.addEventListener('like-update', (event) => {
+        console.log('Like update:', event.data);
+        // Handle like update here
+    });
+
+    eventSource.addEventListener('event-deleted', async (event) => {
+        console.log('Event Delete:', event.data);
+        // Handle event delete here
+        const html = await window.api.getHtml('/home/events-tab');
         contentDiv.innerHTML = html;
-    }
-};
+    });
 
-// Handle connection open
-eventSource.onopen = (event) => {
-    console.log('Connection opened');
-};
+    eventSource.addEventListener('keepalive', (event) => {
+        console.log('Keepalive received');
+    });
 
-// Handle errors
-eventSource.onerror = (event) => {
-    if (eventSource.readyState === EventSource.CLOSED) {
-        console.log('Connection closed');
-    } else {
-        console.error('Error occurred:', event);
+    eventSource.addEventListener('error', (event) => {
+        console.log('Error:', event.data);
+    });
+
+    eventSource.onerror = (event) => {
+        if (eventSource.readyState === EventSource.CLOSED) {
+            console.log('Connection closed, attempting to reconnect...');
+            setTimeout(() => {
+                eventSource.close();
+                setupSSE();
+            }, 5000); // Retry after 5 seconds
+        }
+    };
+
+    return eventSource;
+}
+
+// Start the SSE connection
+const sse = setupSSE();
+
+// Clean up on page unload
+window.addEventListener('beforeunload', () => {
+    if (sse) {
+        sse.close();
     }
-};
+});

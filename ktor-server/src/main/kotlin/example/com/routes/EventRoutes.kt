@@ -33,13 +33,15 @@ fun Route.eventRoutes(
     authenticate {
         post(Routes.Api.Event.DELETE) {
             val request = kotlin.runCatching { call.receiveNullable<DeleteEventRequest>() }.getOrNull() ?: return@post call.respond(HttpStatusCode.BadRequest)
+
+            val deletedEvent = eventRepository.deleteEvent(request.eventId)
+
             try {
                 likeEventManager.emitDeleteEvent(request.eventId)
             }catch (e: Exception){
                 Logger.error("Error emitting delete event: ${e.message}")
                 return@post call.respond(HttpStatusCode.InternalServerError)
             }
-            val deletedEvent = eventRepository.deleteEvent(request.eventId)
 
             call.respond (HttpStatusCode.OK,
                 if (deletedEvent) CreateEventResponse.success() else CreateEventResponse.failure()
