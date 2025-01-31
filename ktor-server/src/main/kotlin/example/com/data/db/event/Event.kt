@@ -1,7 +1,6 @@
 package example.com.data.db.event
 
 import example.com.data.db.user.*
-import example.com.data.utils.ImageEntity
 import example.com.data.utils.LocalDateTimeSerializer
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.dao.IntEntity

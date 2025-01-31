@@ -1,9 +1,13 @@
 document.addEventListener('DOMContentLoaded', async function() {
     const api = new ApiClient();
+    const loginButton = document.getElementById('login-button');
 
     if (api.token) {
         try {
             const html = await api.getHtml('/home/user-info');
+            if (!html) {
+                throw new Error('No HTML received');
+            }
 
             const tempDiv = document.createElement('div');
             tempDiv.innerHTML = html;
@@ -29,13 +33,15 @@ document.addEventListener('DOMContentLoaded', async function() {
             });
 
             // hide login button
-            document.getElementById('login-button').classList.add('hidden');
+            loginButton.classList.add('hidden');
 
         } catch (error) {
-            console.error('Error:', error);
+            console.log('Error:', error);
+            loginButton.classList.remove('hidden');
         }
     } else {
         console.log("No token found");
+        loginButton.classList.remove('hidden');
     }
 });
 
@@ -51,10 +57,15 @@ const eventSource = new EventSource('/home/sse');
     console.log('Received data:', event.data);
     // Handle the data here
 });*/
-
+const contentDiv = document.getElementById('main-content');
 // Listen to all events
 eventSource.onmessage = (event) => {
     console.log('sse message:', event.data);
+    if (event.data === 'refresh-events') {
+        console.log('Received like update');
+        const html = api.getHtml('/home/events-tab');
+        contentDiv.innerHTML = html;
+    }
 };
 
 // Handle connection open

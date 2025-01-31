@@ -3,6 +3,8 @@ package example.com.data.db.event
 import example.com.data.db.user.UserDao
 import example.com.data.db.user.UserProfileDao
 import example.com.data.db.user.suspendTransaction
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -32,5 +34,9 @@ class EventRepositoryImpl: EventRepository {
 
     override suspend fun getEvent(eventId: Int): Event? = suspendTransaction {
         EventDao.findById(eventId)?.toEvent()
+    }
+
+    override suspend fun deleteEvent(eventId: Int): Boolean = suspendTransaction {
+        EventTable.deleteWhere { EventTable.id eq eventId } > 0
     }
 }

@@ -1,7 +1,8 @@
 class ApiClient {
 
     static ENDPOINTS = {
-        CREATE_EVENT: '%%API_CREATE_EVENT%%'
+        CREATE_EVENT: '%%API_CREATE_EVENT%%',
+        DELETE_EVENT: '%%API_DELETE_EVENT%%',
     }
 
     constructor(baseURL = '') {
@@ -89,13 +90,18 @@ class ApiClient {
     }
 
     // POST request
-    async post(endpoint, data, options = {}) {
+    async post(endpoint, data, options = {}, useJsonHeaders = true) {
+        const headers = useJsonHeaders 
+            ? { 'Content-Type': 'application/json', ...options.headers }
+            : options.headers;
+     
         return this.request(endpoint, {
             ...options,
             method: 'POST',
-            body: data
+            headers,
+            body: useJsonHeaders ? JSON.stringify(data) : data
         });
-    }
+     }
 
     // PUT request
     async put(endpoint, data, options = {}) {
@@ -117,3 +123,4 @@ class ApiClient {
 
 // Make it global
 window.ApiClient = ApiClient;
+window.api = new ApiClient();

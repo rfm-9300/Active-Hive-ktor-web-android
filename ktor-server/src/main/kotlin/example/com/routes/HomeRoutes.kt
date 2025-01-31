@@ -59,12 +59,11 @@ fun Route.homeRoutes(
         val postId = call.parameters["postId"]?.toIntOrNull() ?: return@get call.respond(HttpStatusCode.BadRequest)
         // Emit event
         val likesCount = 10
-        //likeEventManager.emitLike(postId, likesCount)
+        likeEventManager.emitLike(postId, likesCount)
         call.respond(HttpStatusCode.OK)
     }
 
     sse ("/home/sse") {
-        send(ServerSentEvent(data = "sse connected"))
         try {
             likeEventManager.likeEvents.collect { event ->
                 send(ServerSentEvent(

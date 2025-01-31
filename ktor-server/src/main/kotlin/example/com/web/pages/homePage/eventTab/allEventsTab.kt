@@ -2,6 +2,7 @@ package example.com.web.pages.homePage.eventTab
 
 import example.com.data.db.event.EventRepository
 import example.com.web.components.post.event
+import example.com.web.loadJs
 import kotlinx.coroutines.runBlocking
 import kotlinx.html.*
 
@@ -34,6 +35,7 @@ fun HTML.allEventsTab(
             events.forEach { event ->
                 event(event)
             }
+            loadJs("event/all-events")
         }
     }
 }

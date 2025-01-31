@@ -27,7 +27,7 @@ console.log('submit-btn clicked');
             formData.append('image', fileInput.files[0]);
         }
 
-        const data = await api.post(ApiClient.ENDPOINTS.CREATE_EVENT, formData, {})
+        const data = await api.post(ApiClient.ENDPOINTS.CREATE_EVENT, formData, {}, false)
 
         if (!data.success){
             contentDiv.innerHTML = `<p class="text-red-500 font-bold">An error occurred while creating the event. Please try again later.</p>`;

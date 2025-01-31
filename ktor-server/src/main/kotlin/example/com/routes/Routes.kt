@@ -6,7 +6,8 @@ object Routes {
             const val LIST = "/events"
             const val CREATE = "/events/create"
             const val DETAILS = "/events/{eventId}"
-            const val EDIT = "/events/{eventId}/edit"
+            const val EDIT = "/events/edit/{eventId}"
+            const val DELETE = "/events/delete/{eventId}"
         }
     }
 

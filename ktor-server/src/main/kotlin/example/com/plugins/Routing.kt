@@ -22,7 +22,7 @@ fun Application.configureRouting(
     routing {
         homeRoutes(likeEventManager, eventRepository)
         loginRoutes(hashingService, userRepository, tokenService, tokenConfig)
-        eventRoutes(eventRepository)
+        eventRoutes(eventRepository, likeEventManager)
         dynamicJsProcessing()
     }
 }

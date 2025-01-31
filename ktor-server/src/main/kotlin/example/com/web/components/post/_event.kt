@@ -15,18 +15,27 @@ fun HtmlBlockTag.event(event: Event){
     val url = Routes.Ui.Event.DETAILS.replace("{eventId}", event.id.toString())
 
     div(classes = "flex flex-row items-center justify-center w-full p-4 rounded-xl") {
-        attributes["hx-get"] = url
+
         // date div
-        div(classes = "flex flex-col flex-1 items-center justify-center text-center text-sm") {
+        div(classes = "flex flex-col flex-1 items-center justify-center text-center text-sm shadow-lg bg-slate-50 rounded-xl py-5") {
             p(classes = "text-lg font-bold") {
                 +date
             }
             p(classes = "text-sm text-gray-500") {
                 +dayOfWeek
             }
+            div(classes = "w-full flex flex-row flex-start px-1") {
+                span(classes = "delete-icon rounded-full overflow-hidden cursor-pointer"){
+                    attributes["data-event-id"] = event.id.toString()
+                    attributes["onclick"] = "deleteEvent(${event.id})"
+                    svgIcon(SvgIcon.DELETE) }
+            }
+
         }
 
-        div(classes = "flex w-[80%] p-4 bg-white rounded-xl shadow-lg") {
+        div(classes = "flex w-[80%] p-4 bg-white rounded-xl shadow-lg hover:bg-gray-100 cursor-pointer") {
+            attributes["hx-get"] = url
+            attributes["hx-target"] = "#main-content"
             div(classes = "flex flex-row items-start justify-between w-full") {
                 div(classes = "flex flex-col items-start justify-center ml-4") {
                     p(classes = "text-lg font-bold mb-2") {

@@ -2,7 +2,10 @@ package example.com.routes
 
 import example.com.data.db.event.Event
 import example.com.data.db.event.EventRepository
+import example.com.data.requests.DeleteEventRequest
 import example.com.data.responses.CreateEventResponse
+import example.com.data.utils.LikeEventManager
+import example.com.plugins.Logger
 import example.com.web.pages.homePage.eventTab.createEvent
 import example.com.web.pages.homePage.eventTab.eventDetail
 import io.ktor.http.*
@@ -17,7 +20,8 @@ import kotlinx.io.readByteArray
 import java.time.LocalDateTime
 
 fun Route.eventRoutes(
-    eventRepository: EventRepository
+    eventRepository: EventRepository,
+    likeEventManager: LikeEventManager,
 ) {
 
     get("/home/create-event") {
@@ -25,8 +29,27 @@ fun Route.eventRoutes(
             createEvent()
         }
     }
+
+    authenticate {
+        post(Routes.Api.Event.DELETE) {
+            val request = kotlin.runCatching { call.receiveNullable<DeleteEventRequest>() }.getOrNull() ?: return@post call.respond(HttpStatusCode.BadRequest)
+            try {
+                likeEventManager.emitDeleteEvent(request.eventId)
+            }catch (e: Exception){
+                Logger.error("Error emitting delete event: ${e.message}")
+                return@post call.respond(HttpStatusCode.InternalServerError)
+            }
+            val deletedEvent = eventRepository.deleteEvent(request.eventId)
+
+            call.respond (HttpStatusCode.OK,
+                if (deletedEvent) CreateEventResponse.success() else CreateEventResponse.failure()
+            )
+
+        }
+    }
+
     // event details
-    get("/events/{eventId}") {
+    get(Routes.Ui.Event.DETAILS) {
         val eventId = call.parameters["eventId"]?.toIntOrNull() ?: return@get call.respond(HttpStatusCode.BadRequest)
         val event = eventRepository.getEvent(eventId) ?: return@get call.respond(HttpStatusCode.NotFound)
         call.respondHtml(HttpStatusCode.OK){
