@@ -3,6 +3,7 @@ class ApiClient {
     static ENDPOINTS = {
         CREATE_EVENT: '%%API_CREATE_EVENT%%',
         DELETE_EVENT: '%%API_DELETE_EVENT%%',
+        SSE_CONNECTION: '%%SSE_CONNECTION%%'
     }
 
     constructor(baseURL = '') {
@@ -124,3 +125,4 @@ class ApiClient {
 // Make it global
 window.ApiClient = ApiClient;
 window.api = new ApiClient();
+window.contentDiv = document.getElementById('main-content');

@@ -52,7 +52,7 @@ fun Application.module() {
         hashingService = hashingService,
         tokenService = tokenService,
         tokenConfig = tokenConfig,
-        likeEventManager = get(),
+        sseManager = get(),
         eventRepository = get()
     )
 }

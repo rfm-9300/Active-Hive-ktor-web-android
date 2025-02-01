@@ -2,7 +2,7 @@ package example.com.plugins
 
 import example.com.data.db.event.EventRepository
 import example.com.data.db.user.UserRepository
-import example.com.data.utils.LikeEventManager
+import example.com.data.utils.SseManager
 import example.com.routes.*
 import example.com.security.hashing.HashingService
 import example.com.security.token.TokenConfig
@@ -16,13 +16,13 @@ fun Application.configureRouting(
     hashingService: HashingService,
     tokenService: TokenService,
     tokenConfig: TokenConfig,
-    likeEventManager: LikeEventManager,  // Add these
+    sseManager: SseManager,  // Add these
     eventRepository: EventRepository
 )  {
     routing {
-        homeRoutes(likeEventManager, eventRepository)
+        homeRoutes(sseManager, eventRepository)
         loginRoutes(hashingService, userRepository, tokenService, tokenConfig)
-        eventRoutes(eventRepository, likeEventManager)
+        eventRoutes(eventRepository, sseManager)
         dynamicJsProcessing()
     }
 }

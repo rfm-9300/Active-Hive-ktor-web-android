@@ -4,7 +4,8 @@ import example.com.data.db.event.Event
 import example.com.data.db.event.EventRepository
 import example.com.data.requests.DeleteEventRequest
 import example.com.data.responses.CreateEventResponse
-import example.com.data.utils.LikeEventManager
+import example.com.data.utils.SseAction
+import example.com.data.utils.SseManager
 import example.com.plugins.Logger
 import example.com.web.pages.homePage.eventTab.createEvent
 import example.com.web.pages.homePage.eventTab.eventDetail
@@ -21,7 +22,7 @@ import java.time.LocalDateTime
 
 fun Route.eventRoutes(
     eventRepository: EventRepository,
-    likeEventManager: LikeEventManager,
+    sseManager: SseManager,
 ) {
 
     get("/home/create-event") {
@@ -33,20 +34,14 @@ fun Route.eventRoutes(
     authenticate {
         post(Routes.Api.Event.DELETE) {
             val request = kotlin.runCatching { call.receiveNullable<DeleteEventRequest>() }.getOrNull() ?: return@post call.respond(HttpStatusCode.BadRequest)
+            val deletedEvent = true // eventRepository.deleteEvent(request.eventId)
 
-            val deletedEvent = eventRepository.deleteEvent(request.eventId)
-
-            try {
-                likeEventManager.emitDeleteEvent(request.eventId)
-            }catch (e: Exception){
-                Logger.error("Error emitting delete event: ${e.message}")
-                return@post call.respond(HttpStatusCode.InternalServerError)
+            if (deletedEvent) {
+                sseManager.emitEvent(SseAction.RefreshEvents)
             }
-
             call.respond (HttpStatusCode.OK,
                 if (deletedEvent) CreateEventResponse.success() else CreateEventResponse.failure()
             )
-
         }
     }
 

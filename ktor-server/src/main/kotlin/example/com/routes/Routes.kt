@@ -25,13 +25,18 @@ object Routes {
         const val API_CLIENT = "/js/ApiClient.js"
     }
 
+    object Sse {
+        const val SSE_CONNECTION = "/sse"
+    }
+
     object Placeholder {
         val PLACEHOLDERS: Map<String, String> = mapOf(
             "%%API_CREATE_EVENT%%" to Api.Event.CREATE,
             "%%API_GET_EVENT%%" to Api.Event.GET,
             "%%API_UPDATE_EVENT%%" to Api.Event.UPDATE,
             "%%API_DELETE_EVENT%%" to Api.Event.DELETE,
-            "%%API_LIST_EVENTS%%" to Api.Event.LIST
+            "%%API_LIST_EVENTS%%" to Api.Event.LIST,
+            "%%SSE_CONNECTION%%" to Sse.SSE_CONNECTION
         )
     }
 }
