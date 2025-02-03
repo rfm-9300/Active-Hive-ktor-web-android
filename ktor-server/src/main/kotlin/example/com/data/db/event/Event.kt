@@ -15,7 +15,7 @@ import java.time.LocalDateTime
 data class Event(
     val id: Int? = null,
     val title: String,
-    val headerImagePath: String,
+    val headerImagePath: String = "",
     val description: String,
     @Serializable(with = LocalDateTimeSerializer::class)
     val date: LocalDateTime,

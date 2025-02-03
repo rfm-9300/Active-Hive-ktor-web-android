@@ -37,56 +37,68 @@ fun Route.eventRoutes(
     //api update event
     authenticate {
         post(Routes.Api.Event.UPDATE) {
-            val multiPart = call.receiveMultipart()
-            var eventId = 0
-            var title = ""
-            var description = ""
-            var date = ""
-            var location = ""
-            var image = ""
+            try {
+                val multiPart = call.receiveMultipart()
+                var eventId = 0
+                var title = ""
+                var description = ""
+                var date = ""
+                var location = ""
+                var image = ""
 
-            multiPart.forEachPart {
-                when(it) {
-                    is PartData.FormItem -> {
-                        when(it.name) {
-                            "eventId" -> eventId = it.value.toInt()
-                            "title" -> title = it.value
-                            "description" -> description = it.value
-                            "date" -> date = it.value
-                            "location" -> location = it.value
+                multiPart.forEachPart {
+                    when(it) {
+                        is PartData.FormItem -> {
+                            when(it.name) {
+                                "eventId" -> eventId = it.value.toInt()
+                                "title" -> title = it.value
+                                "description" -> description = it.value
+                                "date" -> date = it.value
+                                "location" -> location = it.value
+                            }
                         }
-                    }
-                    is PartData.FileItem -> {
-                        if (it.name == "image") {
-                            val fileName = it.originalFileName ?: "unnamed.jpg"
-                            val fileBytes = it.provider().readRemaining().readByteArray()
-                            image = ImageFileHandler.saveImage(fileBytes, fileName)
+                        is PartData.FileItem -> {
+                            if (it.name == "image") {
+                                val fileName = it.originalFileName ?: "unnamed.jpg"
+                                val fileBytes = it.provider().readRemaining().readByteArray()
+                                image = ImageFileHandler.saveImage(fileBytes, fileName)
+                            }
                         }
+                        else -> {}
                     }
-                    else -> {}
+                    it.dispose
                 }
-                it.dispose
-            }
 
-            val event = Event(
-                id = eventId,
-                title = title,
-                description = description,
-                date = LocalDateTime.now(),
-                location = location,
-                organizerId = 1,
-                headerImagePath = image
-            )
-
-            eventRepository.updateEvent(event)
-
-            call.respond(
-                HttpStatusCode.OK,
-                CreateEventResponse(
-                    success = true,
-                    message = "Event updated successfully"
+                val event = Event(
+                    id = eventId,
+                    title = title,
+                    description = description,
+                    date = LocalDateTime.now(),
+                    location = location,
+                    organizerId = 1,
+                    headerImagePath = image
                 )
-            )
+                Logger.d("Updating event: $event")
+
+                if (!eventRepository.updateEvent(event)) throw Exception("Error updating event")
+                Logger.d("Event updated successfully")
+
+                call.respond(
+                    HttpStatusCode.OK,
+                    CreateEventResponse(
+                        success = true,
+                        message = "Event updated successfully"
+                    )
+                )
+            } catch (e: Exception) {
+                Logger.d("Error updating event: ${e.message}")
+                call.respond(
+                    HttpStatusCode.BadRequest, CreateEventResponse(
+                    success = false,
+                    message = "Error updating event: ${e.message}"
+                    )
+                )
+            }
         }
     }
 

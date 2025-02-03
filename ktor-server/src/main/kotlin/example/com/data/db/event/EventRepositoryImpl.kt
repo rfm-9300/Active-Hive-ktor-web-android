@@ -8,6 +8,7 @@ import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.update
 
 class EventRepositoryImpl: EventRepository {
     override suspend fun addEvent(event: Event): Int? = suspendTransaction {
@@ -38,5 +39,19 @@ class EventRepositoryImpl: EventRepository {
 
     override suspend fun deleteEvent(eventId: Int): Boolean = suspendTransaction {
         EventTable.deleteWhere { EventTable.id eq eventId } > 0
+    }
+
+    override suspend fun updateEvent(event: Event): Boolean = suspendTransaction {
+        try {
+            EventTable.update({ EventTable.id eq event.id }) {
+                it[title] = event.title
+                it[description] = event.description
+                it[date] = event.date
+                it[location] = event.location
+                it[headerImagePath] = event.headerImagePath
+            } > 0
+        } catch (e: Exception) {
+            false
+        }
     }
 }

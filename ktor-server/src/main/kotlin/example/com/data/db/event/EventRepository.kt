@@ -5,4 +5,5 @@ interface EventRepository {
     suspend fun getAllEvents(): List<Event>
     suspend fun getEvent(eventId: Int): Event?
     suspend fun deleteEvent(eventId: Int): Boolean
+    suspend fun updateEvent(event: Event): Boolean
 }
