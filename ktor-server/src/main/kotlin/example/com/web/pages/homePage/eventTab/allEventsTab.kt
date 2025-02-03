@@ -1,6 +1,7 @@
 package example.com.web.pages.homePage.eventTab
 
 import example.com.data.db.event.EventRepository
+import example.com.routes.Routes
 import example.com.web.components.post.event
 import example.com.web.loadJs
 import kotlinx.coroutines.runBlocking
@@ -25,7 +26,7 @@ fun HTML.allEventsTab(
             // Add a button to create a new event
             div(classes = "flex justify-end mb-4") {
                 button(classes = "bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700") {
-                    attributes["hx-get"] = "/home/create-event"
+                    attributes["hx-get"] = Routes.Ui.Event.CREATE
                     attributes["hx-target"] = "#main-content"
                     +"Create Event"
                 }

@@ -6,8 +6,11 @@ object Routes {
             const val LIST = "/events"
             const val CREATE = "/events/create"
             const val DETAILS = "/events/{eventId}"
-            const val EDIT = "/events/edit/{eventId}"
+            const val UPDATE = "/events/update/{eventId}"
             const val DELETE = "/events/delete/{eventId}"
+        }
+        object Home {
+            const val HOME = "/home"
         }
     }
 
@@ -15,8 +18,8 @@ object Routes {
         object Event {
             const val CREATE = "/api/events"
             const val GET = "/api/events/{id}"
-            const val UPDATE = "/api/events/{id}"
-            const val DELETE = "/api/events/{id}"
+            const val UPDATE = "/api/events/update"
+            const val DELETE = "/api/events/delete"
             const val LIST = "/api/events"
         }
     }

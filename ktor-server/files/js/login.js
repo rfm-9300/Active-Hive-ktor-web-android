@@ -41,6 +41,9 @@ document.getElementById('login-form').addEventListener('submit', async function(
                  document.cookie = `authToken=${data.token}; expires=${expirationDate.toUTCString()}; path=/`;
                  console.log('Token stored in a cookie as well:', document.cookie);
                 console.log('Token stored in localStorage:', data.token);
+
+                // Redirect to the home page
+                window.location.href = '/';
             } else {
                 console.error('No token found in response');
             }

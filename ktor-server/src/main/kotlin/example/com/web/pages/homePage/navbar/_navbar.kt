@@ -1,5 +1,6 @@
 package example.com.web.pages.homePage.navbar
 
+import example.com.routes.Routes
 import kotlinx.html.*
 
 fun HtmlBlockTag.navbar() {
@@ -7,8 +8,8 @@ fun HtmlBlockTag.navbar() {
         div(classes = "mx-auto max-w-6xl w-full flex justify-between items-center") {
             ul(classes = "hidden md:flex space-x-8 text-gray-600 font-medium mx-auto") {
                 val tabs = mapOf(
-                    "Home" to "/home/home-tab",
-                    "Events" to "/home/events-tab",
+                    "Home" to Routes.Ui.Home.HOME,
+                    "Events" to Routes.Ui.Event.LIST,
                 )
                 tabs.forEach { (label, url) ->
                     li(classes = "nav-tab cursor-pointer hover:text-blue-600 transition text-gray-600") {

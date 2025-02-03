@@ -3,6 +3,7 @@ class ApiClient {
     static ENDPOINTS = {
         CREATE_EVENT: '%%API_CREATE_EVENT%%',
         DELETE_EVENT: '%%API_DELETE_EVENT%%',
+        UPDATE_EVENT: '%%API_UPDATE_EVENT%%',
         SSE_CONNECTION: '%%SSE_CONNECTION%%'
     }
 

@@ -24,13 +24,19 @@ fun HtmlBlockTag.event(event: Event){
             p(classes = "text-sm text-gray-500") {
                 +dayOfWeek
             }
-            div(classes = "w-full flex flex-row flex-start px-1") {
+            // icons div
+            div(classes = "w-full flex flex-row flex-start px-1 gap-2 mt-2") {
                 span(classes = "delete-icon rounded-full overflow-hidden cursor-pointer"){
                     attributes["data-event-id"] = event.id.toString()
                     attributes["onclick"] = "deleteEvent(${event.id})"
-                    svgIcon(SvgIcon.DELETE) }
+                    svgIcon(SvgIcon.DELETE)
+                }
+                span(classes = "edit-icon rounded-full overflow-hidden cursor-pointer"){
+                    attributes["hx-get"] = Routes.Ui.Event.UPDATE.replace("{eventId}", event.id.toString())
+                    attributes["hx-target"] = "#main-content"
+                    svgIcon(SvgIcon.EDIT)
+                }
             }
-
         }
 
         div(classes = "flex w-[80%] p-4 bg-white rounded-xl shadow-lg hover:bg-gray-100 cursor-pointer") {

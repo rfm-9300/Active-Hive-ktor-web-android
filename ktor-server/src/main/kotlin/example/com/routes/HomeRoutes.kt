@@ -33,16 +33,14 @@ fun Route.homeRoutes(
             homePage()
         }
     }
-    get("/home/events-tab") {
+    get(Routes.Ui.Event.LIST) {
         call.respondHtml(HttpStatusCode.OK){
             allEventsTab(
                 eventRepository = eventRepository
             )
         }
     }
-    get("/home/home-tab") {
-        val cookies = call.response.cookies
-        println("Cookies: $cookies")
+    get(Routes.Ui.Home.HOME) {
         call.respondHtml(HttpStatusCode.OK){
             body {
                 homeTab()

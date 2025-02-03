@@ -9,6 +9,7 @@ import example.com.data.utils.SseManager
 import example.com.plugins.Logger
 import example.com.web.pages.homePage.eventTab.createEvent
 import example.com.web.pages.homePage.eventTab.eventDetail
+import example.com.web.pages.homePage.eventTab.updateEvent
 import io.ktor.http.*
 import io.ktor.http.content.*
 import io.ktor.server.auth.*
@@ -24,17 +25,79 @@ fun Route.eventRoutes(
     eventRepository: EventRepository,
     sseManager: SseManager,
 ) {
-
-    get("/home/create-event") {
+    //ui update event
+    get(Routes.Ui.Event.UPDATE) {
+        val eventId = call.parameters["eventId"]?.toIntOrNull() ?: return@get call.respond(HttpStatusCode.BadRequest)
+        val event = eventRepository.getEvent(eventId) ?: return@get call.respond(HttpStatusCode.NotFound)
         call.respondHtml(HttpStatusCode.OK){
-            createEvent()
+            updateEvent(event)
         }
     }
+
+    //api update event
+    authenticate {
+        post(Routes.Api.Event.UPDATE) {
+            val multiPart = call.receiveMultipart()
+            var eventId = 0
+            var title = ""
+            var description = ""
+            var date = ""
+            var location = ""
+            var image = ""
+
+            multiPart.forEachPart {
+                when(it) {
+                    is PartData.FormItem -> {
+                        when(it.name) {
+                            "eventId" -> eventId = it.value.toInt()
+                            "title" -> title = it.value
+                            "description" -> description = it.value
+                            "date" -> date = it.value
+                            "location" -> location = it.value
+                        }
+                    }
+                    is PartData.FileItem -> {
+                        if (it.name == "image") {
+                            val fileName = it.originalFileName ?: "unnamed.jpg"
+                            val fileBytes = it.provider().readRemaining().readByteArray()
+                            image = ImageFileHandler.saveImage(fileBytes, fileName)
+                        }
+                    }
+                    else -> {}
+                }
+                it.dispose
+            }
+
+            val event = Event(
+                id = eventId,
+                title = title,
+                description = description,
+                date = LocalDateTime.now(),
+                location = location,
+                organizerId = 1,
+                headerImagePath = image
+            )
+
+            eventRepository.updateEvent(event)
+
+            call.respond(
+                HttpStatusCode.OK,
+                CreateEventResponse(
+                    success = true,
+                    message = "Event updated successfully"
+                )
+            )
+        }
+    }
+
+
+
+
 
     authenticate {
         post(Routes.Api.Event.DELETE) {
             val request = kotlin.runCatching { call.receiveNullable<DeleteEventRequest>() }.getOrNull() ?: return@post call.respond(HttpStatusCode.BadRequest)
-            val deletedEvent = true // eventRepository.deleteEvent(request.eventId)
+            val deletedEvent = eventRepository.deleteEvent(request.eventId)
 
             if (deletedEvent) {
                 sseManager.emitEvent(SseAction.RefreshEvents)
@@ -51,6 +114,12 @@ fun Route.eventRoutes(
         val event = eventRepository.getEvent(eventId) ?: return@get call.respond(HttpStatusCode.NotFound)
         call.respondHtml(HttpStatusCode.OK){
             eventDetail(event)
+        }
+    }
+
+    get(Routes.Ui.Event.CREATE) {
+        call.respondHtml(HttpStatusCode.OK){
+            createEvent()
         }
     }
 
@@ -117,5 +186,4 @@ fun Route.eventRoutes(
             }
         }
     }
-
 }
