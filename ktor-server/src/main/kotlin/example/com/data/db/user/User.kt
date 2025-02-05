@@ -11,7 +11,7 @@ import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransacti
 @Serializable
 data class User(
     val id: Int? = null,
-    val username: String,
+    val email: String,
     val password: String,
     val salt: String,
     val profile: UserProfile? = null
@@ -20,15 +20,14 @@ data class User(
 @Serializable
 data class UserProfile(
     val id: Int? = null,
-    val firstName: String,
-    val lastName: String,
+    val firstName: String = "",
+    val lastName: String = "",
     val email: String,
-    val phone: String
+    val phone: String = ""
 )
 
-
 object UserTable : IntIdTable("user") {
-    val username = varchar("username", 128)
+    val email = varchar("email", 128)
     val password = varchar("password", 256)
     val salt = varchar("salt", 256)
 }
@@ -45,7 +44,7 @@ object UserProfilesTable : IntIdTable("user_profile") {
 class UserDao(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<UserDao>(UserTable)
 
-    var name by UserTable.username
+    var name by UserTable.email
     var password by UserTable.password
     var salt by UserTable.salt
     var profile by UserProfileDao referencedOn UserProfilesTable.userId
@@ -65,7 +64,7 @@ suspend fun <T> suspendTransaction(block: Transaction.() -> T): T =
 
 fun UserDao.toUser() = User(
     id = id.value,
-    username = name,
+    email = name,
     password = password,
     salt = salt,
     profile = UserProfile(

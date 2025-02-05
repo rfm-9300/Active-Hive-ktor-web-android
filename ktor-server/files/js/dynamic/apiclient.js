@@ -4,7 +4,9 @@ class ApiClient {
         CREATE_EVENT: '%%API_CREATE_EVENT%%',
         DELETE_EVENT: '%%API_DELETE_EVENT%%',
         UPDATE_EVENT: '%%API_UPDATE_EVENT%%',
-        SSE_CONNECTION: '%%SSE_CONNECTION%%'
+        SSE_CONNECTION: '%%SSE_CONNECTION%%',
+        LOGIN: '%%API_LOGIN%%',
+        SIGNUP: '%%API_SIGNUP%%'
     }
 
     constructor(baseURL = '') {
@@ -38,45 +40,34 @@ class ApiClient {
     }
 
     // Add this method to the ApiClient class
-    async getHtml(endpoint, options = {}) {
-        const url = `${this.baseURL}${endpoint}`;
-        const headers = this.getHeaders(options.headers);
-
-        try {
-            const response = await fetch(url, {
-                ...options,
-                method: 'GET',
-                headers
-            });
-
-            return response.text();
-        } catch (error) {
-            console.error('Request failed:', error);
-            throw error;
-        }
-    }
-
-
-    // Generic request method
     async request(endpoint, options = {}) {
         const url = `${this.baseURL}${endpoint}`;
         const headers = this.getHeaders(options.headers);
-
+    
         try {
             const response = await fetch(url, {
                 ...options,
                 headers
             });
-
-            console.log('Response:', response);
-
-            if(!response.ok) {
-                const error = await response.json();
-                throw error;
+    
+            console.log('Raw Response:', response);
+    
+            if (!response.ok) {
+                const errorText = await response.text(); // Log the raw error response
+                console.error('Error Response:', errorText);
+                throw new Error(errorText);
             }
-            
-            const data = await response.json();
-            return data;
+    
+            const responseText = await response.text(); // Log the raw response text
+            console.log('Response Text:', responseText);
+    
+            try {
+                const data = JSON.parse(responseText); // Attempt to parse the response text as JSON
+                return data;
+            } catch (parseError) {
+                console.error('Failed to parse JSON:', parseError);
+                throw new Error('Invalid JSON response from server');
+            }
         } catch (error) {
             console.error('Request failed:', error);
             throw error;

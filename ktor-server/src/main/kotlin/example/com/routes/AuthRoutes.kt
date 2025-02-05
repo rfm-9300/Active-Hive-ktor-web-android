@@ -5,14 +5,16 @@ import example.com.data.responses.AuthResponse
 import example.com.data.db.user.User
 import example.com.data.db.user.UserProfile
 import example.com.data.db.user.UserRepository
+import example.com.data.responses.ApiResponse
+import example.com.plugins.Logger
 import example.com.security.hashing.HashingService
 import example.com.security.hashing.SaltedHash
 import example.com.security.token.TokenClaim
 import example.com.security.token.TokenConfig
 import example.com.security.token.TokenService
-import example.com.web.pages.login.loginPage
+import example.com.web.pages.auth.loginPage
+import example.com.web.pages.auth.signupPage
 import io.ktor.http.*
-import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.html.*
@@ -39,32 +41,36 @@ fun Route.loginRoutes(
      * sing-up
      ****/
 
-    post("signup"){
-        val request = kotlin.runCatching { call.receiveNullable<AuthRequest>() }.getOrNull() ?: return@post call.respond(
-            HttpStatusCode.BadRequest)
-
-        val areFieldsEmpty = request.username.isEmpty() || request.password.isEmpty()
+    post(Routes.Api.Auth.SIGNUP){
+        Logger.d("Received a request to sign up a new user")
+        val request = kotlin.runCatching { call.receiveNullable<AuthRequest>() }.getOrNull() ?: return@post call.respond(HttpStatusCode.BadRequest)
+        Logger.d("Received a request to sign up a new user with email: ${request.email}")
+        val areFieldsEmpty = request.email.isEmpty() || request.password.isEmpty()
         val isPasswordTooShort = request.password.length < PASSWORD_MIN_LENGTH
         if (areFieldsEmpty || isPasswordTooShort) {
-            return@post call.respond(HttpStatusCode.Conflict)
+            return@post call.respond(
+                HttpStatusCode.Conflict,
+                ApiResponse(
+                    success = false,
+                    message = "Invalid email or password"
+                )
+            )
         }
 
-        val user = userRepository.getUser(request.username)
+        val user = userRepository.getUser(request.email)
         if (user != null) {
-            return@post call.respond(HttpStatusCode.Conflict)
+            return@post call.respond(HttpStatusCode.Conflict , ApiResponse(
+                success = false,
+                message = "User already exists"
+            ))
         }
 
         val saltedHash = hashingService.generateSaltedHash(request.password)
         val newUser = User(
-            username = request.username,
+            email = request.email,
             password = saltedHash.hash,
             salt = saltedHash.salt,
-            profile = UserProfile(
-                firstName = "",
-                lastName = "",
-                email = "",
-                phone = ""
-            )
+            profile = UserProfile( email = request.email)
         )
 
         // try to add the user to the database
@@ -72,10 +78,28 @@ fun Route.loginRoutes(
 
         // if the user was not added, return an internal server error
         if (!isUserAdded) {
-            return@post call.respond(HttpStatusCode.InternalServerError)
+            return@post call.respond(
+                HttpStatusCode.InternalServerError,
+                ApiResponse(
+                    success = false,
+                    message = "Failed to add user"
+                )
+            )
         }
 
-        call.respond(HttpStatusCode.Created)
+        call.respond(
+            HttpStatusCode.Created,
+            ApiResponse(
+                success = true,
+                message = "User added successfully"
+            )
+        )
+    }
+
+    get(Routes.Ui.Auth.SIGNUP) {
+        call.respondHtml {
+            signupPage()
+        }
     }
 
     /****
@@ -85,11 +109,11 @@ fun Route.loginRoutes(
     post("login") {
         val request = kotlin.runCatching { call.receiveNullable<AuthRequest>() }.getOrNull() ?: return@post call.respond(HttpStatusCode.BadRequest)
 
-        val areFieldsEmpty = request.username.isEmpty() || request.password.isEmpty()
+        val areFieldsEmpty = request.email.isEmpty() || request.password.isEmpty()
 
         if (areFieldsEmpty) return@post call.respond(HttpStatusCode.Conflict)
 
-        val user = userRepository.getUser(request.username) ?: return@post call.respond(HttpStatusCode.NotFound, "User not found")
+        val user = userRepository.getUser(request.email) ?: return@post call.respond(HttpStatusCode.NotFound, "User not found")
 
         val isPasswordCorrect = hashingService.verifySaltedHash(
             password = request.password,

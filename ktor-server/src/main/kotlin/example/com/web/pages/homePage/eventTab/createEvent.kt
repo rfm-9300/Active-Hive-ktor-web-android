@@ -120,10 +120,8 @@ fun HTML.createEvent() {
                     }
                 }
             }
+            // load scripts
+            loadJs("create-event")
         }
-
-        // load scripts
-        loadJs("create-event")
-
     }
 }

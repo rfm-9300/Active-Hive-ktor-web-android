@@ -1,6 +1,8 @@
 package example.com.routes
 
 object Routes {
+
+    /** Routes for the UI **/
     object Ui {
         object Event {
             const val LIST = "/events"
@@ -12,7 +14,13 @@ object Routes {
         object Home {
             const val HOME = "/home"
         }
+        object Auth {
+            const val LOGIN = "/login"
+            const val SIGNUP = "/signup"
+        }
     }
+
+    /** Routes for the API **/
 
     object Api {
         object Event {
@@ -21,6 +29,11 @@ object Routes {
             const val UPDATE = "/api/events/update"
             const val DELETE = "/api/events/delete"
             const val LIST = "/api/events"
+        }
+
+        object Auth {
+            const val LOGIN = "/api/auth/login"
+            const val SIGNUP = "/api/auth/signup"
         }
     }
 
@@ -39,7 +52,9 @@ object Routes {
             "%%API_UPDATE_EVENT%%" to Api.Event.UPDATE,
             "%%API_DELETE_EVENT%%" to Api.Event.DELETE,
             "%%API_LIST_EVENTS%%" to Api.Event.LIST,
-            "%%SSE_CONNECTION%%" to Sse.SSE_CONNECTION
+            "%%SSE_CONNECTION%%" to Sse.SSE_CONNECTION,
+            "%%API_LOGIN%%" to Api.Auth.LOGIN,
+            "%%API_SIGNUP%%" to Api.Auth.SIGNUP
         )
     }
 }

@@ -1,6 +1,9 @@
 package example.com.data.responses
 
-data class DeleteEventResponse(
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class ApiResponse(
     val success : Boolean,
     val message : String,
 )
