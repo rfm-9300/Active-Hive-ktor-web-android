@@ -18,14 +18,21 @@ fun HTML.eventDetail(event: Event){
                 p(classes = "text-gray-700") {
                     +event.description
                 }
+                div(classes = "mt-4") {
+                    span(classes = "text-gray-700 font-bold") {
+                        +"participants: ${event.attendees.size}"
+                    }
+                    span(classes = " text-gray-700 ml-4") {
+                        +"names: ${event.attendees.joinToString { it.profile?.firstName.toString() }}"
+                    }
+
+                }
+
             }
             // join event button
             div(classes = "flex justify-end") {
                 button(classes = "bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700") {
-                    attributes["hx-post"] = "/home/join-event"
-                    attributes["hx-target"] = "#main-content"
-                    attributes["hx-swap"] = "outerHTML"
-                    attributes["hx-params"] = "eventId=${event.id}"
+                    attributes["onclick"] = "joinEvent(${event.id})"
                     +"Join Event"
                 }
             }
