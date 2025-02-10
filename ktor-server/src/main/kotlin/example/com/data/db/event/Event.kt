@@ -20,10 +20,10 @@ data class Event(
     @Serializable(with = LocalDateTimeSerializer::class)
     val date: LocalDateTime,
     val location: String,
-    val attendees: List<User> = emptyList(),
+    var attendees: List<UserProfile> = emptyList(),
     val organizerId: Int,
     @Serializable(with = LocalDateTimeSerializer::class)
-    val createdAt: LocalDateTime = LocalDateTime.now(),
+    val createdAt: LocalDateTime? = LocalDateTime.now(),
     val organizerName: String = ""
 )
 

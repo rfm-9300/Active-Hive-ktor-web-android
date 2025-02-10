@@ -21,15 +21,15 @@ fun HTML.loginPage() {
 
                 div {
                     label(classes = "block text-sm font-medium text-gray-700") {
-                        attributes["for"] = "username"
-                        +"Username"
+                        attributes["for"] = "email"
+                        +"email"
                     }
                     input(classes = "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50") {
-                        id = "username"
+                        id = "email"
                         type = text
-                        name = "username"
+                        name = "email"
                         required = true
-                        placeholder = "Enter your username"
+                        placeholder = "Enter your email"
                     }
                 }
 

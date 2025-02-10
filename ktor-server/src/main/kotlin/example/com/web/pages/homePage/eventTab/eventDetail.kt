@@ -1,6 +1,7 @@
 package example.com.web.pages.homePage.eventTab
 
 import example.com.data.db.event.Event
+import example.com.web.loadJs
 import kotlinx.html.*
 
 fun HTML.eventDetail(event: Event){
@@ -23,7 +24,7 @@ fun HTML.eventDetail(event: Event){
                         +"participants: ${event.attendees.size}"
                     }
                     span(classes = " text-gray-700 ml-4") {
-                        +"names: ${event.attendees.joinToString { it.profile?.firstName.toString() }}"
+                        +"names: ${event.attendees.joinToString { it.firstName }}"
                     }
 
                 }
@@ -36,6 +37,7 @@ fun HTML.eventDetail(event: Event){
                     +"Join Event"
                 }
             }
+            loadJs("event/event-detail")
         }
     }
 }

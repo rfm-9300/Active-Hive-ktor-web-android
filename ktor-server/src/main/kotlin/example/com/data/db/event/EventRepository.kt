@@ -6,4 +6,5 @@ interface EventRepository {
     suspend fun getEvent(eventId: Int): Event?
     suspend fun deleteEvent(eventId: Int): Boolean
     suspend fun updateEvent(event: Event): Boolean
+    suspend fun joinEvent(eventId: Int, userId:Int): Boolean
 }

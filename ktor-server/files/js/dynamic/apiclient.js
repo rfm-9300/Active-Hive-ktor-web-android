@@ -6,7 +6,8 @@ class ApiClient {
         UPDATE_EVENT: '%%API_UPDATE_EVENT%%',
         SSE_CONNECTION: '%%SSE_CONNECTION%%',
         LOGIN: '%%API_LOGIN%%',
-        SIGNUP: '%%API_SIGNUP%%'
+        SIGNUP: '%%API_SIGNUP%%',
+        JOIN_EVENT: '%%API_JOIN_EVENT%%',
     }
 
     constructor(baseURL = '') {
@@ -53,9 +54,8 @@ class ApiClient {
             console.log('Raw Response:', response);
     
             if (!response.ok) {
-                const errorText = await response.text(); // Log the raw error response
-                console.error('Error Response:', errorText);
-                throw new Error(errorText);
+                console.log('Response Error:', response.status);
+                return { success: false, message: 'Request failed' };
             }
     
             const responseText = await response.text(); // Log the raw response text
@@ -72,6 +72,24 @@ class ApiClient {
             console.error('Request failed:', error);
             throw error;
         }
+    }
+
+    async getHtml(endpoint) {
+        return await fetch(endpoint, {
+            headers: this.getHeaders({
+                'Accept': 'text/html',
+                'Content-Type': 'text/html'
+            }),
+            method: 'GET'
+        }).then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.text();
+        }).catch(error => {
+            console.error('Error fetching HTML:', error);
+            throw error;
+        });
     }
 
     // GET request

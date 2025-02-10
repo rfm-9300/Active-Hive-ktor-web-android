@@ -1,5 +1,6 @@
 package example.com.routes
 
+import com.auth0.jwt.JWT
 import example.com.data.requests.AuthRequest
 import example.com.data.responses.AuthResponse
 import example.com.data.db.user.User
@@ -132,6 +133,11 @@ fun Route.loginRoutes(
                 value = user.id.toString()
             )
         )
+
+        Logger.d("Generated token: $token")
+        val decodedJWT = JWT.decode(token)
+        Logger.d("Decoded JWT claims: ${decodedJWT.claims}")
+        Logger.d("UserID in token: ${decodedJWT.getClaim("userId").asString()}")
 
         call.respond(
             status = HttpStatusCode.OK,

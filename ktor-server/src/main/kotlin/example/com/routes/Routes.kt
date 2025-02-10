@@ -29,6 +29,7 @@ object Routes {
             const val UPDATE = "/api/events/update"
             const val DELETE = "/api/events/delete"
             const val LIST = "/api/events"
+            const val JOIN_EVENT = "/api/events/join"
         }
 
         object Auth {
@@ -54,7 +55,8 @@ object Routes {
             "%%API_LIST_EVENTS%%" to Api.Event.LIST,
             "%%SSE_CONNECTION%%" to Sse.SSE_CONNECTION,
             "%%API_LOGIN%%" to Api.Auth.LOGIN,
-            "%%API_SIGNUP%%" to Api.Auth.SIGNUP
+            "%%API_SIGNUP%%" to Api.Auth.SIGNUP,
+            "%%API_JOIN_EVENT%%" to Api.Event.JOIN_EVENT
         )
     }
 }

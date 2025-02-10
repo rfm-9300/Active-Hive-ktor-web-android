@@ -62,16 +62,10 @@ class UserProfileDao(id: EntityID<Int>) : IntEntity(id) {
 suspend fun <T> suspendTransaction(block: Transaction.() -> T): T =
     newSuspendedTransaction(Dispatchers.IO, statement = block)
 
-fun UserDao.toUser() = User(
-    id = id.value,
-    email = name,
-    password = password,
-    salt = salt,
-    profile = UserProfile(
-        id = profile.id.value,
-        firstName = profile.firstName,
-        lastName = profile.lastName,
-        email = profile.email,
-        phone = profile.phone
-    )
+fun UserDao.toUser() = UserProfile(
+    id = profile.id.value,
+    firstName = profile.firstName,
+    lastName = profile.lastName,
+    email = profile.email,
+    phone = profile.phone
 )

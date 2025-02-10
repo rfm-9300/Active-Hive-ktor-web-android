@@ -1,6 +1,7 @@
 package example.com.web.pages.homePage.eventTab
 
 import example.com.data.db.event.EventRepository
+import example.com.plugins.Logger
 import example.com.routes.Routes
 import example.com.web.components.post.event
 import example.com.web.loadJs
@@ -15,7 +16,7 @@ fun HTML.allEventsTab(
         try {
             eventRepository.getAllEvents()
         } catch (e: Exception) {
-            println("Error fetching events: ${e.message}")
+            Logger.d("Error fetching events: $e")
             emptyList()
         }
     }

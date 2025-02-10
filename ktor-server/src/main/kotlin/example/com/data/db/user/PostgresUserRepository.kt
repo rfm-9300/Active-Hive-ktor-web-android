@@ -10,6 +10,19 @@ class PostgresUserRepository: UserRepository {
             .select { UserTable.email eq email }
             .singleOrNull()?.let {
                 User(
+                    id = it[UserTable.id].value,
+                    email = it[UserTable.email],
+                    password = it[UserTable.password],
+                    salt = it[UserTable.salt]
+                )
+            }
+    }
+
+    override suspend fun getUserById(userId: Int): User? = suspendTransaction {
+        UserTable
+            .select { UserTable.id eq userId }
+            .singleOrNull()?.let {
+                User(
                     email = it[UserTable.email],
                     password = it[UserTable.password],
                     salt = it[UserTable.salt]

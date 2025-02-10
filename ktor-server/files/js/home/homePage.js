@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', async function() {
-    const api = new ApiClient();
+    const api = window.api;
     const loginButton = document.getElementById('login-button');
 
     if (api.token) {
