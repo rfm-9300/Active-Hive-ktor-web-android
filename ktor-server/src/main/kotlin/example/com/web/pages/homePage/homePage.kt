@@ -15,6 +15,18 @@ fun HTML.homePage() {
                 // Navigation Bar
                 navbar()
 
+                // Alert Box
+                div(classes = "fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 hidden p-4 rounded-lg shadow-lg") {
+                    id = "alert-box"
+                    span {
+                        id = "alert-message"
+                    }
+                    span(classes = "ml-4 cursor-pointer") {
+                        onClick = "closeAlert()"
+                        +"×"
+                    }
+                }
+
                 // content
                 div( classes = "flex flex-col justify-center items-center w-[60%] mt-1 py-2 px-4") {
                     id = "main-content"
