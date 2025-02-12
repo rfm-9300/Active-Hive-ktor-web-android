@@ -20,6 +20,7 @@ data class User(
 @Serializable
 data class UserProfile(
     val id: Int? = null,
+    val userId : Int? = null,
     val firstName: String = "",
     val lastName: String = "",
     val email: String,

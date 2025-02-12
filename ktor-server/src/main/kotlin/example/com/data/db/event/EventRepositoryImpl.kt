@@ -140,4 +140,34 @@ class EventRepositoryImpl: EventRepository {
             false
         }
     }
+
+    override suspend fun getEventAttendees(eventId: Int): List<UserProfile> = suspendTransaction {
+        val attendees = mutableListOf<UserProfile>()
+        try {
+            Logger.d("Event ID: $eventId")
+            val attendeesQuery = EventAttendeeTable.select { EventAttendeeTable.event eq eventId }
+            Logger.d("Attendees Query: $attendeesQuery")
+            attendeesQuery.forEach { attendeeRow ->
+                val userId = attendeeRow[EventAttendeeTable.user].value
+                val userProfile = UserProfilesTable.select { UserProfilesTable.userId eq userId }
+                    .map { row ->
+                        UserProfile(
+                            id = row[UserProfilesTable.id].value,
+                            userId = row[UserProfilesTable.userId].value,
+                            firstName = row[UserProfilesTable.firstName],
+                            lastName = row[UserProfilesTable.lastName],
+                            email = row[UserProfilesTable.email],
+                            phone = row[UserProfilesTable.phone]
+                        )
+                    }
+                    .firstOrNull()
+                userProfile?.let { user ->
+                    attendees.add(user)
+                }
+            }
+        } catch (e: Exception) {
+            Logger.d("Error getting event attendees: ${e}")
+        }
+        attendees
+    }
 }

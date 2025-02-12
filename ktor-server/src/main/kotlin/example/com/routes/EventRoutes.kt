@@ -184,21 +184,19 @@ fun Route.eventRoutes(
     // api join event
     authenticate {
         post(Routes.Api.Event.JOIN_EVENT) {
-
             val principal = call.principal<JWTPrincipal>() ?: return@post respondHelper(success = false, message = "User not found", call = call)
-            Logger.d("Principal payload: ${principal.payload}")
-            Logger.d("All claims: ${principal.payload.claims}")
-
             val userId = principal.getClaim("userId", String::class)
             Logger.d("User ID: $userId")
 
             // Add explicit null check and empty string check
             if (userId.isNullOrEmpty() || userId == "null") {
-                Logger.d("User not found")
                 return@post respondHelper(success = false, message = "User not found", call = call)
             }
 
             val eventId = call.receive<EventRequest>().eventId
+            val attendees = eventRepository.getEventAttendees(eventId)
+            Logger.d("Attendees: $attendees")
+
             val event = eventRepository.getEvent(eventId) ?: return@post respondHelper(success = false, message = "Event not found", call = call)
 
             // check if user is already in the event

@@ -33,6 +33,11 @@ function showAlert(message, type = "info") {
 
     // Show the alert box
     alertBox.classList.remove("hidden");
+
+    // Automatically hide the alert after 5 seconds
+    setTimeout(() => {
+        closeAlert();
+    }, 1000);
 }
 
 /**
