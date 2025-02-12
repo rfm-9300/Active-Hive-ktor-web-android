@@ -20,6 +20,7 @@ console.log('submit-btn clicked');
         formData.append('description', document.getElementById('description').value);
         formData.append('date', document.getElementById('date').value);
         formData.append('location', document.getElementById('location').value);
+        formData.append('maxAttendees', document.getElementById('maxAttendees').value);
 
         // Add image file if it exists
         const fileInput = document.getElementById('image');
@@ -40,7 +41,7 @@ console.log('submit-btn clicked');
         const eventContent = document.getElementById('event-content');
 
         if (data.success) {
-            eventContent.innerHTML = `<p class="text-green-500 font-bold">Event created successfully!</p>`;
+            //eventContent.innerHTML = `<p class="text-green-500 font-bold">Event created successfully!</p>`;
         } else {
             eventContent.innerHTML = `<p class="text-red-500 font-bold">An error occurred while creating the event. Please try again later.</p>`;
         }

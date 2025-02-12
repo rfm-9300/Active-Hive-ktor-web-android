@@ -6,7 +6,7 @@ async function joinEvent(eventId) {
     if (data.success) {
         const message = data.message;
         // Example: Show a success message
-        showAlert("Login successful  teste!", "success");
+        showAlert(message, "success");
     } else {
         const message = data.message;
         // Example: Show an error message

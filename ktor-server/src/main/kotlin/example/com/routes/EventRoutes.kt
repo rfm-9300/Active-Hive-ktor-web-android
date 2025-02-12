@@ -44,6 +44,7 @@ fun Route.eventRoutes(
                 var date = ""
                 var location = ""
                 var image = ""
+                var maxAttendees = 0
 
                 multiPart.forEachPart {
                     when(it) {
@@ -54,6 +55,7 @@ fun Route.eventRoutes(
                                 "description" -> description = it.value
                                 "date" -> date = it.value
                                 "location" -> location = it.value
+                                "maxAttendees" -> maxAttendees = it.value.toInt()
                             }
                         }
                         is PartData.FileItem -> {
@@ -75,7 +77,8 @@ fun Route.eventRoutes(
                     date = LocalDateTime.now(),
                     location = location,
                     organizerId = 1,
-                    headerImagePath = image
+                    headerImagePath = image,
+                    maxAttendees = maxAttendees
                 )
                 Logger.d("Updating event: $event")
 
@@ -104,15 +107,26 @@ fun Route.eventRoutes(
     //api delete event
     authenticate {
         post(Routes.Api.Event.DELETE) {
-            val request = kotlin.runCatching { call.receiveNullable<EventRequest>() }.getOrNull() ?: return@post call.respond(HttpStatusCode.BadRequest)
-            val deletedEvent = eventRepository.deleteEvent(request.eventId)
+            try {
+                val request = kotlin.runCatching { call.receiveNullable<EventRequest>() }.getOrNull() ?: return@post call.respond(HttpStatusCode.BadRequest)
+                val deletedEventAttendees = eventRepository.deleteEventAttendees(request.eventId)
+                val deletedEvent = eventRepository.deleteEvent(request.eventId)
 
-            if (deletedEvent) {
-                sseManager.emitEvent(SseAction.RefreshEvents)
+                if (deletedEvent) {
+                    sseManager.emitEvent(SseAction.RefreshEvents)
+                }
+                call.respond (HttpStatusCode.OK,
+                    if (deletedEvent) CreateEventResponse.success() else CreateEventResponse.failure()
+                )
+            } catch (e: Exception) {
+                Logger.d("Error deleting event: ${e.message}")
+                call.respond(
+                    HttpStatusCode.BadRequest, CreateEventResponse(
+                        success = false,
+                        message = "Error deleting event: ${e.message}"
+                    )
+                )
             }
-            call.respond (HttpStatusCode.OK,
-                if (deletedEvent) CreateEventResponse.success() else CreateEventResponse.failure()
-            )
         }
     }
 
@@ -127,6 +141,7 @@ fun Route.eventRoutes(
                 var date = ""
                 var location = ""
                 var image = ""
+                var maxAttendees = 0
 
                 multiPart.forEachPart {
                     when(it) {
@@ -137,6 +152,7 @@ fun Route.eventRoutes(
                                 "description" -> description = it.value
                                 "date" -> date = it.value
                                 "location" -> location = it.value
+                                "maxAttendees" -> maxAttendees = it.value.toInt()
                             }
                         }
                         is PartData.FileItem -> {
@@ -157,11 +173,12 @@ fun Route.eventRoutes(
                     date = LocalDateTime.now(),
                     location = location,
                     organizerId = 1,
-                    headerImagePath = image
+                    headerImagePath = image,
+                    maxAttendees = maxAttendees
                 )
 
-                eventRepository.addEvent(event)
-
+                val eventID = eventRepository.addEvent(event) ?: throw Exception("Error creating event")
+                Logger.d("Event created successfully")
                 call.respond(
                     HttpStatusCode.Created,
                     CreateEventResponse(
@@ -170,7 +187,7 @@ fun Route.eventRoutes(
                     )
                 )
             } catch (e: Exception) {
-                println("Error creating event: ${e.message}")
+                Logger.d("Error creating event: ${e.message}")
                 call.respond(
                     HttpStatusCode.BadRequest, CreateEventResponse(
                         success = false,

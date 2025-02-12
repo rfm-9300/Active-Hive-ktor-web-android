@@ -76,6 +76,20 @@ fun HTML.createEvent() {
                     }
                 }
 
+                // Max attendees
+                div(classes = "mb-4") {
+                    label(classes = "block text-gray-700 text-sm font-bold mb-2") {
+                        attributes["for"] = "maxAttendees"
+                        +"Max Attendees"
+                    }
+                    input(classes = "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700") {
+                        attributes["type"] = "number"
+                        attributes["name"] = "maxAttendees"
+                        attributes["id"] = "maxAttendees"
+                        attributes["required"] = "true"
+                    }
+                }
+
                 // Image upload
                 div(classes = "mb-4") {
                     label(classes = "block text-gray-700 text-sm font-bold mb-2") {

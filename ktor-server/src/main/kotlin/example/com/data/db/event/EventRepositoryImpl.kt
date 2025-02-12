@@ -4,7 +4,6 @@ import example.com.data.db.user.*
 import example.com.plugins.Logger
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.transactions.transaction
 
 class EventRepositoryImpl: EventRepository {
     override suspend fun addEvent(event: Event): Int? = suspendTransaction {
@@ -18,10 +17,11 @@ class EventRepositoryImpl: EventRepository {
                 it[location] = event.location
                 it[organizerId] = organizer.id.value
                 it[headerImagePath] = event.headerImagePath
+                it[maxAttendees] = event.maxAttendees
             }.value
             eventId // Return the generated event ID
         } catch (e: Exception) {
-            null // Return null if the transaction fails
+            throw e
         }
     }
 
@@ -38,16 +38,17 @@ class EventRepositoryImpl: EventRepository {
                 headerImagePath = it[EventTable.headerImagePath],
                 attendees = emptyList(),
                 organizerId = it[EventTable.organizerId].value,
-                organizerName = "Rodrigo"
+                organizerName = "Rodrigo",
+                maxAttendees = it[EventTable.maxAttendees]
             )
         }
         Logger.d("Events: $events")
         events.forEach { event ->
             // Fetch attendees for each event
-            val attendeesQuery = EventAttendeeTable.select { EventAttendeeTable.event eq event.id }
+            val attendeesQuery = EventAttendeeTable.select { EventAttendeeTable.eventId eq event.id }
             Logger.d("Attendees Query: $attendeesQuery")
             attendeesQuery.forEach { attendeeRow ->
-                val userId = attendeeRow[EventAttendeeTable.user].value
+                val userId = attendeeRow[EventAttendeeTable.userId].value
                 val userProfile = UserProfilesTable.select { UserProfilesTable.userId eq userId }
                     .map { row ->
                         UserProfile(
@@ -84,13 +85,14 @@ class EventRepositoryImpl: EventRepository {
                     headerImagePath = it[EventTable.headerImagePath],
                     attendees = emptyList(),
                     organizerId = it[EventTable.organizerId].value,
-                    organizerName = "Rodrigo"
+                    organizerName = "Rodrigo",
+                    maxAttendees = it[EventTable.maxAttendees]
                 )
             }
             .firstOrNull()
-        val attendeesQuery = EventAttendeeTable.select { EventAttendeeTable.event eq eventId }
+        val attendeesQuery = EventAttendeeTable.select { EventAttendeeTable.eventId eq eventId }
         attendeesQuery.forEach { attendeeRow ->
-            val userId = attendeeRow[EventAttendeeTable.user].value
+            val userId = attendeeRow[EventAttendeeTable.userId].value
             val userProfile = UserProfilesTable.select { UserProfilesTable.userId eq userId }
                 .map { row ->
                     UserProfile(
@@ -132,8 +134,8 @@ class EventRepositoryImpl: EventRepository {
     override suspend fun joinEvent(eventId: Int, userId: Int): Boolean = suspendTransaction {
         try {
             EventAttendeeTable.insert {
-                it[event] = eventId
-                it[user] = userId
+                it[this.eventId] = eventId
+                it[this.userId] = userId
             }
             true
         } catch (e: Exception) {
@@ -145,10 +147,10 @@ class EventRepositoryImpl: EventRepository {
         val attendees = mutableListOf<UserProfile>()
         try {
             Logger.d("Event ID: $eventId")
-            val attendeesQuery = EventAttendeeTable.select { EventAttendeeTable.event eq eventId }
+            val attendeesQuery = EventAttendeeTable.select { EventAttendeeTable.eventId eq eventId }
             Logger.d("Attendees Query: $attendeesQuery")
             attendeesQuery.forEach { attendeeRow ->
-                val userId = attendeeRow[EventAttendeeTable.user].value
+                val userId = attendeeRow[EventAttendeeTable.userId].value
                 val userProfile = UserProfilesTable.select { UserProfilesTable.userId eq userId }
                     .map { row ->
                         UserProfile(
@@ -169,5 +171,9 @@ class EventRepositoryImpl: EventRepository {
             Logger.d("Error getting event attendees: ${e}")
         }
         attendees
+    }
+
+    override suspend fun deleteEventAttendees(eventId: Int): Int = suspendTransaction {
+        EventAttendeeTable.deleteWhere { EventAttendeeTable.eventId eq eventId }
     }
 }
