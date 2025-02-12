@@ -216,12 +216,18 @@ fun Route.eventRoutes(
 
             val event = eventRepository.getEvent(eventId) ?: return@post respondHelper(success = false, message = "Event not found", call = call)
 
+            // check if event is full
+            if (event.attendees.size >= event.maxAttendees) {
+                return@post respondHelper(success = false, message = "Event is full", call = call)
+            }
+
             // check if user is already in the event
             event.attendees.forEach {
                 if (it.id == userId.toInt()) {
                     return@post respondHelper(success = false, message = "User already in event", call = call)
                 }
             }
+
             Logger.d("user $userId joining event $eventId")
 
             val joined = eventRepository.joinEvent(eventId, userId.toInt())

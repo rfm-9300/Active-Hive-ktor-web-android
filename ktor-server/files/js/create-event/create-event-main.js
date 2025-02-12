@@ -41,9 +41,9 @@ console.log('submit-btn clicked');
         const eventContent = document.getElementById('event-content');
 
         if (data.success) {
-            //eventContent.innerHTML = `<p class="text-green-500 font-bold">Event created successfully!</p>`;
+            eventContent.innerHTML = `<p class="text-green-500 font-bold">Event created successfully!</p>`;
         } else {
-            eventContent.innerHTML = `<p class="text-red-500 font-bold">An error occurred while creating the event. Please try again later.</p>`;
+            showAlert(data.message, 'error');
         }
 
     } catch (error) {
