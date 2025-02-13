@@ -1,6 +1,8 @@
 document.getElementById('login-form').addEventListener('submit', async function(event) {
         event.preventDefault(); // Prevent default form submission
 
+        const api = window.api
+
         // Get form data
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
@@ -13,33 +15,19 @@ document.getElementById('login-form').addEventListener('submit', async function(
 
         try {
             // Send POST request
-            const response = await fetch('/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload) // Convert JS object to JSON string
-            });
-
-            // Check if the request was successful
-            if (!response.ok) {
-                console.error('HTTP error:', response.message);
-            }
-
-            // Parse JSON response
-            const data = await response.json();
+            const data = await api.post(ApiClient.ENDPOINTS.LOGIN, payload);
             console.log('Response:', data);
 
+            const token = data.data.token;
             // Store the token
-            if (data.token) {
-                localStorage.setItem('authToken', data.token);
+            if (token) {
+                localStorage.setItem('authToken', token);
                 //store cookie
                 //Store the token in a cookie (valid for 1 day)
                  const expirationDate = new Date();
                  expirationDate.setDate(expirationDate.getDate() + 10); // 1 day
-                 document.cookie = `authToken=${data.token}; expires=${expirationDate.toUTCString()}; path=/`;
+                 document.cookie = `authToken=${token}; expires=${expirationDate.toUTCString()}; path=/`;
                  console.log('Token stored in a cookie as well:', document.cookie);
-                console.log('Token stored in localStorage:', data.token);
             } else {
                 console.error('No token found in response');
             }

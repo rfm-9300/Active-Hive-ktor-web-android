@@ -8,11 +8,12 @@ class ApiClient {
         LOGIN: '%%API_LOGIN%%',
         SIGNUP: '%%API_SIGNUP%%',
         JOIN_EVENT: '%%API_JOIN_EVENT%%',
+        PROFILE_MENU: '%%PROFILE_MENU%%',
     }
 
     constructor(baseURL = '') {
         this.baseURL = baseURL;
-        this.token = localStorage.getItem('authToken');
+        this.token = document.cookie.replace(/(?:(?:^|.*;\s*)authToken\s*=\s*([^;]*).*$)|^.*$/, "$1");
     }
 
     // Updates the token

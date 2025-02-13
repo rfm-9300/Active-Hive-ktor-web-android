@@ -20,7 +20,7 @@ fun Application.configureRouting(
     eventRepository: EventRepository
 )  {
     routing {
-        homeRoutes(sseManager, eventRepository)
+        homeRoutes(sseManager, eventRepository, userRepository)
         loginRoutes(hashingService, userRepository, tokenService, tokenConfig)
         eventRoutes(eventRepository, sseManager, userRepository)
         dynamicJsProcessing()

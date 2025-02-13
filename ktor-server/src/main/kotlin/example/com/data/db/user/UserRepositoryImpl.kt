@@ -1,10 +1,9 @@
 package example.com.data.db.user
 
-import example.com.data.db.user.UserTable.salt
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 
-class PostgresUserRepository: UserRepository {
+class UserRepositoryImpl: UserRepository {
     override suspend fun getUser(email: String): User? = suspendTransaction {
         UserTable
             .select { UserTable.email eq email }
@@ -50,8 +49,18 @@ class PostgresUserRepository: UserRepository {
         }
     }
 
-    override suspend fun getUserProfile(userId: Int): Int {
-        return 1
+    override suspend fun getUserProfile(userId: Int): UserProfile = suspendTransaction {
+        UserProfilesTable
+            .select { UserProfilesTable.userId eq userId }
+            .single().let {
+                UserProfile(
+                    userId = it[UserProfilesTable.userId].value,
+                    firstName = it[UserProfilesTable.firstName],
+                    lastName = it[UserProfilesTable.lastName],
+                    email = it[UserProfilesTable.email],
+                    phone = it[UserProfilesTable.phone]
+                )
+            }
     }
 
 }

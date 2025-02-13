@@ -1,10 +1,11 @@
 document.addEventListener('DOMContentLoaded', async function() {
     const api = window.api;
     const loginButton = document.getElementById('login-button');
+    const logoutButton = document.getElementById('logout-button');
 
     if (api.token) {
         try {
-            const html = await api.getHtml('/home/user-info');
+            const html = await api.getHtml(ApiClient.ENDPOINTS.PROFILE_MENU);
             if (!html) {
                 throw new Error('No HTML received');
             }
@@ -35,13 +36,25 @@ document.addEventListener('DOMContentLoaded', async function() {
             // hide login button
             loginButton.classList.add('hidden');
 
+            // show logout button
+            logoutButton.classList.remove('hidden');
+
         } catch (error) {
             console.log('Error:', error);
             loginButton.classList.remove('hidden');
+            logoutButton.classList.add('hidden');
         }
     } else {
         console.log("No token found");
         loginButton.classList.remove('hidden');
+        logoutButton.classList.add('hidden');
     }
 });
 
+// function for logout button
+function logout() {
+    console.log('Logging out...');
+    localStorage.removeItem('authToken');
+    document.cookie = 'authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    window.location.href = '/';
+}

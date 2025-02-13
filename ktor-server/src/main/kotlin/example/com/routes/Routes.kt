@@ -13,6 +13,7 @@ object Routes {
         }
         object Home {
             const val HOME = "/home"
+            const val PROFILE_MENU = "/profile-menu"
         }
         object Auth {
             const val LOGIN = "/login"
@@ -56,7 +57,8 @@ object Routes {
             "%%SSE_CONNECTION%%" to Sse.SSE_CONNECTION,
             "%%API_LOGIN%%" to Api.Auth.LOGIN,
             "%%API_SIGNUP%%" to Api.Auth.SIGNUP,
-            "%%API_JOIN_EVENT%%" to Api.Event.JOIN_EVENT
+            "%%API_JOIN_EVENT%%" to Api.Event.JOIN_EVENT,
+            "%%PROFILE_MENU%%" to Ui.Home.PROFILE_MENU
         )
     }
 }

@@ -2,11 +2,11 @@ package example.com.routes
 
 import com.auth0.jwt.JWT
 import example.com.data.requests.AuthRequest
-import example.com.data.responses.AuthResponse
 import example.com.data.db.user.User
 import example.com.data.db.user.UserProfile
 import example.com.data.db.user.UserRepository
 import example.com.data.responses.ApiResponse
+import example.com.data.responses.ApiResponseData
 import example.com.plugins.Logger
 import example.com.security.hashing.HashingService
 import example.com.security.hashing.SaltedHash
@@ -107,14 +107,14 @@ fun Route.loginRoutes(
      * login
      ****/
 
-    post("login") {
-        val request = kotlin.runCatching { call.receiveNullable<AuthRequest>() }.getOrNull() ?: return@post call.respond(HttpStatusCode.BadRequest)
+    post(Routes.Api.Auth.LOGIN) {
+        val request = kotlin.runCatching { call.receiveNullable<AuthRequest>() }.getOrNull() ?: return@post respondHelper(success = false, message = "Invalid request", call = call)
 
         val areFieldsEmpty = request.email.isEmpty() || request.password.isEmpty()
 
-        if (areFieldsEmpty) return@post call.respond(HttpStatusCode.Conflict)
+        if (areFieldsEmpty) return@post respondHelper(success = false, message = "Email or Password empty", call = call)
 
-        val user = userRepository.getUser(request.email) ?: return@post call.respond(HttpStatusCode.NotFound, "User not found")
+        val user = userRepository.getUser(request.email) ?: return@post respondHelper(success = false, message = "User not found", call = call, statusCode = HttpStatusCode.NotFound)
 
         val isPasswordCorrect = hashingService.verifySaltedHash(
             password = request.password,
@@ -124,7 +124,7 @@ fun Route.loginRoutes(
             )
         )
 
-        if (!isPasswordCorrect) return@post call.respond(HttpStatusCode.Unauthorized, "Invalid password")
+        if (!isPasswordCorrect) return@post respondHelper(success = false, message = "Invalid password", call = call, statusCode = HttpStatusCode.Unauthorized)
 
         val token = tokenService.generateToken(
             config = tokenConfig,
@@ -139,20 +139,14 @@ fun Route.loginRoutes(
         Logger.d("Decoded JWT claims: ${decodedJWT.claims}")
         Logger.d("UserID in token: ${decodedJWT.getClaim("userId").asString()}")
 
-        call.respond(
-            status = HttpStatusCode.OK,
-            message = AuthResponse(token = token)
-        )
+        respondHelper(success = true, message = "User logged in", data = ApiResponseData.AuthResponse(token = token), call = call)
     }
 
     authenticate {
         get("user") {
             val principal = call.principal<JWTPrincipal>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
             val userId = principal.getClaim("userId", String::class) ?: return@get call.respond(HttpStatusCode.Unauthorized)
-            call.respond(
-                status = HttpStatusCode.OK,
-                message = AuthResponse(token = userId)
-            )
+            respondHelper(success = true, message = "User found", call = call)
         }
     }
 }

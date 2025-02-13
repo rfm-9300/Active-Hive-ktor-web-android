@@ -1,6 +1,8 @@
 package example.com.routes
 
 import example.com.data.db.event.EventRepository
+import example.com.data.db.user.UserProfile
+import example.com.data.db.user.UserRepository
 import example.com.data.utils.SseManager
 import example.com.plugins.Logger
 import example.com.web.pages.homePage.homePage
@@ -26,7 +28,8 @@ import java.io.File
 
 fun Route.homeRoutes(
     sseManager: SseManager,
-    eventRepository: EventRepository
+    eventRepository: EventRepository,
+    userRepository: UserRepository
 ){
     get("/") {
         call.respondHtml(HttpStatusCode.OK){
@@ -81,12 +84,15 @@ fun Route.homeRoutes(
     }
 
     authenticate {
-        get("/home/user-info") {
-            val principal = call.principal<JWTPrincipal>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
-            val userId = principal.getClaim("userId", String::class) ?: return@get call.respond(HttpStatusCode.Unauthorized)
+        get(Routes.Ui.Home.PROFILE_MENU) {
+            val principal = call.principal<JWTPrincipal>() ?: return@get respondHelper(success = false, message = "User not found", call = call)
+            val userId = principal.getClaim("userId", String::class) ?: return@get respondHelper(success = false, message = "User not found", call = call)
+
+            val userProfile = userRepository.getUserProfile(userId.toInt())
+
             call.respondHtml(HttpStatusCode.OK) {
                 body {
-                    profileMenu()
+                    profileMenu(userProfile)
                 }
             }
         }

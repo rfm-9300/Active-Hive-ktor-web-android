@@ -27,6 +27,16 @@ fun HtmlBlockTag.topbar() {
         // profile container
         div(classes = "relative flex flex-row items-center gap-2") {
             id = "profile-container"
+
+            // logout button
+            div(classes = "bg-red-500 text-white px-2 py-1 rounded-md cursor-pointer hidden") {
+                onClick = "logout()"
+                id = "logout-button"
+                span {
+                    +"Logout"
+                }
+            }
+
             // login button
             div(classes = "bg-blue-500 text-white px-2 py-1 rounded-md cursor-pointer") {
                 attributes["hx-get"] = "/login"
@@ -36,8 +46,9 @@ fun HtmlBlockTag.topbar() {
                     +"Login"
                 }
             }
-            // user profile icon, show only when user is logged in
-            div(classes = "w-8 h-8 rounded-full overflow-hidden cursor-pointer") {
+
+            // div that will contain the user profile image and toggle the menu
+            div(classes = "w-8 h-8 rounded-full overflow-hidden cursor-pointer z-20") {
                 id = "user-profile-icon"
             }
             div(classes = "w-6 h-6 rounded-full overflow-hidden cursor-pointer") {
