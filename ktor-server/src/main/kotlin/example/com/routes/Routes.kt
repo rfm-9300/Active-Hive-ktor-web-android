@@ -49,6 +49,7 @@ object Routes {
         object Auth {
             const val LOGIN = "/api/auth/login"
             const val SIGNUP = "/api/auth/signup"
+            const val VERIFY = "/api/auth/verify"
         }
     }
 

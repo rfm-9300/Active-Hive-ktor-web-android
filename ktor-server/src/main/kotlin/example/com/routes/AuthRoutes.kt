@@ -5,6 +5,7 @@ import example.com.data.requests.AuthRequest
 import example.com.data.db.user.User
 import example.com.data.db.user.UserProfile
 import example.com.data.db.user.UserRepository
+import example.com.data.requests.VerificationRequest
 import example.com.data.responses.ApiResponse
 import example.com.data.responses.ApiResponseData
 import example.com.plugins.Logger
@@ -113,8 +114,8 @@ fun Route.loginRoutes(
         val verificationToken = tokenService.generateVerificationToken(
             config = tokenConfig,
             TokenClaim(
-                name = "userId",
-                value = "1"
+                name = "Type",
+                value = "Verification"
             )
         )
 
@@ -147,5 +148,27 @@ fun Route.loginRoutes(
                 message = "User added successfully"
             )
         )
+    }
+
+    authenticate {
+        post(Routes.Api.Auth.VERIFY) {
+            val request = kotlin.runCatching { call.receiveNullable<VerificationRequest>() }.getOrNull() ?: return@post respondHelper(success = false, message = "Invalid request", call = call, statusCode = HttpStatusCode.BadRequest)
+            val token = request.token
+
+            val userId = getIdFromRequest(call) ?: return@post
+            val user = userRepository.getUserById(userId.toInt()) ?: return@post respondHelper(success = false, message = "User not found", call = call, statusCode = HttpStatusCode.NotFound)
+
+            if (user.verified) {
+                return@post respondHelper(success = false, message = "User already verified", call = call, statusCode = HttpStatusCode.Conflict)
+            }
+
+            val isTokenValid = user.verificationToken == token
+
+            respondHelper(success = isTokenValid,
+                message = if (isTokenValid) "User verified" else "Invalid token",
+                call = call,
+                statusCode = if (isTokenValid) HttpStatusCode.OK else HttpStatusCode.Unauthorized
+            )
+        }
     }
 }

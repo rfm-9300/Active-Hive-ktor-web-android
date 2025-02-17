@@ -24,7 +24,9 @@ class UserRepositoryImpl: UserRepository {
                 User(
                     email = it[UserTable.email],
                     password = it[UserTable.password],
-                    salt = it[UserTable.salt]
+                    salt = it[UserTable.salt],
+                    verified = it[UserTable.verified],
+                    verificationToken = it[UserTable.verificationToken],
                 )
             }
     }
