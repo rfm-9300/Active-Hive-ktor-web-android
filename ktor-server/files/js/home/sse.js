@@ -5,6 +5,7 @@
 const SseActionTypes = {
     SSE_ACTION: 'sse-action',
     REFRESH_EVENTS: 'refresh-events',
+    REFRESH_POSTS: 'refresh-posts'
 };
 
 function setupSSE() {
@@ -22,7 +23,13 @@ function setupSSE() {
 
         if (data === SseActionTypes.REFRESH_EVENTS) {
             console.log('Refreshing events tab');
-            const html = await window.api.getHtml('/home/events-tab');
+            const html = await window.api.getHtml(ApiClient.ENDPOINTS.EVENTS_TAB);
+            contentDiv.innerHTML = html;
+        }
+        if (data === SseActionTypes.REFRESH_POSTS) {
+            console.log('Refreshing posts');
+            const html = await window.api.getHtml(ApiClient.ENDPOINTS.HOME_PAGE);
+            console.log('HTML:', html);
             contentDiv.innerHTML = html;
         }
     });

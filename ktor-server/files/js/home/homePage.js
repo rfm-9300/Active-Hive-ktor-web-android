@@ -58,3 +58,18 @@ function logout() {
     document.cookie = 'authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     window.location.href = '/';
 }
+
+async function deletePost(postId) {
+    console.log('Deleting post:', postId);
+    const api = window.api;
+
+    const data = await api.post(ApiClient.ENDPOINTS.DELETE_POST, { postId: postId });
+    
+    if (data.success) {
+        console.log('Post deleted:', postId);
+        showAlert('Post deleted', 'success');
+    } else {
+        console.log('Error deleting post:', data.message);
+        showAlert(data.message, 'error');
+    }
+}

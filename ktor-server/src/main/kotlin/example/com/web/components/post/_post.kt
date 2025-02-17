@@ -7,6 +7,7 @@ import kotlinx.html.*
 
 fun HtmlBlockTag.post(post: PostUi = PostUi()) {
     div(classes = "flex flex-col rounded-2xl bg-white shadow-lg p-4 my-4") {
+
         // user div
         div(classes = "flex items-center gap-2") {
             div(classes = "w-8 h-8 rounded-full overflow-hidden cursor-pointer") {
@@ -21,6 +22,7 @@ fun HtmlBlockTag.post(post: PostUi = PostUi()) {
                 }
             }
         }
+
         // post content div
         div(classes = "flex flex-col my-4") {
             p(classes = "text-lg") {
@@ -30,6 +32,7 @@ fun HtmlBlockTag.post(post: PostUi = PostUi()) {
                 +post.content
             }
         }
+
         // post icons div
         div(classes = "flex justify-between") {
             div(classes = "flex gap-2") {
@@ -39,8 +42,9 @@ fun HtmlBlockTag.post(post: PostUi = PostUi()) {
                 }
                 +post.likes.toString()
             }
-            div(classes = "w-6 h-6 rounded-full overflow-hidden cursor-pointer") {
-                svgIcon(SvgIcon.DEFAULT)
+            span(classes = "delete-icon rounded-full overflow-hidden cursor-pointer"){
+                attributes["onclick"] = "deletePost(${post.postId})"
+                svgIcon(SvgIcon.DELETE)
             }
         }
     }

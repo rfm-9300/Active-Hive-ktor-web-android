@@ -1,5 +1,6 @@
 package example.com.web.components.topbar
 
+import example.com.routes.Routes
 import example.com.web.components.SvgIcon
 import example.com.web.components.svgIcon
 import example.com.web.utils.Strings
@@ -11,6 +12,8 @@ fun HtmlBlockTag.topbar() {
     div(classes = "flex items-center justify-between relative px-4") {
         // logo container
         div (classes = "h-auto, flex items-center cursor-pointer rounded-xl hover:bg-gray-200 hover:text-gray-900 transition-all duration-300") {
+            attributes["hx-get"] = Routes.Ui.Home.HOME
+            attributes["hx-target"] = "#main-content"
             id = "logo-container"
             div(classes = "relative overflow-hidden w-12 h-12 rounded-lg"){
                 span {

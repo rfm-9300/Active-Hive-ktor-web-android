@@ -1,6 +1,7 @@
 package example.com.plugins
 
 import example.com.data.db.event.EventRepository
+import example.com.data.db.post.PostRepository
 import example.com.data.db.user.UserRepository
 import example.com.data.utils.SseManager
 import example.com.routes.*
@@ -17,10 +18,11 @@ fun Application.configureRouting(
     tokenService: TokenService,
     tokenConfig: TokenConfig,
     sseManager: SseManager,  // Add these
-    eventRepository: EventRepository
+    eventRepository: EventRepository,
+    postRepository: PostRepository
 )  {
     routing {
-        homeRoutes(sseManager, eventRepository, userRepository)
+        homeRoutes(sseManager, eventRepository, userRepository, postRepository )
         loginRoutes(hashingService, userRepository, tokenService, tokenConfig)
         eventRoutes(eventRepository, sseManager, userRepository)
         dynamicJsProcessing()

@@ -2,7 +2,10 @@ package example.com.routes
 
 object Routes {
 
-    /** Routes for the UI **/
+    /**
+     * Routes for the UI
+     **/
+
     object Ui {
         object Event {
             const val LIST = "/events"
@@ -21,7 +24,9 @@ object Routes {
         }
     }
 
-    /** Routes for the API **/
+    /**
+     * Routes for the API
+     **/
 
     object Api {
         object Event {
@@ -31,6 +36,14 @@ object Routes {
             const val DELETE = "/api/events/delete"
             const val LIST = "/api/events"
             const val JOIN_EVENT = "/api/events/join"
+        }
+
+        object Post {
+            const val CREATE = "/api/posts"
+            const val GET = "/api/posts/{id}"
+            const val UPDATE = "/api/posts/update"
+            const val DELETE = "/api/posts/delete"
+            const val LIST = "/api/posts"
         }
 
         object Auth {
@@ -58,7 +71,12 @@ object Routes {
             "%%API_LOGIN%%" to Api.Auth.LOGIN,
             "%%API_SIGNUP%%" to Api.Auth.SIGNUP,
             "%%API_JOIN_EVENT%%" to Api.Event.JOIN_EVENT,
-            "%%PROFILE_MENU%%" to Ui.Home.PROFILE_MENU
+            "%%PROFILE_MENU%%" to Ui.Home.PROFILE_MENU,
+            "%%API_CREATE_POST%%" to Api.Post.CREATE,
+            "%%API_GET_POST%%" to Api.Post.GET,
+            "%%API_UPDATE_POST%%" to Api.Post.UPDATE,
+            "%%API_DELETE_POST%%" to Api.Post.DELETE,
+            "%%UI_HOME%%" to Ui.Home.HOME,
         )
     }
 }

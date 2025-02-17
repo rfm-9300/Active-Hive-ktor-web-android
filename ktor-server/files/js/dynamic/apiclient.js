@@ -5,10 +5,13 @@ class ApiClient {
         DELETE_EVENT: '%%API_DELETE_EVENT%%',
         UPDATE_EVENT: '%%API_UPDATE_EVENT%%',
         SSE_CONNECTION: '%%SSE_CONNECTION%%',
+        DELETE_POST: '%%API_DELETE_POST%%',
         LOGIN: '%%API_LOGIN%%',
         SIGNUP: '%%API_SIGNUP%%',
         JOIN_EVENT: '%%API_JOIN_EVENT%%',
         PROFILE_MENU: '%%PROFILE_MENU%%',
+        EVENTS_TAB: '%%EVENTS_TAB%%',
+        HOME_PAGE: '%%UI_HOME%%',
     }
 
     constructor(baseURL = '') {
@@ -52,18 +55,14 @@ class ApiClient {
                 headers
             });
     
-            console.log('Raw Response:', response);
-    
             if (!response.ok) {
                 console.log('Response Error:', response.status);
                 return { success: false, message: 'Request failed' };
             }
-    
-            const responseText = await response.text(); // Log the raw response text
-            console.log('Response Text:', responseText);
-    
+            
             try {
-                const data = JSON.parse(responseText); // Attempt to parse the response text as JSON
+                const data = await response.json(); // Attempt to parse the response text as JSON
+                console.log('Response Data:', data);
                 return data;
             } catch (parseError) {
                 console.error('Failed to parse JSON:', parseError);

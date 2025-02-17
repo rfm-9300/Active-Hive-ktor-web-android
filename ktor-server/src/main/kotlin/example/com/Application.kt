@@ -53,6 +53,7 @@ fun Application.module() {
         tokenService = tokenService,
         tokenConfig = tokenConfig,
         sseManager = get(),
-        eventRepository = get()
+        eventRepository = get(),
+        postRepository = get()
     )
 }
