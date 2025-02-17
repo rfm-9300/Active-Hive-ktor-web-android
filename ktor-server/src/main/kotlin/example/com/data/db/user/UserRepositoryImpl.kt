@@ -35,6 +35,9 @@ class UserRepositoryImpl: UserRepository {
                 it[email] = user.email
                 it[password] = user.password
                 it[salt] = user.salt
+                it[verified] = user.verified
+                it[verificationToken] = user.verificationToken
+                it[createdAt] = user.createdAt
             }
             UserProfilesTable.insert {
                 it[userId] = UserTable.select { UserTable.email eq user.email }.single()[UserTable.id]

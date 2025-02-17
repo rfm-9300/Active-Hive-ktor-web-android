@@ -1,12 +1,15 @@
 package example.com.data.db.user
 
+import example.com.data.utils.LocalDateTimeSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.dao.*
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.Transaction
+import org.jetbrains.exposed.sql.`java-time`.datetime
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
+import java.time.LocalDateTime
 
 @Serializable
 data class User(
@@ -14,6 +17,10 @@ data class User(
     val email: String,
     val password: String,
     val salt: String,
+    val verified: Boolean = false,
+    @Serializable(with = LocalDateTimeSerializer::class)
+    val createdAt: LocalDateTime = LocalDateTime.now(),
+    val verificationToken: String? = null,
     val profile: UserProfile? = null
 )
 
@@ -31,6 +38,9 @@ object UserTable : IntIdTable("user") {
     val email = varchar("email", 128)
     val password = varchar("password", 256)
     val salt = varchar("salt", 256)
+    val verified = bool("verified").default(false)
+    val createdAt = datetime("created_at")
+    val verificationToken = varchar("verification_token", 256).nullable()
 }
 
 // UserProfilesTable now extends IntIdTable

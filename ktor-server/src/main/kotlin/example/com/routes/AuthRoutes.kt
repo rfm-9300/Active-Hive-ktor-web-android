@@ -32,45 +32,97 @@ fun Route.loginRoutes(
     tokenService: TokenService,
     tokenConfig: TokenConfig
 ) {
+
+
+    /****
+     * UI Routes
+     ****/
+
+    get(Routes.Ui.Auth.SIGNUP) {
+        call.respondHtml {
+            signupPage()
+        }
+    }
+
     get("/login") {
         call.respondHtml {
             loginPage()
         }
     }
 
+
+
+
+
     /****
-     * sing-up
+     * Api Routes
      ****/
+
+    post(Routes.Api.Auth.LOGIN) {
+        val request = kotlin.runCatching { call.receiveNullable<AuthRequest>() }.getOrNull() ?: return@post respondHelper(success = false, message = "Invalid request", call = call)
+
+        val areFieldsEmpty = request.email.isEmpty() || request.password.isEmpty()
+
+        if (areFieldsEmpty) return@post respondHelper(success = false, message = "Email or Password empty", call = call)
+
+        val user = userRepository.getUser(request.email) ?: return@post respondHelper(success = false, message = "User not found", call = call, statusCode = HttpStatusCode.NotFound)
+
+        val isPasswordCorrect = hashingService.verifySaltedHash(
+            password = request.password,
+            saltedHash = SaltedHash(
+                hash = user.password,
+                salt = user.salt
+            )
+        )
+
+        if (!isPasswordCorrect) return@post respondHelper(success = false, message = "Invalid password", call = call, statusCode = HttpStatusCode.Unauthorized)
+
+        val token = tokenService.generateAuthToken(
+            config = tokenConfig,
+            TokenClaim(
+                name = "userId",
+                value = user.id.toString()
+            )
+        )
+
+        Logger.d("Generated token: $token")
+        val decodedJWT = JWT.decode(token)
+        Logger.d("Decoded JWT claims: ${decodedJWT.claims}")
+        Logger.d("UserID in token: ${decodedJWT.getClaim("userId").asString()}")
+
+        respondHelper(success = true, message = "User logged in", data = ApiResponseData.AuthResponse(token = token), call = call)
+    }
 
     post(Routes.Api.Auth.SIGNUP){
         Logger.d("Received a request to sign up a new user")
-        val request = kotlin.runCatching { call.receiveNullable<AuthRequest>() }.getOrNull() ?: return@post call.respond(HttpStatusCode.BadRequest)
-        Logger.d("Received a request to sign up a new user with email: ${request.email}")
+        val request = kotlin.runCatching { call.receiveNullable<AuthRequest>() }.getOrNull() ?: return@post respondHelper(success = false, message = "Invalid request", call = call, statusCode = HttpStatusCode.BadRequest)
+
         val areFieldsEmpty = request.email.isEmpty() || request.password.isEmpty()
         val isPasswordTooShort = request.password.length < PASSWORD_MIN_LENGTH
+
         if (areFieldsEmpty || isPasswordTooShort) {
-            return@post call.respond(
-                HttpStatusCode.Conflict,
-                ApiResponse(
-                    success = false,
-                    message = "Invalid email or password"
-                )
-            )
+            return@post respondHelper(success = false, message = "Empty fields or weak password", call = call, statusCode = HttpStatusCode.BadRequest)
         }
 
         val user = userRepository.getUser(request.email)
         if (user != null) {
-            return@post call.respond(HttpStatusCode.Conflict , ApiResponse(
-                success = false,
-                message = "User already exists"
-            ))
+            return@post respondHelper(success = false, message = "User already exists", call = call, statusCode = HttpStatusCode.Conflict)
         }
 
         val saltedHash = hashingService.generateSaltedHash(request.password)
+        val verificationToken = tokenService.generateVerificationToken(
+            config = tokenConfig,
+            TokenClaim(
+                name = "userId",
+                value = "1"
+            )
+        )
+
         val newUser = User(
             email = request.email,
             password = saltedHash.hash,
             salt = saltedHash.salt,
+            verificationToken = verificationToken,
             profile = UserProfile( email = request.email)
         )
 
@@ -95,58 +147,5 @@ fun Route.loginRoutes(
                 message = "User added successfully"
             )
         )
-    }
-
-    get(Routes.Ui.Auth.SIGNUP) {
-        call.respondHtml {
-            signupPage()
-        }
-    }
-
-    /****
-     * login
-     ****/
-
-    post(Routes.Api.Auth.LOGIN) {
-        val request = kotlin.runCatching { call.receiveNullable<AuthRequest>() }.getOrNull() ?: return@post respondHelper(success = false, message = "Invalid request", call = call)
-
-        val areFieldsEmpty = request.email.isEmpty() || request.password.isEmpty()
-
-        if (areFieldsEmpty) return@post respondHelper(success = false, message = "Email or Password empty", call = call)
-
-        val user = userRepository.getUser(request.email) ?: return@post respondHelper(success = false, message = "User not found", call = call, statusCode = HttpStatusCode.NotFound)
-
-        val isPasswordCorrect = hashingService.verifySaltedHash(
-            password = request.password,
-            saltedHash = SaltedHash(
-                hash = user.password,
-                salt = user.salt
-            )
-        )
-
-        if (!isPasswordCorrect) return@post respondHelper(success = false, message = "Invalid password", call = call, statusCode = HttpStatusCode.Unauthorized)
-
-        val token = tokenService.generateToken(
-            config = tokenConfig,
-            TokenClaim(
-                name = "userId",
-                value = user.id.toString()
-            )
-        )
-
-        Logger.d("Generated token: $token")
-        val decodedJWT = JWT.decode(token)
-        Logger.d("Decoded JWT claims: ${decodedJWT.claims}")
-        Logger.d("UserID in token: ${decodedJWT.getClaim("userId").asString()}")
-
-        respondHelper(success = true, message = "User logged in", data = ApiResponseData.AuthResponse(token = token), call = call)
-    }
-
-    authenticate {
-        get("user") {
-            val principal = call.principal<JWTPrincipal>() ?: return@get call.respond(HttpStatusCode.Unauthorized)
-            val userId = principal.getClaim("userId", String::class) ?: return@get call.respond(HttpStatusCode.Unauthorized)
-            respondHelper(success = true, message = "User found", call = call)
-        }
     }
 }
