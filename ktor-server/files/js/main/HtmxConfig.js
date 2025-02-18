@@ -1,16 +1,19 @@
 document.addEventListener('DOMContentLoaded', function() {
-    try {
-        const token = localStorage.getItem('authToken');
-        if (token) {
-            htmx.config.headers = {
-                'Authorization': 'Bearer ' + token,
-                'X-User': 'rfm-9300'
-            };
-            console.log('HTMX headers configured successfully');
-        } else {
-            console.warn('No auth token found');
-        }
-    } catch (error) {
-        console.error('Error configuring HTMX headers:', error);
+    if (typeof htmx === 'undefined') {
+        console.error('HTMX is not loaded!');
+        return;
+    }
+
+    const token = document.cookie.replace(/(?:(?:^|.*;\s*)authToken\s*=\s*([^;]*).*$)|^.*$/, "$1");
+    console.log('Token:', token);
+    if (token) {
+        htmx.defineConfig({
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        });
+        console.log('HTMX headers configured successfully');
+    } else {
+        console.warn('No auth token found');
     }
 });

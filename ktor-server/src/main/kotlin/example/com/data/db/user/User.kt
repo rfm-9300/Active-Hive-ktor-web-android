@@ -1,11 +1,13 @@
 package example.com.data.db.user
 
+import example.com.data.db.event.Event
 import example.com.data.utils.LocalDateTimeSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.dao.*
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
+import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Transaction
 import org.jetbrains.exposed.sql.`java-time`.datetime
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
@@ -31,7 +33,11 @@ data class UserProfile(
     val firstName: String = "",
     val lastName: String = "",
     val email: String,
-    val phone: String = ""
+    val phone: String = "",
+    @Serializable(with = LocalDateTimeSerializer::class)
+    val joinedAt: LocalDateTime? = null,
+    val hostedEvents : List<Event> = emptyList(),
+    val attendedEvents : List<Event> = emptyList()
 )
 
 object UserTable : IntIdTable("user") {
@@ -50,6 +56,7 @@ object UserProfilesTable : IntIdTable("user_profile") {
     val lastName = varchar("last_name", 128)
     val email = varchar("email", 128)
     val phone = varchar("phone", 18)
+    val joinedAt = datetime("joined_at").default(LocalDateTime.now())
 }
 
 class UserDao(id: EntityID<Int>) : IntEntity(id) {
@@ -79,4 +86,23 @@ fun UserDao.toUser() = UserProfile(
     lastName = profile.lastName,
     email = profile.email,
     phone = profile.phone
+)
+
+fun ResultRow.toUser() = User(
+    id = this[UserTable.id].value,
+    email = this[UserTable.email],
+    password = this[UserTable.password],
+    salt = this[UserTable.salt],
+    verified = this[UserTable.verified],
+    createdAt = this[UserTable.createdAt],
+    verificationToken = this[UserTable.verificationToken]
+)
+
+fun ResultRow.toUserProfile() = UserProfile(
+    id = this[UserProfilesTable.id].value,
+    userId = this[UserProfilesTable.userId].value,
+    firstName = this[UserProfilesTable.firstName],
+    lastName = this[UserProfilesTable.lastName],
+    email = this[UserProfilesTable.email],
+    phone = this[UserProfilesTable.phone]
 )

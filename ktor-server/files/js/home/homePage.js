@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', async function() {
     const api = window.api;
     const loginButton = document.getElementById('login-button');
-    const logoutButton = document.getElementById('logout-button');
 
     if (api.token) {
         try {
@@ -35,19 +34,15 @@ document.addEventListener('DOMContentLoaded', async function() {
 
             // hide login button
             loginButton.classList.add('hidden');
-
-            // show logout button
-            logoutButton.classList.remove('hidden');
+            htmx.process(targetDiv);
 
         } catch (error) {
             console.log('Error:', error);
             loginButton.classList.remove('hidden');
-            logoutButton.classList.add('hidden');
         }
     } else {
         console.log("No token found");
         loginButton.classList.remove('hidden');
-        logoutButton.classList.add('hidden');
     }
 });
 
@@ -72,4 +67,10 @@ async function deletePost(postId) {
         console.log('Error deleting post:', data.message);
         showAlert(data.message, 'error');
     }
+}
+
+async function navigateToProfile() {
+    console.log('Navigating to profile...');
+    const api = window.api;
+    const data = await api.getHtml(ApiClient.ENDPOINTS.PROFILE);
 }

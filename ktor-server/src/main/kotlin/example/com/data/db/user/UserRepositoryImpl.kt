@@ -2,6 +2,7 @@ package example.com.data.db.user
 
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
+import java.time.LocalDateTime
 
 class UserRepositoryImpl: UserRepository {
     override suspend fun getUser(email: String): User? = suspendTransaction {
@@ -47,6 +48,7 @@ class UserRepositoryImpl: UserRepository {
                 it[lastName] = user.profile?.lastName ?: ""
                 it[email] = user.profile?.email ?: ""
                 it[phone] = user.profile?.phone ?: ""
+                it[joinedAt] = user.profile?.joinedAt ?: LocalDateTime.now()
             }
             true
         } catch (e: Exception) {
@@ -55,17 +57,8 @@ class UserRepositoryImpl: UserRepository {
     }
 
     override suspend fun getUserProfile(userId: Int): UserProfile = suspendTransaction {
-        UserProfilesTable
-            .select { UserProfilesTable.userId eq userId }
-            .single().let {
-                UserProfile(
-                    userId = it[UserProfilesTable.userId].value,
-                    firstName = it[UserProfilesTable.firstName],
-                    lastName = it[UserProfilesTable.lastName],
-                    email = it[UserProfilesTable.email],
-                    phone = it[UserProfilesTable.phone]
-                )
-            }
+        val userProfile = UserProfilesTable.select { UserProfilesTable.userId eq userId }.single().toUserProfile()
+        userProfile
     }
 
 }

@@ -22,6 +22,10 @@ object Routes {
             const val LOGIN = "/login"
             const val SIGNUP = "/signup"
         }
+
+        object Profile {
+            const val ROOT = "/profile"
+        }
     }
 
     /**

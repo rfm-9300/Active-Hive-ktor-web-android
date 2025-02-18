@@ -10,7 +10,7 @@ import kotlinx.html.*
 fun HTML.homePage() {
     layout {
         topbar()
-        div (classes = "bg-slate-100 px-4 ") {
+        div (classes = "px-4 ") {
             div(classes = "flex flex-col justify-center items-center w-full bg-stone-100 rounded-2xl shadow-lg") {
                 // Navigation Bar
                 navbar()

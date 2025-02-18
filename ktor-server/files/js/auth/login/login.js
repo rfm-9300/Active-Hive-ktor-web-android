@@ -32,8 +32,8 @@ document.getElementById('login-form').addEventListener('submit', async function(
                 console.error('No token found in response');
             }
 
-            // Optionally update the page content (example)
-            document.getElementById('main-content').innerHTML = 'Login Successful!';
+            // Redirect to the home page
+            window.location.href = '/';
 
         } catch (error) {
             console.error('Error during the login process:', error);

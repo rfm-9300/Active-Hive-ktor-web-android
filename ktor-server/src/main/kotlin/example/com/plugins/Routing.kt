@@ -26,5 +26,6 @@ fun Application.configureRouting(
         loginRoutes(hashingService, userRepository, tokenService, tokenConfig)
         eventRoutes(eventRepository, sseManager, userRepository)
         dynamicJsProcessing()
+        profileRoutes(userRepository)
     }
 }

@@ -21,3 +21,7 @@ object LocalDateTimeSerializer : KSerializer<LocalDateTime> {
         return LocalDateTime.parse(decoder.decodeString(), formatter)
     }
 }
+
+fun LocalDateTime.monthYear(): String {
+    return this.format(DateTimeFormatter.ofPattern("MMM yyyy"))
+}

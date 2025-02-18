@@ -31,22 +31,13 @@ fun HtmlBlockTag.topbar() {
         div(classes = "relative flex flex-row items-center gap-2") {
             id = "profile-container"
 
-            // logout button
-            div(classes = "bg-red-500 text-white px-2 py-1 rounded-md cursor-pointer hidden") {
-                onClick = "logout()"
-                id = "logout-button"
-                span {
-                    +"Logout"
-                }
-            }
-
             // login button
-            div(classes = "bg-blue-500 text-white px-2 py-1 rounded-md cursor-pointer") {
+            div(classes = "bg-blue-200 text-gray px-2 py-1 rounded-md cursor-pointer opacity-75 hover:opacity-100 text-sm") {
                 attributes["hx-get"] = "/login"
                 attributes["hx-target"] = "#main-content"
                 id = "login-button"
                 span {
-                    +"Login"
+                    +"Sing in"
                 }
             }
 
@@ -54,7 +45,7 @@ fun HtmlBlockTag.topbar() {
             div(classes = "w-8 h-8 rounded-full overflow-hidden cursor-pointer z-20") {
                 id = "user-profile-icon"
             }
-            div(classes = "w-6 h-6 rounded-full overflow-hidden cursor-pointer") {
+            div(classes = "w-4 h-4 rounded-full overflow-hidden cursor-pointer") {
                 svgIcon(SvgIcon.MENU)
             }
 
