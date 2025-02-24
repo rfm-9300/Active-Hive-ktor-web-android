@@ -1,8 +1,9 @@
 package example.com.routes
 
+import com.auth0.jwt.JWT
 import example.com.data.responses.ApiResponse
 import example.com.data.responses.ApiResponseData
-import example.com.data.responses.CreateEventResponse
+import example.com.plugins.Logger
 import example.com.security.Roles
 import io.ktor.http.*
 import io.ktor.server.auth.*
@@ -25,7 +26,7 @@ suspend fun respondHelper(
 }
 
 // return the userID from the JWT token for authenticated routes
-suspend fun getIdFromRequest(call: RoutingCall): String? {
+suspend fun getIdFromRequestToken(call: RoutingCall): String? {
     val principal = call.principal<JWTPrincipal>()
     if (principal == null) {
         respondHelper(
@@ -50,6 +51,24 @@ suspend fun getIdFromRequest(call: RoutingCall): String? {
     return userId
 }
 
-fun authorizeUser(userId: String): Boolean {
+fun authorizeUser(userId: String?): Boolean {
+    if (userId?.toIntOrNull() == null) return false
     return Roles.returnRole(userId.toInt()) == Roles.Role.ADMIN
+}
+
+fun RoutingContext.getUserId(): Int? {
+    val token = call.request.cookies["authToken"]
+    return getUserIdFromToken(token)
+}
+
+fun getUserIdFromToken(token: String?): Int? {
+    try {
+        val decodedJWT = JWT.decode(token)
+        Logger.d("Decoded JWT claims: ${decodedJWT.claims}")
+        Logger.d("UserID in token: ${decodedJWT.getClaim("userId").asString()}")
+        return decodedJWT.getClaim("userId").asString().toIntOrNull()
+    } catch (e: Exception){
+        Logger.d("Error decoding JWT: $e")
+        return null
+    }
 }

@@ -9,7 +9,8 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.html.*
 
 fun HTML.allEventsTab(
-    eventRepository: EventRepository
+    eventRepository: EventRepository,
+    isAdminRequest: Boolean
 ) {
     // Fetch events using runBlocking
     val events = runBlocking {
@@ -35,7 +36,7 @@ fun HTML.allEventsTab(
 
             // Render each event
             events.forEach { event ->
-                event(event)
+                event(event, isAdminRequest)
             }
             loadJs("event/all-events")
         }

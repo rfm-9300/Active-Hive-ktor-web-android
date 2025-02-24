@@ -3,10 +3,6 @@ package example.com.web.pages.profilePage
 import example.com.data.db.user.UserProfile
 import example.com.data.utils.monthYear
 import example.com.web.components.layout.layout
-import example.com.web.pages.homePage.navbar.navbar
-import example.com.web.components.topbar.topbar
-import example.com.web.loadJs
-import example.com.web.pages.homePage.homeTab.homeTab
 import kotlinx.html.*
 
 fun HTML.profilePage(user: UserProfile){

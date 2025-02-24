@@ -2,9 +2,7 @@ package example.com.routes
 
 import example.com.data.db.event.EventRepository
 import example.com.data.db.post.PostRepository
-import example.com.data.db.user.UserProfile
 import example.com.data.db.user.UserRepository
-import example.com.data.requests.EventRequest
 import example.com.data.requests.PostRequest
 import example.com.data.utils.SseAction
 import example.com.data.utils.SseManager
@@ -19,15 +17,12 @@ import io.ktor.server.auth.jwt.*
 import io.ktor.server.html.*
 import io.ktor.server.http.content.*
 import io.ktor.server.request.*
-import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.sse.*
 import io.ktor.sse.*
 import io.ktor.utils.io.*
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import kotlinx.html.body
 import java.io.File
 
@@ -48,7 +43,7 @@ fun Route.homeRoutes(
                 val postId = request.postId
 
                 Logger.d("Delete post request")
-                val userId = getIdFromRequest(call) ?: return@post
+                val userId = getIdFromRequestToken(call) ?: return@post
                 if (!authorizeUser(userId)) {
                     return@post respondHelper(success = false, message = "Unauthorized", call = call, statusCode = HttpStatusCode.Unauthorized)
                 }
@@ -77,9 +72,11 @@ fun Route.homeRoutes(
         }
     }
     get(Routes.Ui.Event.LIST) {
+        val userId = getUserId()
         call.respondHtml(HttpStatusCode.OK){
             allEventsTab(
-                eventRepository = eventRepository
+                eventRepository = eventRepository,
+                isAdminRequest = authorizeUser(getUserId().toString())
             )
         }
     }

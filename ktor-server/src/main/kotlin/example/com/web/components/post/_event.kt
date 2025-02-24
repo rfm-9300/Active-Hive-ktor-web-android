@@ -8,7 +8,7 @@ import kotlinx.html.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-fun HtmlBlockTag.event(event: Event){
+fun HtmlBlockTag.event(event: Event, isAdminRequest: Boolean = false) {
     val date = LocalDateTime.parse(event.date.toString()).format(DateTimeFormatter.ofPattern("dd MMM"))
     val dayOfWeek = LocalDateTime.parse(event.date.toString()).dayOfWeek.toString()
     val time = LocalDateTime.parse(event.date.toString()).format(DateTimeFormatter.ofPattern("hh:mm a"))
@@ -25,13 +25,14 @@ fun HtmlBlockTag.event(event: Event){
                 +dayOfWeek
             }
             // icons div
-            div(classes = "w-full flex flex-row flex-start px-1 gap-2 mt-2") {
+            val hiddenTag = if (!isAdminRequest) "hidden" else ""
+            div(classes = "w-full flex flex-row flex-start px-1 gap-2 mt-2 $hiddenTag") {
                 span(classes = "delete-icon rounded-full overflow-hidden cursor-pointer"){
                     attributes["data-event-id"] = event.id.toString()
                     attributes["onclick"] = "deleteEvent(${event.id})"
                     svgIcon(SvgIcon.DELETE)
                 }
-                span(classes = "edit-icon rounded-full overflow-hidden cursor-pointer"){
+                span(classes = "edit-icon rounded-full overflow-hidden cursor-pointer $hiddenTag"){
                     attributes["hx-get"] = Routes.Ui.Event.UPDATE.replace("{eventId}", event.id.toString())
                     attributes["hx-target"] = "#main-content"
                     svgIcon(SvgIcon.EDIT)

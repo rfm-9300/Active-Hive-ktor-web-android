@@ -2,6 +2,8 @@ package example.com.web.components.topbar
 
 import example.com.data.db.user.UserProfile
 import example.com.routes.Routes
+import example.com.web.components.SvgIcon
+import example.com.web.components.svgIcon
 import kotlinx.html.*
 
 

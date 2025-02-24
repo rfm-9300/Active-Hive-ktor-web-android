@@ -18,7 +18,6 @@ import example.com.web.pages.auth.loginPage
 import example.com.web.pages.auth.signupPage
 import io.ktor.http.*
 import io.ktor.server.auth.*
-import io.ktor.server.auth.jwt.*
 import io.ktor.server.html.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
@@ -155,7 +154,7 @@ fun Route.loginRoutes(
             val request = kotlin.runCatching { call.receiveNullable<VerificationRequest>() }.getOrNull() ?: return@post respondHelper(success = false, message = "Invalid request", call = call, statusCode = HttpStatusCode.BadRequest)
             val token = request.token
 
-            val userId = getIdFromRequest(call) ?: return@post
+            val userId = getIdFromRequestToken(call) ?: return@post
             val user = userRepository.getUserById(userId.toInt()) ?: return@post respondHelper(success = false, message = "User not found", call = call, statusCode = HttpStatusCode.NotFound)
 
             if (user.verified) {
