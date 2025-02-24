@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter
 fun HtmlBlockTag.event(event: Event, isAdminRequest: Boolean = false) {
     val date = LocalDateTime.parse(event.date.toString()).format(DateTimeFormatter.ofPattern("dd MMM"))
     val dayOfWeek = LocalDateTime.parse(event.date.toString()).dayOfWeek.toString()
-    val time = LocalDateTime.parse(event.date.toString()).format(DateTimeFormatter.ofPattern("hh:mm a"))
+    val time = LocalDateTime.parse(event.date.toString()).format(DateTimeFormatter.ofPattern("HH:mm"))
     val url = Routes.Ui.Event.DETAILS.replace("{eventId}", event.id.toString())
 
     div(classes = "flex flex-row items-center justify-center w-full p-4 rounded-xl") {
@@ -40,6 +40,7 @@ fun HtmlBlockTag.event(event: Event, isAdminRequest: Boolean = false) {
             }
         }
 
+        // event card div
         div(classes = "flex w-[80%] p-4 bg-white rounded-xl shadow-lg hover:bg-gray-100 cursor-pointer") {
             attributes["hx-get"] = url
             attributes["hx-target"] = "#main-content"
@@ -56,8 +57,8 @@ fun HtmlBlockTag.event(event: Event, isAdminRequest: Boolean = false) {
                 }
                 // image div
                 div(classes = "flex flex-row items-center") {
-                    img(classes = "w-[200px] h-[100px] rounded-2xl") {
-                        src = "/resources/uploads/images/0e396674-6989-473f-a61c-ae4c748006a2.jpeg"
+                    img(classes = "w-[150px] h-[150px] rounded-2xl") {
+                        src = "/resources/uploads/images/${event.headerImagePath}"
                     }
                 }
             }

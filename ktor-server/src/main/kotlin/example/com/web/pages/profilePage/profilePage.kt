@@ -11,17 +11,18 @@ fun HTML.profilePage(user: UserProfile){
     val hostedEvents = user.hostedEvents.size
     val attendedEvents = user.attendedEvents.size
     layout {
-        div (classes = "flex flex-col"){
+        div (classes = "flex flex-col w-full items-center justify-center"){
             // profile info div
-            div(classes = "flex flex-row items-center"){
+            div(classes = "flex flex-row items-center w-full p-4 rounded-xl"){
                 img(src = "/resources/images/profile.jpg", classes = "w-20 h-20 rounded-full"){}
 
                 // user info
                 div(classes = "flex flex-col ml-4"){
-                    h1 { +userName }
-                    p { +joinString }
-                    span { +"Hosted events: $hostedEvents" }
-                    span { +"Attended events: $attendedEvents" }
+                    p(classes = "font-bold text-xl") { +userName }
+                    p(classes = "text-sm") { +joinString }
+                    p (classes = "text-sm text-gray-500 mt-2"){
+                        +"$hostedEvents hosted  $attendedEvents attended"
+                    }
                 }
             }
         }

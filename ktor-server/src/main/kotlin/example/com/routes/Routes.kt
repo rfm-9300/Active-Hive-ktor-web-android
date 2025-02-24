@@ -82,6 +82,8 @@ object Routes {
             "%%API_UPDATE_POST%%" to Api.Post.UPDATE,
             "%%API_DELETE_POST%%" to Api.Post.DELETE,
             "%%UI_HOME%%" to Ui.Home.HOME,
+            "%%EVENTS_TAB%%" to Ui.Event.LIST,
+
         )
     }
 }

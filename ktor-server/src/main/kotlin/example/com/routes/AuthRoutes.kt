@@ -5,6 +5,7 @@ import example.com.data.requests.AuthRequest
 import example.com.data.db.user.User
 import example.com.data.db.user.UserProfile
 import example.com.data.db.user.UserRepository
+import example.com.data.requests.SingUpRequest
 import example.com.data.requests.VerificationRequest
 import example.com.data.responses.ApiResponse
 import example.com.data.responses.ApiResponseData
@@ -95,8 +96,8 @@ fun Route.loginRoutes(
 
     post(Routes.Api.Auth.SIGNUP){
         Logger.d("Received a request to sign up a new user")
-        val request = kotlin.runCatching { call.receiveNullable<AuthRequest>() }.getOrNull() ?: return@post respondHelper(success = false, message = "Invalid request", call = call, statusCode = HttpStatusCode.BadRequest)
-
+        val request = kotlin.runCatching { call.receiveNullable<SingUpRequest>() }.getOrNull() ?: return@post respondHelper(success = false, message = "Invalid request", call = call, statusCode = HttpStatusCode.BadRequest)
+        Logger.d("Request: $request")
         val areFieldsEmpty = request.email.isEmpty() || request.password.isEmpty()
         val isPasswordTooShort = request.password.length < PASSWORD_MIN_LENGTH
 
@@ -123,7 +124,11 @@ fun Route.loginRoutes(
             password = saltedHash.hash,
             salt = saltedHash.salt,
             verificationToken = verificationToken,
-            profile = UserProfile( email = request.email)
+            profile = UserProfile(
+                email = request.email,
+                firstName = request.firstName,
+                lastName = request.lastName
+            )
         )
 
         // try to add the user to the database

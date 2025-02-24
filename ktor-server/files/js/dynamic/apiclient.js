@@ -11,7 +11,7 @@ class ApiClient {
         JOIN_EVENT: '%%API_JOIN_EVENT%%',
         PROFILE_MENU: '%%PROFILE_MENU%%',
         EVENTS_TAB: '%%EVENTS_TAB%%',
-        HOME_PAGE: '%%UI_HOME%%',
+        HOME_PAGE: '%%UI_HOME%%'
     }
 
     constructor(baseURL = '') {

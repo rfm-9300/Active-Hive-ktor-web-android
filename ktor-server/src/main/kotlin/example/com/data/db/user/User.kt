@@ -104,5 +104,6 @@ fun ResultRow.toUserProfile() = UserProfile(
     firstName = this[UserProfilesTable.firstName],
     lastName = this[UserProfilesTable.lastName],
     email = this[UserProfilesTable.email],
-    phone = this[UserProfilesTable.phone]
+    phone = this[UserProfilesTable.phone],
+    joinedAt = this[UserProfilesTable.joinedAt]
 )

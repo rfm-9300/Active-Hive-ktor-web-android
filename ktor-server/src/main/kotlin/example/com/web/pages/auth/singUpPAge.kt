@@ -19,6 +19,36 @@ fun HTML.signupPage() {
                 }
 
                 div {
+                    //profile inputs
+                    label(classes = "block text-sm font-medium text-gray-700") {
+                        attributes["for"] = "first-name"
+                        +"First Name"
+                    }
+                    input(classes = "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50") {
+                        id = "first-name"
+                        type = text
+                        name = "first-name"
+                        required = true
+                        placeholder = "Enter your first name"
+                        value = "Rodrigo"
+                    }
+                }
+                div {
+                    label(classes = "block text-sm font-medium text-gray-700") {
+                        attributes["for"] = "last-name"
+                        +"Last Name"
+                    }
+                    input(classes = "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50") {
+                        id = "last-name"
+                        type = text
+                        name = "last-name"
+                        required = true
+                        placeholder = "Enter your last name"
+                        value = "Doe"
+                    }
+                }
+
+                div {
                     label(classes = "block text-sm font-medium text-gray-700") {
                         attributes["for"] = "email"
                         +"Email"
@@ -29,7 +59,7 @@ fun HTML.signupPage() {
                         name = "email"
                         required = true
                         placeholder = "Enter your email"
-                        value = "slbarbaralinda@linda.com"
+                        value = "eventpagetest@hive.com"
                     }
                 }
 
