@@ -28,7 +28,7 @@ fun HTML.homePage() {
                 }
 
                 // content
-                div( classes = "flex flex-col justify-center items-center w-[60%] mt-1 py-2 px-4") {
+                div( classes = "flex flex-col justify-center items-center w-[70%] mt-1 py-2 px-4") {
                     id = "main-content"
                     homeTab()
                 }

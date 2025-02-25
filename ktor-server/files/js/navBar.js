@@ -9,3 +9,5 @@ function setActiveTab(tabElement) {
     tabElement.classList.remove('text-gray-600');
     tabElement.classList.add('text-blue-600', 'font-bold');
 }
+
+setActiveTab(document.getElementById('home-tab'));

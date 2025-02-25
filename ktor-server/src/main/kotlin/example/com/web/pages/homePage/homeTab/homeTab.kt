@@ -8,7 +8,7 @@ import example.com.web.models.PostUi
 import kotlinx.coroutines.*
 import kotlinx.html.*
 
-fun HtmlBlockTag.homeTab() {
+fun HtmlBlockTag.homeTab(isAdminRequest: Boolean = false) {
     // Run blocking to get posts synchronously
     val posts = runBlocking {
         try {
@@ -27,13 +27,36 @@ fun HtmlBlockTag.homeTab() {
             emptyList()
         }
     }
-
-    div(classes = "w-[70%] py-4") {
-        posts.forEach { post ->
-            post(post)
+    div {
+        //banner div
+        div(classes = "flex flex-row items-center") {
+            img(classes = "w-[1000px] h-[300px] rounded-2xl") {
+                src = "/resources/images/banner.jpeg"
+            }
         }
-        script(src = "/resources/js/post.js") {}
+
+        // Container for the "Create Post" button
+        if (isAdminRequest){
+            div(classes = "w-full py-4") {
+                // Add a button to create a new post
+                div(classes = "flex justify-end mb-4") {
+                    button(classes = "bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700") {
+                        attributes["hx-get"] = "/post/create"
+                        attributes["hx-target"] = "#main-content"
+                        +"Create Post"
+                    }
+                }
+            }
+        }
+
+        div(classes = "w-[70%] py-4") {
+            posts.forEach { post ->
+                post(post)
+            }
+            script(src = "/resources/js/post.js") {}
+        }
     }
+
 
 }
 

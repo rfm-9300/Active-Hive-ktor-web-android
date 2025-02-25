@@ -19,6 +19,7 @@ fun HtmlBlockTag.navbar() {
                         // If this is the initial active tab
                         if (label == "Home") {  // or whatever logic you use to determine active tab
                             attributes["class"] = attributes["class"] + " text-blue-600 font-bold"
+                            attributes["id"] = "home-tab"
                         }
                         +label
                     }

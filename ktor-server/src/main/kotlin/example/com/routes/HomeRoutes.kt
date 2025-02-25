@@ -83,7 +83,9 @@ fun Route.homeRoutes(
     get(Routes.Ui.Home.HOME) {
         call.respondHtml(HttpStatusCode.OK){
             body {
-                homeTab()
+                homeTab(
+                    isAdminRequest = authorizeUser(getUserId().toString())
+                )
             }
         }
     }

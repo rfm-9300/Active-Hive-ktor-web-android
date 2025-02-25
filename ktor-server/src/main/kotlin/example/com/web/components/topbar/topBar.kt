@@ -53,6 +53,4 @@ fun HtmlBlockTag.topbar() {
         // hidden menu
         logoMenu()
     }
-    script(src = "/resources/js/topBar.js" ) {}
-
 }
