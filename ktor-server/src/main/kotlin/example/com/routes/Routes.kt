@@ -55,6 +55,11 @@ object Routes {
             const val SIGNUP = "/api/auth/signup"
             const val VERIFY = "/api/auth/verify"
         }
+
+        object Profile {
+            const val GET = "/api/profile"
+            const val UPDATE = "/api/profile/update"
+        }
     }
 
     object DynamicJs{
