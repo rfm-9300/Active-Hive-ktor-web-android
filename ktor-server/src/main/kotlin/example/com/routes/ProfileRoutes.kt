@@ -40,12 +40,13 @@ fun Route.profileRoutes(
             val userProfile = userRepository.getUserProfile(userId.toInt()) ?: return@post respondHelper(call, false, "User not found", statusCode = HttpStatusCode.NotFound)
             try {
                 val multiPart = call.receiveMultipart()
+                Logger.d("Updating profile, multipart: $multiPart")
                 var image = ""
 
                 multiPart.forEachPart {
                     when(it){
                         is PartData.FormItem -> {
-
+                            Logger.d("Form field: ${it.name} = ${it.value}")
                         }
                         is PartData.FileItem -> {
                             if(it.name == "image"){
@@ -54,7 +55,9 @@ fun Route.profileRoutes(
                                 image = ImageFileHandler.saveImage(fileBytes, fileName)
                             }
                         }
-                        else -> {}
+                        else -> {
+                            Logger.d("Unknown part: $it")
+                        }
                     }
                 }
                 val newProfile = userProfile.copy(

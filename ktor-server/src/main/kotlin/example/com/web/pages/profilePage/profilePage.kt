@@ -14,7 +14,9 @@ fun HTML.profilePage(user: UserProfile){
     layout {
         div (classes = "flex flex-col w-full items-center justify-center relative"){
             // hidden floating box change profile picture
-            profileEditBox()
+            div(classes = "relative w-full flex justify-center") {
+                profileEditBox()
+            }
 
 
             // profile info div

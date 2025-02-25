@@ -10,6 +10,9 @@ fun HTML.layout(e: BODY.() -> Unit) {
         // Add Tailwind CSS CDN
         script(src = "https://cdn.tailwindcss.com") {}
         script (src = Routes.DynamicJs.API_CLIENT){}
+        // cropper.js
+        script(src = "https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js") {}
+        link (rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css")
         loadHeaderScripts()
     }
 

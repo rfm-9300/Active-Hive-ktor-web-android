@@ -3,7 +3,7 @@ package example.com.web.pages.profilePage
 import kotlinx.html.*
 
 fun HtmlBlockTag.profileEditBox() {
-    div(classes = "fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-4 rounded-lg shadow-lg hidden") {
+    div(classes = "w-[90%] z-10 absolute p-4 rounded-lg hidden") {
         id = "floating-profile-page"
         form(
             action = "#",
@@ -33,7 +33,6 @@ fun HtmlBlockTag.profileEditBox() {
                                     span(classes = "pl-1") { +" or drag and drop" }
                                 }
                             }
-
                         }
                         p(classes = "text-xs text-gray-500") {
                             id = "image-upload-text"
@@ -43,6 +42,13 @@ fun HtmlBlockTag.profileEditBox() {
                             id = "upload-status"
                             +""
                         }
+                    }
+                }
+                // Image preview and cropping area
+                div(classes = "mt-4 hidden") {
+                    id = "image-cropper-container"
+                    img( src = "", alt = "Image Preview", classes = "max-w-full h-[300px]"){
+                        id = "image-preview"
                     }
                 }
             }
