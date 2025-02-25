@@ -133,6 +133,7 @@ fun Route.eventRoutes(
     //api create event
     authenticate {
         post(Routes.Api.Event.CREATE) {
+            val userId = getUserIdFromRequestToken(call) ?: return@post respondHelper(success = false, message = "User not found", call = call)
             try {
                 val multiPart = call.receiveMultipart()
                 var source = ""

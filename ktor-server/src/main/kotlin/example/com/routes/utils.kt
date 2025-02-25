@@ -26,7 +26,7 @@ suspend fun respondHelper(
 }
 
 // return the userID from the JWT token for authenticated routes
-suspend fun getIdFromRequestToken(call: RoutingCall): String? {
+suspend fun getUserIdFromRequestToken(call: RoutingCall): String? {
     val principal = call.principal<JWTPrincipal>()
     if (principal == null) {
         respondHelper(

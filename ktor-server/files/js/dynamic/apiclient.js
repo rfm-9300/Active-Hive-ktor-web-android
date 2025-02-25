@@ -11,7 +11,8 @@ class ApiClient {
         JOIN_EVENT: '%%API_JOIN_EVENT%%',
         PROFILE_MENU: '%%PROFILE_MENU%%',
         EVENTS_TAB: '%%EVENTS_TAB%%',
-        HOME_PAGE: '%%UI_HOME%%'
+        HOME_PAGE: '%%UI_HOME%%',
+        UPDATE_PROFILE: '%%API_UPDATE_PROFILE%%'
     }
 
     constructor(baseURL = '') {
@@ -56,7 +57,7 @@ class ApiClient {
             });
     
             if (!response.ok) {
-                console.log('Response Error:', response.status);
+                console.log('Response Error:', response);
                 return { success: false, message: 'Request failed' };
             }
             

@@ -21,7 +21,7 @@ fun HTML.profilePage(user: UserProfile){
             div(classes = "flex flex-row items-center w-full p-4 rounded-xl"){
                 div(classes = "relative group") {
                     img(
-                        src = "/resources/images/profile.jpg",
+                        src = "/resources/uploads/images/${user.profileImagePath}",
                         classes = "w-20 h-20 rounded-full"
                     )
 
@@ -29,8 +29,6 @@ fun HTML.profilePage(user: UserProfile){
                     button(classes = "absolute inset-0 flex items-center justify-center w-20 h-20 " +
                                 "rounded-full bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 " +
                                 "transition-opacity duration-200 text-white") {
-                        attributes["hx-get"] = "/profile/edit"
-                        attributes["hx-target"] = "#floating-profile-page"
                         onClick = "showEditProfile()"
                         +"Edit"
                     }

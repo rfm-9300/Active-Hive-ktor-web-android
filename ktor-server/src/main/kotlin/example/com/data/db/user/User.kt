@@ -37,7 +37,8 @@ data class UserProfile(
     @Serializable(with = LocalDateTimeSerializer::class)
     val joinedAt: LocalDateTime? = null,
     val hostedEvents : List<Event> = emptyList(),
-    val attendedEvents : List<Event> = emptyList()
+    val attendedEvents : List<Event> = emptyList(),
+    val profileImagePath: String = ""
 )
 
 object UserTable : IntIdTable("user") {
@@ -57,6 +58,7 @@ object UserProfilesTable : IntIdTable("user_profile") {
     val email = varchar("email", 128)
     val phone = varchar("phone", 18)
     val joinedAt = datetime("joined_at").default(LocalDateTime.now())
+    val imagePath = varchar("image_path", 100)
 }
 
 class UserDao(id: EntityID<Int>) : IntEntity(id) {
@@ -105,5 +107,6 @@ fun ResultRow.toUserProfile() = UserProfile(
     lastName = this[UserProfilesTable.lastName],
     email = this[UserProfilesTable.email],
     phone = this[UserProfilesTable.phone],
-    joinedAt = this[UserProfilesTable.joinedAt]
+    joinedAt = this[UserProfilesTable.joinedAt],
+    profileImagePath = this[UserProfilesTable.imagePath]
 )

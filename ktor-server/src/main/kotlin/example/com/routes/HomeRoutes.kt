@@ -43,7 +43,7 @@ fun Route.homeRoutes(
                 val postId = request.postId
 
                 Logger.d("Delete post request")
-                val userId = getIdFromRequestToken(call) ?: return@post
+                val userId = getUserIdFromRequestToken(call) ?: return@post
                 if (!authorizeUser(userId)) {
                     return@post respondHelper(success = false, message = "Unauthorized", call = call, statusCode = HttpStatusCode.Unauthorized)
                 }
@@ -96,7 +96,7 @@ fun Route.homeRoutes(
             val principal = call.principal<JWTPrincipal>() ?: return@get respondHelper(success = false, message = "User not found", call = call)
             val userId = principal.getClaim("userId", String::class) ?: return@get respondHelper(success = false, message = "User not found", call = call)
 
-            val userProfile = userRepository.getUserProfile(userId.toInt())
+            val userProfile = userRepository.getUserProfile(userId.toInt()) ?: return@get respondHelper(success = false, message = "User not found", call = call)
 
             call.respondHtml(HttpStatusCode.OK) {
                 body {

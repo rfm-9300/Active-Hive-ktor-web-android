@@ -159,7 +159,7 @@ fun Route.loginRoutes(
             val request = kotlin.runCatching { call.receiveNullable<VerificationRequest>() }.getOrNull() ?: return@post respondHelper(success = false, message = "Invalid request", call = call, statusCode = HttpStatusCode.BadRequest)
             val token = request.token
 
-            val userId = getIdFromRequestToken(call) ?: return@post
+            val userId = getUserIdFromRequestToken(call) ?: return@post
             val user = userRepository.getUserById(userId.toInt()) ?: return@post respondHelper(success = false, message = "User not found", call = call, statusCode = HttpStatusCode.NotFound)
 
             if (user.verified) {

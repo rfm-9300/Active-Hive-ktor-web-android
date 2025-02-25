@@ -2,6 +2,7 @@ package example.com.data.db.user
 
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.update
 import java.time.LocalDateTime
 
 class UserRepositoryImpl: UserRepository {
@@ -49,6 +50,7 @@ class UserRepositoryImpl: UserRepository {
                 it[email] = user.profile?.email ?: ""
                 it[phone] = user.profile?.phone ?: ""
                 it[joinedAt] = user.profile?.joinedAt ?: LocalDateTime.now()
+                it[imagePath] = user.profile?.profileImagePath ?: "profile"
             }
             true
         } catch (e: Exception) {
@@ -56,9 +58,28 @@ class UserRepositoryImpl: UserRepository {
         }
     }
 
-    override suspend fun getUserProfile(userId: Int): UserProfile = suspendTransaction {
-        val userProfile = UserProfilesTable.select { UserProfilesTable.userId eq userId }.single().toUserProfile()
-        userProfile
+    override suspend fun getUserProfile(userId: Int): UserProfile? = suspendTransaction {
+        try {
+            val userProfile = UserProfilesTable.select { UserProfilesTable.userId eq userId }.single().toUserProfile()
+            userProfile
+        } catch (e: Exception) {
+            null
+        }
+
     }
 
+    override suspend fun updateUserProfile(userProfile: UserProfile): Boolean = suspendTransaction {
+        try {
+            UserProfilesTable.update({ UserProfilesTable.userId eq userProfile.userId }) {
+                it[firstName] = userProfile.firstName
+                it[lastName] = userProfile.lastName
+                it[email] = userProfile.email
+                it[phone] = userProfile.phone
+                it[imagePath] = userProfile.profileImagePath
+            }
+            true
+        } catch (e: Exception) {
+            false
+        }
+    }
 }

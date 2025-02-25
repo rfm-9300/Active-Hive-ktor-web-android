@@ -8,6 +8,7 @@ import java.security.MessageDigest
 object ImageFileHandler {
     private const val UPLOAD_DIR = "files/uploads/images"
 
+
     init {
         // Create upload directory if it doesn't exist
         File(UPLOAD_DIR).mkdirs()
