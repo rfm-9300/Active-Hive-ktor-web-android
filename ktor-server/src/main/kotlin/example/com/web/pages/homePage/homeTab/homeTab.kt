@@ -2,6 +2,7 @@ package example.com.web.pages.homePage.homeTab
 
 import example.com.data.db.post.Post
 import example.com.data.db.post.PostRepositoryImpl
+import example.com.routes.Routes
 import example.com.web.components.layout.layout
 import example.com.web.components.post.post
 import example.com.web.models.PostUi
@@ -14,11 +15,8 @@ fun HtmlBlockTag.homeTab(isAdminRequest: Boolean = false) {
         try {
             PostRepositoryImpl().getAllPosts().map { post ->
                 PostUi(
-                    postId = post.id,
-                    userName = post.userName,
                     title = post.title,
                     content = post.content,
-                    date = post.date,
                     likes = post.likes
                 )
             }
@@ -41,7 +39,7 @@ fun HtmlBlockTag.homeTab(isAdminRequest: Boolean = false) {
                 // Add a button to create a new post
                 div(classes = "flex justify-end mb-4") {
                     button(classes = "bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700") {
-                        attributes["hx-get"] = "/post/create"
+                        attributes["hx-get"] = Routes.Ui.Home.CREATE_POST
                         attributes["hx-target"] = "#main-content"
                         +"Create Post"
                     }

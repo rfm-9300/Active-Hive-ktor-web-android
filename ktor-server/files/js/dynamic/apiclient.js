@@ -12,7 +12,8 @@ class ApiClient {
         PROFILE_MENU: '%%PROFILE_MENU%%',
         EVENTS_TAB: '%%EVENTS_TAB%%',
         HOME_PAGE: '%%UI_HOME%%',
-        UPDATE_PROFILE: '%%API_UPDATE_PROFILE%%'
+        UPDATE_PROFILE: '%%API_UPDATE_PROFILE%%',
+        CREATE_POST: '%%API_CREATE_POST%%'
     }
 
     constructor(baseURL = '') {
@@ -58,6 +59,7 @@ class ApiClient {
     
             if (!response.ok) {
                 const data = await response.json();
+                console.log('Request failed:', data);
                 return data;
             }
             

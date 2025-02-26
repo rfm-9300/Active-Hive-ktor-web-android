@@ -17,6 +17,7 @@ object Routes {
         object Home {
             const val HOME = "/home"
             const val PROFILE_MENU = "/profile-menu"
+            const val CREATE_POST = "/post/create"
         }
         object Auth {
             const val LOGIN = "/login"
@@ -88,7 +89,7 @@ object Routes {
             "%%API_DELETE_POST%%" to Api.Post.DELETE,
             "%%UI_HOME%%" to Ui.Home.HOME,
             "%%EVENTS_TAB%%" to Ui.Event.LIST,
-            "%%API_UPDATE_PROFILE%%" to Api.Profile.UPDATE,
+            "%%API_UPDATE_PROFILE%%" to Api.Profile.UPDATE
         )
     }
 }

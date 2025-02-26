@@ -1,8 +1,10 @@
 package example.com.routes
 
 import example.com.data.db.event.EventRepository
+import example.com.data.db.post.Post
 import example.com.data.db.post.PostRepository
 import example.com.data.db.user.UserRepository
+import example.com.data.requests.CreatePostRequest
 import example.com.data.requests.PostRequest
 import example.com.data.utils.SseAction
 import example.com.data.utils.SseManager
@@ -10,6 +12,7 @@ import example.com.plugins.Logger
 import example.com.web.pages.homePage.homePage
 import example.com.web.components.topbar.profileMenu
 import example.com.web.pages.homePage.eventTab.allEventsTab
+import example.com.web.pages.homePage.homeTab.createPostTab
 import example.com.web.pages.homePage.homeTab.homeTab
 import io.ktor.http.*
 import io.ktor.server.auth.*
@@ -60,6 +63,36 @@ fun Route.homeRoutes(
         }
     }
 
+    authenticate {
+        post(Routes.Api.Post.CREATE) {
+            Logger.d("Create post request")
+            try {
+                val request = call.receive<CreatePostRequest>()
+                Logger.d("Parsed request: $request")
+                if (request == null) {
+                    return@post respondHelper(success = false, message = "Invalid request", call = call, statusCode = HttpStatusCode.BadRequest)
+                }
+                val title = request.title
+                val content = request.content
+
+                Logger.d("Create post request")
+                val userId = getUserIdFromRequestToken(call) ?: return@post
+                if (!authorizeUser(userId)) {
+                    return@post respondHelper(success = false, message = "Unauthorized", call = call, statusCode = HttpStatusCode.Unauthorized)
+                }
+                Logger.d("User $userId is authorized to create post")
+
+                val post = Post(userId = userId.toInt(), title = title, content = content)
+
+                val postId = postRepository.addPost(post)
+
+                respondHelper(success = postId != null, message = if (postId != null) "Post created" else "Error creating post",  call = call, statusCode = if (postId != null) HttpStatusCode.OK else HttpStatusCode.InternalServerError)
+            } catch (e: Exception) {
+                respondHelper(success = false, message = e.message ?: "Error creating post", call = call, statusCode = HttpStatusCode.InternalServerError)
+            }
+        }
+    }
+
 
 
     /**
@@ -71,6 +104,7 @@ fun Route.homeRoutes(
             homePage()
         }
     }
+
     get(Routes.Ui.Event.LIST) {
         val userId = getUserId()
         call.respondHtml(HttpStatusCode.OK){
@@ -80,6 +114,7 @@ fun Route.homeRoutes(
             )
         }
     }
+
     get(Routes.Ui.Home.HOME) {
         call.respondHtml(HttpStatusCode.OK){
             body {
@@ -90,6 +125,11 @@ fun Route.homeRoutes(
         }
     }
 
+    get(Routes.Ui.Home.CREATE_POST) {
+        call.respondHtml(HttpStatusCode.OK){
+            createPostTab()
+        }
+    }
 
     authenticate {
         get(Routes.Ui.Home.PROFILE_MENU) {

@@ -4,6 +4,7 @@ import example.com.data.db.user.UserDao
 import example.com.data.db.user.UserProfileDao
 import example.com.data.db.user.UserProfilesTable
 import example.com.data.db.user.UserTable
+import example.com.data.utils.LocalDateTimeSerializer
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
@@ -11,14 +12,16 @@ import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.`java-time`.datetime
+import java.time.LocalDateTime
 
 @Serializable
 data class Post(
-    val id: Int,
-    val userName: String,
+    val id: Int? = null,
+    val userId : Int,
     val title: String,
     val content: String,
-    val date: String,
+    @Serializable(with = LocalDateTimeSerializer::class)
+    val date: LocalDateTime = LocalDateTime.now(),
     val likes: Int = 0,
 )
 
@@ -40,21 +43,4 @@ object PostCommentTable: IntIdTable("post_comment") {
     val date = datetime("date")
 }
 
-class PostDao(id: EntityID<Int>): IntEntity(id) {
-    companion object: IntEntityClass<PostDao>(PostTable)
 
-    var title by PostTable.title
-    var content by PostTable.content
-    var date by PostTable.date
-    var userProfile by UserProfileDao referencedOn PostTable.userId
-    var likes by UserDao via PostLikeTable
-}
-
-fun PostDao.toPost() = Post(
-    id = id.value,
-    userName = userProfile.firstName + " " + userProfile.lastName,
-    title = title,
-    content = content,
-    date = date.toString(),
-    likes = likes.count().toInt()
-)
