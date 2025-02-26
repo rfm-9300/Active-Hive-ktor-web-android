@@ -15,7 +15,7 @@ fun HTML.eventDetail(event: Event){
                         +event.title
                     }
                     p(classes = "text-gray-700") {
-                        +"${dates["day"]} ${dates["month"]}, ${dates["time"]}"
+                        +"${dates.day} ${dates.month}, ${dates.time}"
                     }
                 }
                 p(classes = "text-gray-700") {

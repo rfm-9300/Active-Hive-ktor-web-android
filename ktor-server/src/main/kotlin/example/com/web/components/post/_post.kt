@@ -5,7 +5,7 @@ import example.com.web.components.svgIcon
 import example.com.web.models.PostUi
 import kotlinx.html.*
 
-fun HtmlBlockTag.post(post: PostUi = PostUi()) {
+fun HtmlBlockTag.post(post: PostUi) {
     div(classes = "flex flex-col rounded-2xl bg-white shadow-lg p-4 my-4") {
 
         // user div
@@ -18,7 +18,7 @@ fun HtmlBlockTag.post(post: PostUi = PostUi()) {
                     +post.userName
                 }
                 span(classes = "text-xs") {
-                    +post.date
+                    +"${post.date.day} ${post.date.month}, ${post.date.time}"
                 }
             }
         }

@@ -1,5 +1,6 @@
 package example.com.data.utils
 
+import example.com.data.model.uiDate
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
@@ -26,15 +27,10 @@ fun LocalDateTime.monthYear(): String {
     return this.format(DateTimeFormatter.ofPattern("MMM yyyy"))
 }
 
-fun LocalDateTime.dayMonthTime(): Map<String, String> {
+fun LocalDateTime.dayMonthTime(): uiDate {
     val day = this.dayOfMonth.toString()
     val dayOfWeek = this.dayOfWeek.toString()
     val time = this.format(DateTimeFormatter.ofPattern("HH:mm"))
     val month = this.format(DateTimeFormatter.ofPattern("MMM"))
-    return mapOf(
-        "day" to day,
-        "dayOfWeek" to dayOfWeek,
-        "time" to time,
-        "month" to month
-    )
+    return uiDate(day, dayOfWeek, time, month)
 }

@@ -4,7 +4,7 @@ import kotlinx.html.*
 
 fun HTML.createPostTab(){
     body {
-        div(classes = "flex flex-col justify-center items-center w-3/4") {
+        div(classes = "flex flex-col justify-center items-center w-3/4 w-full") {
             div(classes = "flex justify-between items-center mb-8") {
                 div {
                     h1(classes = "text-3xl font-bold") { +"Create New Post" }
@@ -12,7 +12,7 @@ fun HTML.createPostTab(){
             }
 
                 // Title
-                div(classes = "mb-4") {
+                div(classes = "mb-4 w-full") {
                     label(classes = "block text-gray-700 text-sm font-bold mb-2") {
                         attributes["for"] = "title"
                         +"Post Title"
@@ -26,7 +26,7 @@ fun HTML.createPostTab(){
                 }
 
                 // Content
-                div(classes = "mb-4") {
+                div(classes = "mb-4 w-full") {
                     label(classes = "block text-gray-700 text-sm font-bold mb-2") {
                         attributes["for"] = "content"
                         +"Content"
