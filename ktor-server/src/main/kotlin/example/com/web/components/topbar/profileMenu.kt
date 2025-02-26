@@ -8,7 +8,7 @@ import kotlinx.html.*
 
 
 fun HtmlBlockTag.profileMenu(user: UserProfile) {
-    img(classes = "object-cover w-full h-full", src = "/resources/images/default-user-image.webp", alt = "Active Hive Logo")
+    img(classes = "object-cover w-full h-full", src = "/resources/uploads/images/${user.profileImagePath}", alt = "Active Hive Logo")
 
     // toggle menu
     div(classes = "flex flex-col gap-1 w-72 absolute -right-2 top-full hidden rounded-lg bg-white mt-3 shadow-lg text-gray-700") {

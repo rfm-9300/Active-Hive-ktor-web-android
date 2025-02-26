@@ -6,6 +6,7 @@
  * @param {string} type - The type of alert (e.g., "success", "error", "info"). Defaults to "info".
  */
 function showAlert(message, type = "info") {
+    console.log('alert LOADED');
     const alertBox = document.getElementById("alert-box");
     const alertMessage = document.getElementById("alert-message");
 
@@ -37,7 +38,7 @@ function showAlert(message, type = "info") {
     // Automatically hide the alert after 5 seconds
     setTimeout(() => {
         closeAlert();
-    }, 1000);
+    }, 3000);
 }
 
 /**

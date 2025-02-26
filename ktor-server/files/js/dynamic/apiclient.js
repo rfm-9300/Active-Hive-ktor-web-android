@@ -57,8 +57,8 @@ class ApiClient {
             });
     
             if (!response.ok) {
-                console.log('Response Error:', response);
-                return { success: false, message: 'Request failed' };
+                const data = await response.json();
+                return data;
             }
             
             try {

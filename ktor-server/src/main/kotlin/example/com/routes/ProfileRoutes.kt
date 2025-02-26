@@ -41,7 +41,7 @@ fun Route.profileRoutes(
             try {
                 val multiPart = call.receiveMultipart()
                 Logger.d("Updating profile, multipart: $multiPart")
-                var image = ""
+                var image = userProfile.profileImagePath
 
                 multiPart.forEachPart {
                     when(it){
@@ -53,6 +53,7 @@ fun Route.profileRoutes(
                                 val fileName = it.originalFileName ?: "unnamed.jpg"
                                 val fileBytes = it.provider().readRemaining().readByteArray()
                                 image = ImageFileHandler.saveImage(fileBytes, fileName)
+                                Logger.d("Image saved: $image")
                             }
                         }
                         else -> {
@@ -60,10 +61,13 @@ fun Route.profileRoutes(
                         }
                     }
                 }
-                val newProfile = userProfile.copy(
-                    profileImagePath = image
-                )
+                // After processing, check if image was successfully updated
+                if (image == userProfile.profileImagePath) respondHelper(call = call, success = false, message = "No image uploaded or image save failed")
+
+                val newProfile = userProfile.copy(profileImagePath = image)
+
                 val isUpdated = userRepository.updateUserProfile(newProfile)
+
                 respondHelper(
                     call = call,
                     success = isUpdated,
