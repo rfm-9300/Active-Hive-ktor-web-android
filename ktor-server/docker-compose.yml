@@ -15,8 +15,11 @@ services:
       interval: 5s
   ktor:
     image: rfm9300/ktor-central:latest
+    pull_policy: always
     platform: linux/amd64
     container_name: backend-ktor
+    volumes:
+      - ./files:/app/files
     restart: always
     ports:
       - "8080:8080"

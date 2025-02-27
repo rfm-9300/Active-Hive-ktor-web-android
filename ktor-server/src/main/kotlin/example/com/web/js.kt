@@ -6,7 +6,7 @@ import kotlinx.html.script
 import java.io.File
 
 fun HtmlBlockTag.loadJs(folderName: String = "") {
-    val directory = "files/js/$folderName"
+    val directory = "/app/files/js/$folderName"
 
     // get all files in the directory
     val files = File(directory).listFiles()?.toList()?.filter { it.name.endsWith(".js") } ?: emptyList()
@@ -19,7 +19,7 @@ fun HtmlBlockTag.loadJs(folderName: String = "") {
 }
 
 fun HEAD.loadHeaderScripts(folderName: String = "main") {
-    val directory = "files/js/$folderName"
+    val directory = "/app/files/js/$folderName"
 
     // get all files in the directory
     val files = File(directory).listFiles()?.toList()?.filter { it.name.endsWith(".js") } ?: emptyList()

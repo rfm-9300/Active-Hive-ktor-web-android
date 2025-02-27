@@ -179,7 +179,7 @@ fun Route.homeRoutes(
         }
     }
 
-    staticFiles("/resources", File("files")){
+    staticFiles("/resources", File("/app/files")){
         default("htmx.js")
     }
 }
