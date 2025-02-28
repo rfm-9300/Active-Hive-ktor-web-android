@@ -8,7 +8,7 @@ import java.io.File
 
 fun Route.dynamicJsProcessing() {
     get("/js/{filename}") {
-        val directory = "files/js/dynamic"
+        val directory = "app/files/js/dynamic"
         try {
             // Get the filename from the request
             val filename = call.parameters["filename"] ?: throw IllegalArgumentException("Filename not provided")
