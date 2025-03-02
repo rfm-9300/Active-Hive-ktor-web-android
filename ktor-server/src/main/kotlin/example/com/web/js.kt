@@ -1,12 +1,13 @@
 package example.com.web
 
+import example.com.web.utils.Strings
 import kotlinx.html.HEAD
 import kotlinx.html.HtmlBlockTag
 import kotlinx.html.script
 import java.io.File
 
 fun HtmlBlockTag.loadJs(folderName: String = "") {
-    val directory = "/app/files/js/$folderName"
+    val directory = "${Strings.RESOURCES_DIR}/js/$folderName"
 
     // get all files in the directory
     val files = File(directory).listFiles()?.toList()?.filter { it.name.endsWith(".js") } ?: emptyList()
@@ -19,7 +20,7 @@ fun HtmlBlockTag.loadJs(folderName: String = "") {
 }
 
 fun HEAD.loadHeaderScripts(folderName: String = "main") {
-    val directory = "/app/files/js/$folderName"
+    val directory = "${Strings.RESOURCES_DIR}/js/$folderName"
 
     // get all files in the directory
     val files = File(directory).listFiles()?.toList()?.filter { it.name.endsWith(".js") } ?: emptyList()

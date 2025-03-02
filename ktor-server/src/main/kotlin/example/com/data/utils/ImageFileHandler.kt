@@ -1,3 +1,4 @@
+import example.com.web.utils.Strings
 import java.io.File
 import java.util.UUID
 import kotlinx.coroutines.Dispatchers
@@ -5,7 +6,7 @@ import kotlinx.coroutines.withContext
 import javax.imageio.ImageIO
 
 object ImageFileHandler {
-    private const val UPLOAD_DIR = "app/files/uploads/images"
+    private const val UPLOAD_DIR = "${Strings.RESOURCES_DIR}/uploads/images"
     private const val MAX_FILE_SIZE = 3 * 1024 * 1024 // 5MB
     private const val MIN_FILE_SIZE = 1024 // 1KB
     private const val MAX_IMAGE_WIDTH = 5000 // pixels

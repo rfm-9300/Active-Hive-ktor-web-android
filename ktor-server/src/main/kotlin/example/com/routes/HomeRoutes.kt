@@ -14,6 +14,7 @@ import example.com.web.components.topbar.profileMenu
 import example.com.web.pages.homePage.eventTab.allEventsTab
 import example.com.web.pages.homePage.homeTab.createPostTab
 import example.com.web.pages.homePage.homeTab.homeTab
+import example.com.web.utils.Strings
 import io.ktor.http.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
@@ -179,7 +180,7 @@ fun Route.homeRoutes(
         }
     }
 
-    staticFiles("/resources", File("/app/files")){
+    staticFiles("/resources", File(Strings.RESOURCES_DIR)){
         default("htmx.js")
     }
 }
