@@ -19,7 +19,7 @@ services:
     platform: linux/amd64
     container_name: backend-ktor
     volumes:
-      - ./files:/app/files
+      - ./app/files:/app/files
     restart: always
     ports:
       - "8080:8080"

@@ -5,5 +5,5 @@ object Strings {
         const val COMMUNITY_NAME = "Active Hive"
         const val SUBTITLE = "Upcoming community gatherings and workshops"
     }
-    const val RESOURCES_DIR = "/app/files"
+    const val RESOURCES_DIR = "app/files"
 }

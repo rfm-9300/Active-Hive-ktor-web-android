@@ -18,7 +18,11 @@ document.getElementById('login-form').addEventListener('submit', async function(
             const data = await api.post(ApiClient.ENDPOINTS.LOGIN, payload);
             console.log('Response:', data);
 
-            const token = data.data.token;
+            let token;
+            if (data.success) {
+                token = data.data.token;
+            }
+            
             // Store the token
             if (token) {
                 localStorage.setItem('authToken', token);
