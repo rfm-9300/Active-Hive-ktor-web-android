@@ -13,7 +13,11 @@ import kotlinx.html.*
 fun HTML.homePage(eventRepository: EventRepository) {
     layout {
         div(classes = "flex flex-col w-full bg-gradient-to-br from-blue-50 via-blue-100 to-indigo-50 min-h-screen") {
-            topbar()
+            id = "root-container"
+            // Sticky topbar container
+            div(classes = "sticky top-0 z-20 w-full") {
+                topbar()
+            }
             // Navigation Bar
             //navbar()
 
@@ -29,11 +33,16 @@ fun HTML.homePage(eventRepository: EventRepository) {
                 }
             }
 
-            // content
-            div( classes = "flex flex-col justify-center items-center w-[70%] mt-1 py-2 px-4") {
-                id = "main-content"
-                allEventsTab(eventRepository, true)
+            div (classes = "w-full flex flex-col justify-center items-center") {
+                id = "main-content-bg"
+                // content
+                div( classes = "flex flex-col justify-center items-center w-[70%] mt-1 py-2 px-4") {
+                    id = "main-content"
+                    allEventsTab(eventRepository, true)
+                }
             }
+
+
         }
         loadJs("home")
     }

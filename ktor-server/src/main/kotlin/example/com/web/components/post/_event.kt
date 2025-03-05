@@ -14,55 +14,58 @@ fun HtmlBlockTag.event(event: Event, isAdminRequest: Boolean = false) {
     val time = LocalDateTime.parse(event.date.toString()).format(DateTimeFormatter.ofPattern("HH:mm"))
     val url = Routes.Ui.Event.DETAILS.replace("{eventId}", event.id.toString())
 
-    div(classes = "flex flex-row items-center justify-center w-full p-4 rounded-xl") {
+    div(classes = "flex flex-row items-center w-[80%] p-4 space-x-4 group") {
+        // Date container
+        div(classes = "flex flex-col items-center justify-center w-24 min-w-[6rem] p-3 text-center shadow-md bg-blue-50/80 backdrop-blur-sm rounded-xl border border-blue-200 transition-all duration-300") {
+            p(classes = "text-lg font-semibold text-blue-600") { +date }
+            p(classes = "text-sm text-blue-400") { +dayOfWeek.take(3) }
 
-        // date div
-        div(classes = "flex flex-col flex-1 items-center justify-center text-center text-sm shadow-lg bg-slate-50 rounded-xl py-5") {
-            p(classes = "text-lg font-bold") {
-                +date
-            }
-            p(classes = "text-sm text-gray-500") {
-                +dayOfWeek
-            }
-            // icons div
+            // Admin controls
             val hiddenTag = if (!isAdminRequest) "hidden" else ""
-            div(classes = "w-full flex flex-row flex-start px-1 gap-2 mt-2 $hiddenTag") {
-                span(classes = "delete-icon rounded-full overflow-hidden cursor-pointer"){
+            div(classes = "w-full flex flex-row justify-center gap-1 mt-2 $hiddenTag") {
+                span(classes = "p-1 rounded-full bg-blue-100/50 hover:bg-blue-200/80 transition-colors") {
                     attributes["data-event-id"] = event.id.toString()
                     attributes["onclick"] = "deleteEvent(${event.id})"
-                    svgIcon(SvgIcon.DELETE)
+                    svgIcon(SvgIcon.DELETE, classes = "w-4 h-4 text-blue-600")
                 }
-                span(classes = "edit-icon rounded-full overflow-hidden cursor-pointer $hiddenTag"){
+                span(classes = "p-1 rounded-full bg-blue-100/50 hover:bg-blue-200/80 transition-colors") {
                     attributes["hx-get"] = Routes.Ui.Event.UPDATE.replace("{eventId}", event.id.toString())
                     attributes["hx-target"] = "#main-content"
-                    svgIcon(SvgIcon.EDIT)
+                    svgIcon(SvgIcon.EDIT, classes = "w-4 h-4 text-blue-600")
                 }
             }
         }
 
-        // event card div
-        div(classes = "flex w-[80%] p-4 bg-white rounded-xl shadow-lg hover:bg-gray-100 cursor-pointer") {
+        // Event card
+        div(classes = "flex-1 p-4 bg-white-500 backdrop-blur-sm rounded-xl border border-blue-100 shadow-md hover:shadow-lg hover:border-blue-400 hover:bg-blue-100 bg-opacity-50 transition-all duration-300 cursor-pointer group-hover:translate-x-1") {
             attributes["hx-get"] = url
             attributes["hx-target"] = "#main-content"
-            div(classes = "flex flex-row items-start justify-between w-full") {
-                div(classes = "flex flex-col items-start justify-center ml-4") {
-                    p(classes = "text-lg font-bold mb-2") {
-                        +event.title
-                    }
-                    div(classes = "text-sm text-gray-500 flex items-center") {
-                        div(classes = "w-4 h-4 mr-1") { svgIcon(SvgIcon.TIME, size = 12) }
+
+            div(classes = "flex flex-row items-start justify-between") {
+                // Text content
+                div(classes = "flex flex-col pr-4") {
+                    p(classes = "text-xl font-bold text-gray-800 mb-1 tracking-tight") { +event.title }
+
+                    div(classes = "flex items-center text-sm text-blue-500/90 ") {
+                        svgIcon(SvgIcon.TIME, classes = "w-4 h-4 text-blue-400")
                         +time
                     }
-                    p(classes = "text-sm text-gray-500") { +"With ${event.organizerName}" }
+
+                    p(classes = "text-sm text-blue-400") {
+                        +"Hosted by "
+                        span(classes = "font-medium text-blue-500") { +event.organizerName }
+                    }
+
+                    p(classes = "text-sm text-blue-400") { +"${event.attendees.size} attending" }
                 }
-                // image div
-                div(classes = "flex flex-row items-center") {
-                    img(classes = "w-[150px] h-[150px] rounded-2xl") {
+
+                // Image
+                div(classes = "flex-shrink-0 ml-4") {
+                    img(classes = "w-24 h-24 rounded-xl border-2 border-blue-50 object-cover shadow-inner") {
                         src = "/resources/uploads/images/${event.headerImagePath}"
                     }
                 }
             }
         }
-
     }
 }

@@ -74,3 +74,20 @@ async function navigateToProfile() {
     const api = window.api;
     const data = await api.getHtml(ApiClient.ENDPOINTS.PROFILE);
 }
+
+window.addEventListener('scroll', () => {
+    const header = document.querySelector('.sticky.top-0');
+    const mainContent = document.getElementById('main-content-bg');
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    
+    header.style.backgroundColor = scrollY > 50 
+        ? 'rgba(255, 255, 255, 1)' 
+        : 'rgba(255, 255, 255, 0)';
+    header.style.boxShadow = scrollY > 50
+        ? '0 2px 4px 0 rgba(0, 0, 0, 0.1)'
+        : 'none';
+    mainContent.style.backgroundColor = scrollY > 120
+        ? 'rgba(255, 255, 255, 1)'
+        : 'rgba(255, 255, 255, 0)';
+
+});
