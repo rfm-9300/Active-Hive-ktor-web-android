@@ -102,17 +102,19 @@ fun Route.homeRoutes(
 
     get("/") {
         call.respondHtml(HttpStatusCode.OK){
-            homePage()
+            homePage(eventRepository)
         }
     }
 
     get(Routes.Ui.Event.LIST) {
         val userId = getUserId()
         call.respondHtml(HttpStatusCode.OK){
-            allEventsTab(
-                eventRepository = eventRepository,
-                isAdminRequest = authorizeUser(getUserId().toString())
-            )
+            body {
+                allEventsTab(
+                    eventRepository = eventRepository,
+                    isAdminRequest = authorizeUser(getUserId().toString())
+                )
+            }
         }
     }
 
