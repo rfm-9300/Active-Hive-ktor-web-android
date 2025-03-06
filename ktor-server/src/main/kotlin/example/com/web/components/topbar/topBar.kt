@@ -9,14 +9,14 @@ import kotlinx.html.*
 fun HtmlBlockTag.topbar() {
     val title = Strings.Home.COMMUNITY_NAME
 
-    div(classes = "w-full flex items-center justify-between px-4 py-2 backdrop-blur-sm transition-all duration-300") {
+    div(classes = "w-full flex items-center justify-between px-4 backdrop-blur-sm transition-all duration-300") {
         style = "border-bottom: 1px solid rgba(0, 0, 0, 0.05);"
         // logo container
         div (classes = "h-auto, flex items-center cursor-pointer rounded-xl hover:bg-gray-200 hover:text-gray-900 transition-all duration-300") {
             attributes["hx-get"] = Routes.Ui.Event.LIST_UPCOMING
             attributes["hx-target"] = "#main-content"
             id = "logo-container"
-            div(classes = "relative overflow-hidden w-auto h-[65px] rounded-lg"){
+            div(classes = "relative overflow-hidden w-auto h-[60px] rounded-lg"){
                 span {
                     img(classes = "object-cover w-full h-full", src = "/resources/logo.webp", alt = "Active Hive Logo")
                 }

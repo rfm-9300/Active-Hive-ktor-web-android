@@ -5,6 +5,7 @@ import example.com.plugins.Logger
 import example.com.routes.Routes
 import example.com.web.components.eventFilterTag
 import example.com.web.components.post.event
+import example.com.web.components.projectButton
 import example.com.web.loadJs
 import kotlinx.coroutines.runBlocking
 import kotlinx.html.*
@@ -16,7 +17,7 @@ fun HtmlBlockTag.upcomingEvents(
     // Fetch events using runBlocking
     val events = runBlocking {
         try {
-            eventRepository.getAllEvents()
+            eventRepository.getUpcomingEvents().sortedBy { it.date }
         } catch (e: Exception) {
             Logger.d("Error fetching events: $e")
             emptyList()
@@ -26,11 +27,7 @@ fun HtmlBlockTag.upcomingEvents(
     div(classes = "w-full py-4") {
         // Add a button to create a new event
         div(classes = "flex justify-end mb-4") {
-            button(classes = "bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700") {
-                attributes["hx-get"] = Routes.Ui.Event.CREATE
-                attributes["hx-target"] = "#main-content"
-                +"Create Event"
-            }
+            projectButton("Create Event", hxGet = Routes.Ui.Event.CREATE, hxTarget = "#main-content")
         }
 
         // container for filter tags

@@ -4,6 +4,7 @@ import example.com.data.db.user.*
 import example.com.plugins.Logger
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import java.time.LocalDateTime
 
 class EventRepositoryImpl: EventRepository {
     override suspend fun addEvent(event: Event): Int? = suspendTransaction {
@@ -136,6 +137,7 @@ class EventRepositoryImpl: EventRepository {
             EventAttendeeTable.insert {
                 it[this.eventId] = eventId
                 it[this.userId] = userId
+                it[joinedAt] = LocalDateTime.now()
             }
             true
         } catch (e: Exception) {
@@ -175,5 +177,12 @@ class EventRepositoryImpl: EventRepository {
 
     override suspend fun deleteEventAttendees(eventId: Int): Int = suspendTransaction {
         EventAttendeeTable.deleteWhere { EventAttendeeTable.eventId eq eventId }
+    }
+
+    override suspend fun getUpcomingEvents(): List<Event> {
+        val upcomingEvents = getAllEvents().filter { event ->
+            event.date.isAfter(LocalDateTime.now())
+        }
+        return upcomingEvents
     }
 }
