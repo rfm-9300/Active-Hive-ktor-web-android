@@ -8,12 +8,9 @@ import example.com.data.responses.CreateEventResponse
 import example.com.data.utils.SseAction
 import example.com.data.utils.SseManager
 import example.com.plugins.Logger
-import example.com.web.pages.homePage.eventTab.createEvent
-import example.com.web.pages.homePage.eventTab.eventDetail
-import example.com.web.pages.homePage.eventTab.updateEvent
+import example.com.web.pages.homePage.eventTab.*
 import io.ktor.http.*
 import io.ktor.http.content.*
-import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.html.*
@@ -21,6 +18,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.utils.io.*
+import kotlinx.html.body
 import kotlinx.io.readByteArray
 import java.time.LocalDateTime
 
@@ -272,5 +270,28 @@ fun Route.eventRoutes(
         }
     }
 
+    get(Routes.Ui.Event.LIST_UPCOMING) {
+        val userId = getUserId()
+        call.respondHtml(HttpStatusCode.OK){
+            body {
+                upcomingEvents(
+                    eventRepository = eventRepository,
+                    isAdminRequest = authorizeUser(getUserId().toString())
+                )
+            }
+        }
+    }
+
+    get(Routes.Ui.Event.LIST_PAST) {
+        val userId = getUserId()
+        call.respondHtml(HttpStatusCode.OK){
+            body {
+                pastEvents(
+                    eventRepository = eventRepository,
+                    isAdminRequest = authorizeUser(getUserId().toString())
+                )
+            }
+        }
+    }
 
 }

@@ -11,7 +11,6 @@ import example.com.data.utils.SseManager
 import example.com.plugins.Logger
 import example.com.web.pages.homePage.homePage
 import example.com.web.components.topbar.profileMenu
-import example.com.web.pages.homePage.eventTab.allEventsTab
 import example.com.web.pages.homePage.homeTab.createPostTab
 import example.com.web.pages.homePage.homeTab.homeTab
 import example.com.web.utils.Strings
@@ -106,17 +105,7 @@ fun Route.homeRoutes(
         }
     }
 
-    get(Routes.Ui.Event.LIST) {
-        val userId = getUserId()
-        call.respondHtml(HttpStatusCode.OK){
-            body {
-                allEventsTab(
-                    eventRepository = eventRepository,
-                    isAdminRequest = authorizeUser(getUserId().toString())
-                )
-            }
-        }
-    }
+
 
     get(Routes.Ui.Home.HOME) {
         call.respondHtml(HttpStatusCode.OK){

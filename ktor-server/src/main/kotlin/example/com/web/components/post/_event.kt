@@ -14,7 +14,7 @@ fun HtmlBlockTag.event(event: Event, isAdminRequest: Boolean = false) {
     val time = LocalDateTime.parse(event.date.toString()).format(DateTimeFormatter.ofPattern("HH:mm"))
     val url = Routes.Ui.Event.DETAILS.replace("{eventId}", event.id.toString())
 
-    div(classes = "flex flex-row items-center w-[80%] p-4 space-x-4 group") {
+    div(classes = "flex flex-row items-center w-[80%] space-x-4 group") {
         // Date container
         div(classes = "flex flex-col items-center justify-center w-24 min-w-[6rem] p-3 text-center shadow-md bg-blue-50/80 backdrop-blur-sm rounded-xl border border-blue-200 transition-all duration-300") {
             p(classes = "text-lg font-semibold text-blue-600") { +date }

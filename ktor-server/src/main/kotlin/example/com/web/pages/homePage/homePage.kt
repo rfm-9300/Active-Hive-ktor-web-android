@@ -1,13 +1,10 @@
 package example.com.web.pages.homePage
 
 import example.com.data.db.event.EventRepository
-import example.com.data.db.user.UserRepository
 import example.com.web.components.layout.layout
-import example.com.web.pages.homePage.navbar.navbar
 import example.com.web.components.topbar.topbar
 import example.com.web.loadJs
-import example.com.web.pages.homePage.eventTab.allEventsTab
-import example.com.web.pages.homePage.homeTab.homeTab
+import example.com.web.pages.homePage.eventTab.upcomingEvents
 import kotlinx.html.*
 
 fun HTML.homePage(eventRepository: EventRepository) {
@@ -38,7 +35,7 @@ fun HTML.homePage(eventRepository: EventRepository) {
                 // content
                 div( classes = "flex flex-col justify-center items-center w-[70%] mt-1 py-2 px-4") {
                     id = "main-content"
-                    allEventsTab(eventRepository, true)
+                    upcomingEvents(eventRepository, true)
                 }
             }
 

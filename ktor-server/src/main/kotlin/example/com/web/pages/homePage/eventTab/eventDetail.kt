@@ -8,8 +8,8 @@ import kotlinx.html.*
 fun HTML.eventDetail(event: Event){
     val dates = event.date.dayMonthTime()
     body {
-        div(classes = "w-full py-4") {
-            div(classes = "bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4") {
+        div(classes = "w-[90%] py-4") {
+            div(classes = "bg-white shadow-md  flex-1 p-4 bg-white-500 backdrop-blur-sm rounded-xl border border-blue-400 shadow-md bg-opacity-50 transition-all duration-300  group-hover:translate-x-1") {
                 div(classes = "mb-4") {
                     h1(classes = "text-2xl font-bold") {
                         +event.title

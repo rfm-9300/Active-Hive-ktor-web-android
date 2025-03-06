@@ -8,7 +8,8 @@ object Routes {
 
     object Ui {
         object Event {
-            const val LIST = "/events"
+            const val LIST_PAST = "/events/past"
+            const val LIST_UPCOMING = "/events/upcoming"
             const val CREATE = "/events/create"
             const val DETAILS = "/events/{eventId}"
             const val UPDATE = "/events/update/{eventId}"
@@ -88,7 +89,8 @@ object Routes {
             "%%API_UPDATE_POST%%" to Api.Post.UPDATE,
             "%%API_DELETE_POST%%" to Api.Post.DELETE,
             "%%UI_HOME%%" to Ui.Home.HOME,
-            "%%EVENTS_TAB%%" to Ui.Event.LIST,
+            "%%UI_EVENTS_PAST%%" to Ui.Event.LIST_PAST,
+            "%%UI_EVENTS_UPCOMING%%" to Ui.Event.LIST_UPCOMING,
             "%%API_UPDATE_PROFILE%%" to Api.Profile.UPDATE
         )
     }

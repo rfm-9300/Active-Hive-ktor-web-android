@@ -10,7 +10,8 @@ class ApiClient {
         SIGNUP: '%%API_SIGNUP%%',
         JOIN_EVENT: '%%API_JOIN_EVENT%%',
         PROFILE_MENU: '%%PROFILE_MENU%%',
-        EVENTS_TAB: '%%EVENTS_TAB%%',
+        EVENTS_PAST: '%%UI_EVENTS_PAST%%',
+        EVENTS_UPCOMING: '%%UI_EVENTS_UPCOMING%%',
         HOME_PAGE: '%%UI_HOME%%',
         UPDATE_PROFILE: '%%API_UPDATE_PROFILE%%',
         CREATE_POST: '%%API_CREATE_POST%%'

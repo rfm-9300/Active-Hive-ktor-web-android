@@ -3,12 +3,13 @@ package example.com.web.pages.homePage.eventTab
 import example.com.data.db.event.EventRepository
 import example.com.plugins.Logger
 import example.com.routes.Routes
+import example.com.web.components.eventFilterTag
 import example.com.web.components.post.event
 import example.com.web.loadJs
 import kotlinx.coroutines.runBlocking
 import kotlinx.html.*
 
-fun HtmlBlockTag.allEventsTab(
+fun HtmlBlockTag.pastEvents(
     eventRepository: EventRepository,
     isAdminRequest: Boolean
 ) {
@@ -30,6 +31,13 @@ fun HtmlBlockTag.allEventsTab(
                 attributes["hx-target"] = "#main-content"
                 +"Create Event"
             }
+        }
+
+        // container for filter tags
+        div(classes = "w-[80%] justify-end flex flex-row gap-1 mb-2") {
+            // Filter tags
+            eventFilterTag("Upcoming", Routes.Ui.Event.LIST_UPCOMING, active = false)
+            eventFilterTag("Past", Routes.Ui.Event.LIST_UPCOMING, active = true)
         }
 
         // Render each event

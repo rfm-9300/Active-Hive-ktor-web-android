@@ -9,7 +9,7 @@ fun HtmlBlockTag.navbar() {
             ul(classes = "hidden md:flex space-x-8 text-gray-600 font-medium mx-auto") {
                 val tabs = mapOf(
                     "Home" to Routes.Ui.Home.HOME,
-                    "Events" to Routes.Ui.Event.LIST,
+                    "Events" to Routes.Ui.Event.LIST_UPCOMING,
                 )
                 tabs.forEach { (label, url) ->
                     li(classes = "nav-tab cursor-pointer hover:text-blue-600 transition text-gray-600") {
