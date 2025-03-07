@@ -4,6 +4,7 @@ import example.com.data.db.user.*
 import example.com.data.utils.LocalDateTimeSerializer
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.dao.id.IntIdTable
+import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.`java-time`.datetime
 import java.time.LocalDateTime
@@ -22,7 +23,9 @@ data class Event(
     @Serializable(with = LocalDateTimeSerializer::class)
     val createdAt: LocalDateTime? = LocalDateTime.now(),
     val organizerName: String = "",
-    val maxAttendees: Int
+    val maxAttendees: Int,
+    val needsApproval: Boolean = false,
+    var waitingList: List<UserProfile> = emptyList()
 )
 
 @Serializable
@@ -41,6 +44,7 @@ object EventTable : IntIdTable("event")  {
     val organizerId = reference("organizer_id", UserProfilesTable)
     val headerImagePath = varchar("header_image_path", 255)
     val maxAttendees = integer("max_attendees")
+    val needsApproval = bool("needs_approval").default(false)
 }
 
 object EventAttendeeTable : Table("event_attendee") {
@@ -49,3 +53,25 @@ object EventAttendeeTable : Table("event_attendee") {
     val joinedAt = datetime("joined_at").default(LocalDateTime.now())
     override val primaryKey = PrimaryKey(eventId, userId)
 }
+
+object EventWaitingListTable : Table("event_waiting_list") {
+    val eventId = reference("event_id", EventTable)
+    val userId = reference("user_id", UserTable)
+    val joinedAt = datetime("joined_at").default(LocalDateTime.now())
+    override val primaryKey = PrimaryKey(eventId, userId)
+}
+
+fun ResultRow.toEvent() = Event(
+    id = this[EventTable.id].value,
+    title = this[EventTable.title],
+    description = this[EventTable.description],
+    date = this[EventTable.date],
+    location = this[EventTable.location],
+    headerImagePath = this[EventTable.headerImagePath],
+    attendees = emptyList(),
+    organizerId = this[EventTable.organizerId].value,
+    organizerName = "Rodrigo",
+    maxAttendees = this[EventTable.maxAttendees],
+    createdAt = this[EventTable.date],
+    needsApproval = this[EventTable.needsApproval]
+)

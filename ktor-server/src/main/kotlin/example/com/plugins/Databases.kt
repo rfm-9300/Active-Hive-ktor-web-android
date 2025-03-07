@@ -2,6 +2,7 @@ package example.com.plugins
 
 import example.com.data.db.event.EventAttendeeTable
 import example.com.data.db.event.EventTable
+import example.com.data.db.event.EventWaitingListTable
 import example.com.data.db.post.PostCommentTable
 import example.com.data.db.post.PostLikeTable
 import example.com.data.db.post.PostTable
@@ -42,7 +43,8 @@ fun Application.configureDatabases(config: ApplicationConfig) {
             EventAttendeeTable,
             PostTable,
             PostLikeTable,
-            PostCommentTable
+            PostCommentTable,
+            EventWaitingListTable
         )
     }
 }

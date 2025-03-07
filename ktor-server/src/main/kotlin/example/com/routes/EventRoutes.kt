@@ -229,6 +229,22 @@ fun Route.eventRoutes(
 
             Logger.d("user $userId joining event $eventId")
 
+            if (event.needsApproval) {
+                event.waitingList.forEach { if (it.id == userId.toInt()) {
+                        return@post respondHelper(success = false, message = "User already in waiting list", call = call)
+                    }
+                }
+                val joined = eventRepository.joinEventWaitingList(eventId, userId.toInt())
+                if (joined) {
+                    sseManager.emitEvent(SseAction.RefreshEvents)
+                }
+                call.respond(HttpStatusCode.OK, CreateEventResponse(
+                    success = joined,
+                    message = if (joined) "Joined event" else "Failed to join event"
+                ))
+                return@post
+            }
+
             val joined = eventRepository.joinEvent(eventId, userId.toInt())
             if (joined) {
                 sseManager.emitEvent(SseAction.RefreshEvents)

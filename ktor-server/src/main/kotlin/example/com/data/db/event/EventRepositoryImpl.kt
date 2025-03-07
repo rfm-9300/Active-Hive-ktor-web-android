@@ -75,42 +75,22 @@ class EventRepositoryImpl: EventRepository {
     }
 
     override suspend fun getEvent(eventId: Int): Event? = suspendTransaction {
-        val event = EventTable.select { EventTable.id eq eventId }
-            .map {
-                Event(
-                    id = it[EventTable.id].value,
-                    title = it[EventTable.title],
-                    description = it[EventTable.description],
-                    date = it[EventTable.date],
-                    location = it[EventTable.location],
-                    headerImagePath = it[EventTable.headerImagePath],
-                    attendees = emptyList(),
-                    organizerId = it[EventTable.organizerId].value,
-                    organizerName = "Rodrigo",
-                    maxAttendees = it[EventTable.maxAttendees]
-                )
-            }
-            .firstOrNull()
+        val event = EventTable.select { EventTable.id eq eventId }.firstOrNull()?.toEvent()
         val attendeesQuery = EventAttendeeTable.select { EventAttendeeTable.eventId eq eventId }
+        val waitingListQuery = EventWaitingListTable.select { EventWaitingListTable.eventId eq eventId }
+
         attendeesQuery.forEach { attendeeRow ->
             val userId = attendeeRow[EventAttendeeTable.userId].value
-            val userProfile = UserProfilesTable.select { UserProfilesTable.userId eq userId }
-                .map { row ->
-                    UserProfile(
-                        id = row[UserProfilesTable.id].value,
-                        firstName = row[UserProfilesTable.firstName],
-                        lastName = row[UserProfilesTable.lastName],
-                        email = row[UserProfilesTable.email],
-                        phone = row[UserProfilesTable.phone]
-                    )
-                }
-                .firstOrNull()
-            userProfile?.let { user ->
-                if (event != null) {
-                    event.attendees += user
-                }
-            }
+            val userProfile = UserProfilesTable.select { UserProfilesTable.userId eq userId }.firstOrNull()?.toUserProfile()
+            userProfile?.let { user -> if (event != null) { event.attendees += user } }
         }
+
+        waitingListQuery.forEach { waitingListRow ->
+            val userId = waitingListRow[EventWaitingListTable.userId].value
+            val userProfile = UserProfilesTable.select { UserProfilesTable.userId eq userId }.firstOrNull()?.toUserProfile()
+            userProfile?.let { user -> if (event != null) { event.waitingList += user } }
+        }
+
         event
     }
 
@@ -184,5 +164,18 @@ class EventRepositoryImpl: EventRepository {
             event.date.isAfter(LocalDateTime.now())
         }
         return upcomingEvents
+    }
+
+    override suspend fun joinEventWaitingList(eventId: Int, userId: Int): Boolean = suspendTransaction {
+        try {
+            EventWaitingListTable.insert {
+                it[this.eventId] = eventId
+                it[this.userId] = userId
+                it[joinedAt] = LocalDateTime.now()
+            }
+            true
+        } catch (e: Exception) {
+            false
+        }
     }
 }
