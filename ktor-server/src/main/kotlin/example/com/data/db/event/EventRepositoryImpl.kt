@@ -88,7 +88,10 @@ class EventRepositoryImpl: EventRepository {
         waitingListQuery.forEach { waitingListRow ->
             val userId = waitingListRow[EventWaitingListTable.userId].value
             val userProfile = UserProfilesTable.select { UserProfilesTable.userId eq userId }.firstOrNull()?.toUserProfile()
-            userProfile?.let { user -> if (event != null) { event.waitingList += user } }
+            userProfile?.let { user -> if (event != null) {
+                val waitingList = waitingListRow.toEventWaitingList(user)
+                event.waitingList += waitingList
+            } }
         }
 
         event

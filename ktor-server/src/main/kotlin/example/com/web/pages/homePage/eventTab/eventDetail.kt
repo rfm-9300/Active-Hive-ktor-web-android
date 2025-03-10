@@ -21,6 +21,7 @@ fun HTML.eventDetail(event: Event) {
         isTomorrow -> "Tomorrow at " + eventDate.format(TimeFormatter)
         else -> eventDate.format(DateAndTimeFormatter)
     }
+    val isAdmin = true
 
     val url = Routes.Ui.Event.DETAILS.replace("{eventId}", event.id.toString())
     val encodedUrl = URLEncoder.encode(url, "utf-8")
@@ -100,6 +101,49 @@ fun HTML.eventDetail(event: Event) {
                         attributes["hx-get"] = Routes.Ui.Event.LIST_UPCOMING
                         attributes["hx-target"] = "#main-content"
                         +"Back to Events"
+                    }
+                }
+            }
+
+            // Admin Waiting List Section (Below Main Card)
+            if (isAdmin) {
+                div(classes = "mt-6 bg-white bg-opacity-80 shadow-lg p-6 rounded-xl border border-gray-200") {
+                    id = "waiting-list-container"
+                    // Toggle Header
+                    div(classes = "flex justify-between items-center mb-2 cursor-pointer") {
+                        attributes["onclick"] = "toggleWaitingList()"
+                        h2(classes = "text-2xl font-semibold text-gray-800") { +"Waiting List" }
+                        button(classes = "text-blue-500 hover:text-blue-700 focus:outline-none") {
+                            svgIcon(SvgIcon.CHEVRON_DOWN, classes = "w-6 h-6")
+                        }
+                    }
+                    // Collapsible Content
+                    div(classes = "hidden") {
+                        id = "waiting-list"
+                        if (event.waitingList.isEmpty()) {
+                            p(classes = "text-gray-600 text-base") { +"No users on the waiting list." }
+                        } else {
+                            div {
+                                div(classes = "flex flex-row justify-between border-b border-gray-200") {
+                                    p(classes = "text-gray-700 font-semibold") { +"User" }
+                                    p(classes = "text-gray-700 font-semibold") { +"Joined At" }
+                                    p(classes = "text-gray-700 font-semibold") { +"Actions" }
+                                }
+                                event.waitingList.forEach { waitingList ->
+                                    div(classes = "flex flex-row justify-between py-2 border-b border-gray-200 text-sm items-center") {
+                                        p(classes = "text-gray-700") { +"${waitingList.user.firstName} ${waitingList.user.lastName}" }
+                                        p(classes = "text-gray-700") { +waitingList.joinedAt.format(DateAndTimeFormatter) }
+                                        button(classes = "bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-700") {
+                                            attributes["hx-post"] = "Routes.Api.Event.REMOVE_WAITING_LIST"
+                                            attributes["hx-swap"] = "outerHTML"
+                                            attributes["hx-target"] = "#waiting-list"
+                                            attributes["hx-params"] = "eventId=${event.id}&userId=${waitingList.user.id}"
+                                            +"Check in"
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

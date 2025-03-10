@@ -230,7 +230,7 @@ fun Route.eventRoutes(
             Logger.d("user $userId joining event $eventId")
 
             if (event.needsApproval) {
-                event.waitingList.forEach { if (it.id == userId.toInt()) {
+                event.waitingList.forEach { if (it.user.userId == userId.toInt()) {
                         return@post respondHelper(success = false, message = "User already in waiting list", call = call)
                     }
                 }

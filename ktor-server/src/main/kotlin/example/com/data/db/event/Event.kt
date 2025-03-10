@@ -25,12 +25,20 @@ data class Event(
     val organizerName: String = "",
     val maxAttendees: Int,
     val needsApproval: Boolean = false,
-    var waitingList: List<UserProfile> = emptyList()
+    var waitingList: List<EventWaitingList> = emptyList()
 )
 
 @Serializable
 data class EventAttendee(
     val event: Int,
+    val user: UserProfile,
+    @Serializable(with = LocalDateTimeSerializer::class)
+    val joinedAt: LocalDateTime
+)
+
+@Serializable
+data class EventWaitingList(
+    val eventId: Int,
     val user: UserProfile,
     @Serializable(with = LocalDateTimeSerializer::class)
     val joinedAt: LocalDateTime
@@ -74,4 +82,16 @@ fun ResultRow.toEvent() = Event(
     maxAttendees = this[EventTable.maxAttendees],
     createdAt = this[EventTable.date],
     needsApproval = this[EventTable.needsApproval]
+)
+
+fun ResultRow.toEventAttendee() = EventAttendee(
+    event = this[EventAttendeeTable.eventId].value,
+    user = this.toUserProfile(),
+    joinedAt = this[EventAttendeeTable.joinedAt]
+)
+
+fun ResultRow.toEventWaitingList(user: UserProfile) = EventWaitingList(
+    eventId = this[EventWaitingListTable.eventId].value,
+    user = user,
+    joinedAt = this[EventWaitingListTable.joinedAt]
 )

@@ -6,6 +6,12 @@ fun HtmlBlockTag.svgIcon(icon: SvgIcon, classes: String = "", size: Int = 24) {
     span {
         unsafe {
             when (icon) {
+                SvgIcon.CHEVRON_DOWN -> +"""
+<svg width="$size" height="$size" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 9l6 6 6-6"/>
+</svg>
+"""
+
                 SvgIcon.FACEBOOK -> +"""
 <svg width="$size" height="$size" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
   <path d="M2,2 v10 M2,2 h2 M2,7 h4"/>
@@ -73,5 +79,5 @@ fun HtmlBlockTag.svgIcon(icon: SvgIcon, classes: String = "", size: Int = 24) {
 }
 
 enum class SvgIcon {
-    MENU, CLOSE, SEARCH, DEFAULT, LIKE, TIME, DELETE, EDIT, FACEBOOK, X
+    MENU, CLOSE, SEARCH, DEFAULT, LIKE, TIME, DELETE, EDIT, FACEBOOK, X, CHEVRON_DOWN
 }
