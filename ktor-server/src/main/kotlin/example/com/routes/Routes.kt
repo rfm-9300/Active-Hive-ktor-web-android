@@ -93,7 +93,8 @@ object Routes {
             "%%UI_EVENTS_PAST%%" to Ui.Event.LIST_PAST,
             "%%UI_EVENTS_UPCOMING%%" to Ui.Event.LIST_UPCOMING,
             "%%API_UPDATE_PROFILE%%" to Api.Profile.UPDATE,
-            "%%API_APPROVE_USER%%" to Api.Event.APPROVE_USER
+            "%%API_APPROVE_USER%%" to Api.Event.APPROVE_USER,
+            "%%UI_EVENT_DETAIL%%" to Ui.Event.DETAILS
         )
     }
 }

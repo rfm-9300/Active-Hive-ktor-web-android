@@ -16,6 +16,7 @@ class ApiClient {
         UPDATE_PROFILE: '%%API_UPDATE_PROFILE%%',
         CREATE_POST: '%%API_CREATE_POST%%',
         APPROVE_USER: '%%API_APPROVE_USER%%',
+        EVENT_DETAIL: '%%UI_EVENT_DETAIL%%',
     }
 
     constructor(baseURL = '') {

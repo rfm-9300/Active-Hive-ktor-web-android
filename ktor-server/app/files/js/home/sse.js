@@ -5,7 +5,8 @@
 const SseActionTypes = {
     SSE_ACTION: 'sse-action',
     REFRESH_EVENTS: 'refresh-events',
-    REFRESH_POSTS: 'refresh-posts'
+    REFRESH_POSTS: 'refresh-posts',
+    REFRESH_EVENT_DETAIL: 'refresh-event-detail'
 };
 
 function setupSSE() {
@@ -17,7 +18,7 @@ function setupSSE() {
     };
 
     eventSource.addEventListener(SseActionTypes.SSE_ACTION, async (event) => {
-        console.log('Event Delete:', event.data);
+        console.log('SSE Action received:', event);
         // Handle event delete here
         const data = event.data;
 
@@ -32,6 +33,7 @@ function setupSSE() {
             console.log('HTML:', html);
             contentDiv.innerHTML = html;
         }
+
     });
 
     eventSource.addEventListener('keepalive', (event) => {

@@ -6,6 +6,10 @@ async function joinEvent(eventId) {
     if (data.success) {
         const message = data.message;
         // Example: Show a success message
+        const contentDiv = document.getElementById('main-content');
+        const eventDetailUrl = `${ApiClient.ENDPOINTS.EVENT_DETAIL.replace("{eventId}", eventId)}`;
+        const html = await window.api.getHtml(eventDetailUrl);
+        contentDiv.innerHTML = html;
         showAlert(message, "success");
     } else {
         const message = data.message;
@@ -21,6 +25,10 @@ async function approveUser(eventId, userId) {
     if (data.success) {
         const message = data.message;
         // Example: Show a success message
+        const contentDiv = document.getElementById('main-content');
+        const eventDetailUrl = `${ApiClient.ENDPOINTS.EVENT_DETAIL.replace("{eventId}", eventId)}`;
+        const html = await window.api.getHtml(eventDetailUrl);
+        contentDiv.innerHTML = html;
         showAlert(message, "success");
     } else {
         const message = data.message;
