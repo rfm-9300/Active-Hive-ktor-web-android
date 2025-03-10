@@ -13,4 +13,5 @@ interface EventRepository {
     suspend fun deleteEventAttendees(eventId: Int): Int
     suspend fun getUpcomingEvents(): List<Event>
     suspend fun joinEventWaitingList(eventId: Int, userId:Int): Boolean
+    suspend fun approveUser(eventId: Int, userId: Int): Boolean
 }

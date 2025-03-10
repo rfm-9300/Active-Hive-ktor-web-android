@@ -134,11 +134,8 @@ fun HTML.eventDetail(event: Event) {
                                         p(classes = "text-gray-700") { +"${waitingList.user.firstName} ${waitingList.user.lastName}" }
                                         p(classes = "text-gray-700") { +waitingList.joinedAt.format(DateAndTimeFormatter) }
                                         button(classes = "bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-700") {
-                                            attributes["hx-post"] = "Routes.Api.Event.REMOVE_WAITING_LIST"
-                                            attributes["hx-swap"] = "outerHTML"
-                                            attributes["hx-target"] = "#waiting-list"
-                                            attributes["hx-params"] = "eventId=${event.id}&userId=${waitingList.user.id}"
-                                            +"Check in"
+                                            attributes["onclick"] = "approveUser(${waitingList.eventId}, ${waitingList.user.userId})"
+                                            +"Approve"
                                         }
                                     }
                                 }

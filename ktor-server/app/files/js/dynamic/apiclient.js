@@ -14,7 +14,8 @@ class ApiClient {
         EVENTS_UPCOMING: '%%UI_EVENTS_UPCOMING%%',
         HOME_PAGE: '%%UI_HOME%%',
         UPDATE_PROFILE: '%%API_UPDATE_PROFILE%%',
-        CREATE_POST: '%%API_CREATE_POST%%'
+        CREATE_POST: '%%API_CREATE_POST%%',
+        APPROVE_USER: '%%API_APPROVE_USER%%',
     }
 
     constructor(baseURL = '') {

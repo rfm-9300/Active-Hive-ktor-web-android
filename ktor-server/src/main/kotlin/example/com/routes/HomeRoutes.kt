@@ -47,7 +47,7 @@ fun Route.homeRoutes(
 
                 Logger.d("Delete post request")
                 val userId = getUserIdFromRequestToken(call) ?: return@post
-                if (!authorizeUser(userId)) {
+                if (!isUserAdmin(userId)) {
                     return@post respondHelper(success = false, message = "Unauthorized", call = call, statusCode = HttpStatusCode.Unauthorized)
                 }
                 Logger.d("User $userId is authorized to delete post")
@@ -77,7 +77,7 @@ fun Route.homeRoutes(
 
                 Logger.d("Create post request")
                 val userId = getUserIdFromRequestToken(call) ?: return@post
-                if (!authorizeUser(userId)) {
+                if (!isUserAdmin(userId)) {
                     return@post respondHelper(success = false, message = "Unauthorized", call = call, statusCode = HttpStatusCode.Unauthorized)
                 }
                 Logger.d("User $userId is authorized to create post")
@@ -111,7 +111,7 @@ fun Route.homeRoutes(
         call.respondHtml(HttpStatusCode.OK){
             body {
                 homeTab(
-                    isAdminRequest = authorizeUser(getUserId().toString())
+                    isAdminRequest = isUserAdmin(getUserId().toString())
                 )
             }
         }

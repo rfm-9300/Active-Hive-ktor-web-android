@@ -42,6 +42,7 @@ object Routes {
             const val DELETE = "/api/events/delete"
             const val LIST = "/api/events"
             const val JOIN_EVENT = "/api/events/join"
+            const val APPROVE_USER = "/api/events/approve"
         }
 
         object Post {
@@ -91,7 +92,8 @@ object Routes {
             "%%UI_HOME%%" to Ui.Home.HOME,
             "%%UI_EVENTS_PAST%%" to Ui.Event.LIST_PAST,
             "%%UI_EVENTS_UPCOMING%%" to Ui.Event.LIST_UPCOMING,
-            "%%API_UPDATE_PROFILE%%" to Api.Profile.UPDATE
+            "%%API_UPDATE_PROFILE%%" to Api.Profile.UPDATE,
+            "%%API_APPROVE_USER%%" to Api.Event.APPROVE_USER
         )
     }
 }

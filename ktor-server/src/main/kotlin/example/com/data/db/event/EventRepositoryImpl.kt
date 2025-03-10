@@ -181,4 +181,25 @@ class EventRepositoryImpl: EventRepository {
             false
         }
     }
+
+    override suspend fun approveUser(eventId: Int, userId: Int): Boolean = suspendTransaction {
+        Logger.d("Approving user: $userId for event: $eventId")
+        try {
+            val removedFromWaitingList = EventWaitingListTable.deleteWhere {
+                (EventWaitingListTable.eventId eq eventId) and (EventWaitingListTable.userId eq userId)
+            }
+            if (removedFromWaitingList < 0) {
+                return@suspendTransaction false
+            }
+            val joinedEvent = EventAttendeeTable.insert {
+                it[this.eventId] = eventId
+                it[this.userId] = userId
+                it[joinedAt] = LocalDateTime.now()
+            }.insertedCount
+            joinedEvent > 0
+        } catch (e: Exception) {
+            Logger.d("Error approving user: $e")
+            false
+        }
+    }
 }

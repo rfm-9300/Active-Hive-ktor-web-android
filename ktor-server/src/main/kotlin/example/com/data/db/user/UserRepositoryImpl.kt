@@ -24,6 +24,7 @@ class UserRepositoryImpl: UserRepository {
             .select { UserTable.id eq userId }
             .singleOrNull()?.let {
                 User(
+                    id = it[UserTable.id].value,
                     email = it[UserTable.email],
                     password = it[UserTable.password],
                     salt = it[UserTable.salt],

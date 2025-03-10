@@ -14,9 +14,22 @@ async function joinEvent(eventId) {
     }
 }
 
+async function approveUser(eventId, userId) {
+    const data = await window.api.post(ApiClient.ENDPOINTS.APPROVE_USER, { eventId: eventId, userId: userId });
+    console.log('User approved:', data.success);
+    // Optionally update the page content (example)
+    if (data.success) {
+        const message = data.message;
+        // Example: Show a success message
+        showAlert(message, "success");
+    } else {
+        const message = data.message;
+        // Example: Show an error message
+        showAlert(message, "error");
+    }
+}
+
 function updateCountdown() {
-    console.log('Updating countdown...');
-    console.log('Event date:', eventDate);
     const now = new Date();
     const eventTime = new Date(eventDate);
     const difference = eventTime - now;

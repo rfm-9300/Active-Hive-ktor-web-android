@@ -51,7 +51,7 @@ suspend fun getUserIdFromRequestToken(call: RoutingCall): String? {
     return userId
 }
 
-fun authorizeUser(userId: String?): Boolean {
+fun isUserAdmin(userId: String?): Boolean {
     if (userId?.toIntOrNull() == null) return false
     return Roles.returnRole(userId.toInt()) == Roles.Role.ADMIN
 }

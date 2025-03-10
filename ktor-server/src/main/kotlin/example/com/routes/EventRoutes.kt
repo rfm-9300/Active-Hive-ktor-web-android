@@ -3,6 +3,7 @@ package example.com.routes
 import example.com.data.db.event.Event
 import example.com.data.db.event.EventRepository
 import example.com.data.db.user.UserRepository
+import example.com.data.requests.ApproveUserEventRequest
 import example.com.data.requests.EventRequest
 import example.com.data.responses.CreateEventResponse
 import example.com.data.utils.SseAction
@@ -30,6 +31,41 @@ fun Route.eventRoutes(
     /**
      * API Routes
      */
+
+    // api approve user
+    authenticate {
+        post(Routes.Api.Event.APPROVE_USER) {
+            try {
+                val request = call.receive<ApproveUserEventRequest>()
+                val requestUserId = getUserIdFromRequestToken(call) ?: return@post respondHelper(success = false, message = "User not found", call = call)
+
+                if(!isUserAdmin(requestUserId)) {
+                    return@post respondHelper(success = false, message = "Unauthorized", call = call)
+                }
+
+                val event = eventRepository.getEvent(request.eventId) ?: return@post respondHelper(success = false, message = "Event not found", call = call)
+
+                val user = userRepository.getUserById(requestUserId.toInt()) ?: return@post respondHelper(success = false, message = "User not found", call = call)
+
+                if(user.id == null) return@post respondHelper(success = false, message = "User not found", call = call)
+
+                val approved = eventRepository.approveUser(eventId = request.eventId, userId = user.id)
+
+                call.respond(HttpStatusCode.OK, CreateEventResponse(
+                    success = approved,
+                    message = if (approved) "User approved" else "Failed to approve user"
+                ))
+            } catch (e: Exception) {
+                Logger.d("Error approving user: ${e.message}")
+                call.respond(
+                    HttpStatusCode.BadRequest, CreateEventResponse(
+                        success = false,
+                        message = "Error approving user: ${e.message}"
+                    )
+                )
+            }
+        }
+    }
 
     //api update event
     authenticate {
@@ -292,7 +328,7 @@ fun Route.eventRoutes(
             body {
                 upcomingEvents(
                     eventRepository = eventRepository,
-                    isAdminRequest = authorizeUser(getUserId().toString())
+                    isAdminRequest = isUserAdmin(getUserId().toString())
                 )
             }
         }
@@ -304,7 +340,7 @@ fun Route.eventRoutes(
             body {
                 pastEvents(
                     eventRepository = eventRepository,
-                    isAdminRequest = authorizeUser(getUserId().toString())
+                    isAdminRequest = isUserAdmin(getUserId().toString())
                 )
             }
         }
