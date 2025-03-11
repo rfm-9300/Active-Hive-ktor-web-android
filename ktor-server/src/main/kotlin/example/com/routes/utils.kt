@@ -56,7 +56,7 @@ fun isUserAdmin(userId: String?): Boolean {
     return Roles.returnRole(userId.toInt()) == Roles.Role.ADMIN
 }
 
-fun RoutingContext.getUserId(): Int? {
+fun RoutingContext.getUserIdFromCookies(): Int? {
     val token = call.request.cookies["authToken"]
     return getUserIdFromToken(token)
 }

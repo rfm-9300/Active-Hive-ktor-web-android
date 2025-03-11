@@ -54,13 +54,22 @@ function updateCountdown() {
 
 function toggleWaitingList() {
     const content = document.getElementById('waiting-list');
-    const icon = document.getElementById('toggle-icon');
+    content.classList.toggle('hidden');
+}
+
+function toggleParticipants() {
+    console.log('Toggling participants');
+    const content = document.getElementById('participants-list');
+    const icon = document.querySelector('.participants-toggle-icon path');
+    console.log('Content:', content);
+    console.log('Icon before toggle:', icon.getAttribute('d'));
     content.classList.toggle('hidden');
     if (content.classList.contains('hidden')) {
-        icon.setAttribute('d', 'M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z'); // Down arrow
+        icon.setAttribute('d', 'M5 8l7 7 7-7'); // Down arrow
     } else {
-        icon.setAttribute('d', 'M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z'); // Up arrow
+        icon.setAttribute('d', 'M5 16l7-7 7 7'); // Up arrow
     }
+    console.log('Icon after toggle:', icon.getAttribute('d'));
 }
 
 setInterval(updateCountdown, 1000);

@@ -310,8 +310,9 @@ fun Route.eventRoutes(
     get(Routes.Ui.Event.DETAILS) {
         val eventId = call.parameters["eventId"]?.toIntOrNull() ?: return@get call.respond(HttpStatusCode.BadRequest)
         val event = eventRepository.getEvent(eventId) ?: return@get call.respond(HttpStatusCode.NotFound)
+        val user = getUserIdFromCookies()?.let { userRepository.getUserProfile(it) }
         call.respondHtml(HttpStatusCode.OK){
-            eventDetail(event)
+            eventDetail(event, user)
         }
     }
 
@@ -323,24 +324,24 @@ fun Route.eventRoutes(
     }
 
     get(Routes.Ui.Event.LIST_UPCOMING) {
-        val userId = getUserId()
+        val userId = getUserIdFromCookies()
         call.respondHtml(HttpStatusCode.OK){
             body {
                 upcomingEvents(
                     eventRepository = eventRepository,
-                    isAdminRequest = isUserAdmin(getUserId().toString())
+                    isAdminRequest = isUserAdmin(getUserIdFromCookies().toString())
                 )
             }
         }
     }
 
     get(Routes.Ui.Event.LIST_PAST) {
-        val userId = getUserId()
+        val userId = getUserIdFromCookies()
         call.respondHtml(HttpStatusCode.OK){
             body {
                 pastEvents(
                     eventRepository = eventRepository,
-                    isAdminRequest = isUserAdmin(getUserId().toString())
+                    isAdminRequest = isUserAdmin(getUserIdFromCookies().toString())
                 )
             }
         }

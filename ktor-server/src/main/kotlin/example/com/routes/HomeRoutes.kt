@@ -111,7 +111,7 @@ fun Route.homeRoutes(
         call.respondHtml(HttpStatusCode.OK){
             body {
                 homeTab(
-                    isAdminRequest = isUserAdmin(getUserId().toString())
+                    isAdminRequest = isUserAdmin(getUserIdFromCookies().toString())
                 )
             }
         }

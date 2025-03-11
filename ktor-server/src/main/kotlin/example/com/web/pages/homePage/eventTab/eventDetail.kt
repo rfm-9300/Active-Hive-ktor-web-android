@@ -1,6 +1,7 @@
 package example.com.web.pages.homePage.eventTab
 
 import example.com.data.db.event.Event
+import example.com.data.db.user.UserProfile
 import example.com.routes.Routes
 import example.com.web.components.SvgIcon
 import example.com.web.components.projectButton
@@ -11,7 +12,7 @@ import java.net.URLEncoder
 import java.time.*
 import java.time.format.*
 
-fun HTML.eventDetail(event: Event) {
+fun HTML.eventDetail(event: Event, requestUser: UserProfile?) {
     val now = LocalDateTime.now()
     val eventDate = LocalDateTime.parse(event.date.toString())
     val isToday = eventDate.toLocalDate() == now.toLocalDate()
@@ -27,115 +28,181 @@ fun HTML.eventDetail(event: Event) {
     val encodedUrl = URLEncoder.encode(url, "utf-8")
     val encodedTitle = URLEncoder.encode(event.title, "utf-8")
 
+    val isParticipating = requestUser?.let { user -> event.attendees.any { it.userId == user.userId } } ?: false
+    val isWaiting = requestUser?.let { user -> event.waitingList.any { it.user.userId == user.userId } } ?: false
+
     body {
-        div(classes = "w-[90%] mx-auto py-6") { // Increased padding, centered with mx-auto
-            div(classes = "bg-white bg-opacity-80 shadow-lg p-6 rounded-xl border border-blue-200 transition-all duration-300") { // Softer border, larger padding, higher opacity
-                // Header Image
-                img(src = "/resources/uploads/images/${event.headerImagePath}", classes = "w-full h-56 object-cover rounded-t-xl mb-6", alt = event.title) // Increased height, margin
-
-                // Title and Date
-                div(classes = "mb-6") { // Grouped for spacing
-                    h1(classes = "text-3xl font-bold text-gray-900 mb-2") { +event.title } // Larger, bolder title
-                    p(classes = "text-gray-600 text-base") { +formattedDate } // Larger text for date
+        div(classes = "w-[90%] mx-auto py-6") {
+            div(classes = "bg-white bg-opacity-80 shadow-lg p-6 rounded-xl border border-blue-200 transition-all duration-300") {
+                img(src = "/resources/uploads/images/${event.headerImagePath}", classes = "w-full h-56 object-cover rounded-t-xl mb-6", alt = event.title)
+                div(classes = "mb-6") {
+                    h1(classes = "text-3xl font-bold text-gray-900 mb-2") { +event.title }
+                    p(classes = "text-gray-600 text-base") { +formattedDate }
                 }
-
-                // Description
-                p(classes = "text-gray-700 text-lg leading-relaxed mb-6") { +event.description } // Larger text, more spacing
-
-                // Event Details (Location, Organizer, Countdown)
-                div(classes = "space-y-3 mb-6") { // Vertical spacing for details
+                p(classes = "text-gray-700 text-lg leading-relaxed mb-6") { +event.description }
+                div(classes = "space-y-3 mb-6") {
                     p(classes = "text-gray-700 text-base") {
                         +"Location: "
-                        a(href = "https://www.google.com/maps/place/${event.location}", target = "_blank", classes = "text-blue-500 hover:underline") {
-                            +event.location
-                        }
+                        a(href = "https://www.google.com/maps/place/${event.location}", target = "_blank", classes = "text-blue-500 hover:underline") { +event.location }
                     }
-                    p(classes = "text-gray-700 text-base") {
-                        +"Organized by: ${event.organizerName}" // Fixed syntax
-                    }
+                    p(classes = "text-gray-700 text-base") { +"Organized by: ${event.organizerName}" }
                     if (eventDate > now) {
                         p(classes = "text-blue-500 text-base") {
                             +"Starts in "
                             span { id = "countdown" }
                         }
                     } else {
-                        p(classes = "text-green-500 text-base") {
-                            +"Event has started!"
-                        }
+                        p(classes = "text-green-500 text-base") { +"Event has started!" }
                     }
                 }
 
-                // Participants and Join Button
-                div(classes = "flex items-center justify-between mb-6") {
-                    span(classes = "text-gray-700 font-semibold text-base") {
-                        +"Participants: ${event.attendees.size}/${event.maxAttendees}"
-                        if (event.attendees.size >= event.maxAttendees) {
-                            span(classes = "text-red-500 ml-2") { +" (Sold out)" }
+                // Enhanced Participants Section
+                div(classes = "mb-8 bg-blue-50 border border-blue-200 rounded-lg p-4 transition-all duration-300 hover:shadow-md") {
+                    div(classes = "cursor-pointer flex items-center justify-between") {
+                        attributes["onclick"] = "toggleParticipants()"
+
+                        div {
+                            h3(classes = "text-lg font-bold text-blue-800") { +"Participants" }
+                            div(classes = "flex items-center") {
+                                span(classes = "text-blue-600 mr-2") {
+                                    +"${event.attendees.size}/${event.maxAttendees}"
+                                }
+                                if (event.attendees.size >= event.maxAttendees) {
+                                    span(classes = "text-red-500 text-sm font-semibold") { +"(Sold out)" }
+                                }
+
+                                // Tooltip to indicate clickable
+                                span(classes = "text-xs text-blue-500 ml-2 italic") { +"(click to view all)" }
+                            }
+                        }
+
+                        div(classes = "flex items-center gap-2") {
+                            // User Status Badge
+                            requestUser?.let {
+                                when {
+                                    isParticipating -> span(classes = "inline-block bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm") { +"You're going!" }
+                                    isWaiting -> span(classes = "inline-block bg-yellow-400 text-gray-800 text-xs font-bold px-3 py-1 rounded-full shadow-sm") { +"Waiting list" }
+                                    event.needsApproval -> span(classes = "inline-block bg-gray-300 text-gray-800 text-xs font-bold px-3 py-1 rounded-full shadow-sm") { +"Needs approval" }
+                                }
+                            }
+                            div(classes = "bg-blue-100 hover:bg-blue-200 rounded-full p-1 transition-colors duration-300") {
+                                svgIcon(SvgIcon.CHEVRON_DOWN, classes = "w-5 h-5 text-blue-600 participants-toggle-icon")
+                            }
                         }
                     }
-                    if (eventDate <= now) {
-                        span(classes = "text-gray-500 text-base") {
-                            +"Event has started."
+
+                    // Participants List (Hidden by Default)
+                    div(classes = "hidden mt-4 pt-3 border-t border-blue-200") {
+                        id = "participants-list"
+                        if (event.attendees.isEmpty()) {
+                            p(classes = "text-gray-600 text-center py-4 italic") { +"Be the first to join this event!" }
+                        } else {
+                            div(classes = "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2") {
+                                event.attendees.forEach { attendee ->
+                                    div(classes = "flex items-center p-2 rounded-md ${if (requestUser?.userId == attendee.userId) "bg-blue-100" else ""}") {
+                                        // Profile image placeholder or actual image if available
+                                        if (attendee.profileImagePath.isNotEmpty()) {
+                                            img(
+                                                src = "/resources/uploads/images/${attendee.profileImagePath}",
+                                                classes = "w-8 h-8 rounded-full object-cover mr-2"
+                                            )
+                                        } else {
+                                            div(classes = "w-8 h-8 rounded-full bg-blue-300 flex items-center justify-center mr-2 text-white font-bold") {
+                                                +(attendee.firstName.firstOrNull()?.toString() ?: "")
+                                            }
+                                        }
+
+                                        span { +"${attendee.firstName} ${attendee.lastName}" }
+
+                                        if (requestUser?.userId == attendee.userId) {
+                                            span(classes = "ml-1 text-blue-600 text-xs font-bold") { +"(You)" }
+                                        }
+                                    }
+                                }
+                            }
                         }
-                    } else if (event.attendees.size >= event.maxAttendees) {
-                        span(classes = "bg-red-500 text-white px-3 py-1 rounded-full text-sm shadow-md") {
-                            +"Event Full"
+                    }
+
+                    // Join Button Section
+                    div(classes = "mt-4 flex justify-end") {
+                        if (eventDate <= now) {
+                            span(classes = "text-gray-500 text-base") { +"Event has started." }
+                        } else if (event.attendees.size >= event.maxAttendees && !isParticipating) {
+                            button(classes = "bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg shadow transition-colors duration-300") {
+                                attributes["onclick"] = "joinWaitingList(${event.id})"
+                                +"Join Waiting List"
+                            }
+                        } else if (!isParticipating && !isWaiting) {
+                            projectButton(
+                                text = "Join Event",
+                                onClick = "joinEvent(${event.id})",
+                                extraClasses = "bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg shadow-md transition-colors duration-300"
+                            )
                         }
-                    } else {
-                        projectButton(text = "Join Event", onClick = "joinEvent(${event.id})")
                     }
                 }
 
                 // Action Buttons (Social Sharing, Calendar, Back)
-                div(classes = "flex flex-wrap items-center gap-4") { // Flex wrap for responsiveness
-                    a(href = "https://www.facebook.com/sharer/sharer.php?u=$encodedUrl", target = "_blank", classes = "text-blue-500 hover:text-blue-700 transition-colors duration-200") {
-                        svgIcon(SvgIcon.FACEBOOK, classes = "w-6 h-6")
-                    }
-                    a(href = "https://x.com/intent/tweet?text=$encodedTitle&url=$encodedUrl", target = "_blank", classes = "text-blue-500 hover:text-blue-700 transition-colors duration-200") {
-                        svgIcon(SvgIcon.X, classes = "w-6 h-6")
-                    }
-                    a(classes = "text-blue-500 hover:underline text-base", href = "webcal://yourdomain.com/events/${event.id}.ics") {
+                div(classes = "flex flex-wrap items-center gap-4") {
+                    a(classes = "flex items-center gap-1 text-blue-500 hover:text-blue-700 transition-colors duration-300",
+                        href = "webcal://yourdomain.com/events/${event.id}.ics") {
+                        svgIcon(SvgIcon.CALENDAR, classes = "w-4 h-4")
                         +"Add to Calendar"
                     }
-                    p(classes = "text-blue-500 hover:underline text-base cursor-pointer") {
+                    p(classes = "flex items-center gap-1 text-blue-500 hover:text-blue-700 transition-colors duration-300 cursor-pointer") {
                         attributes["hx-get"] = Routes.Ui.Event.LIST_UPCOMING
                         attributes["hx-target"] = "#main-content"
+                        svgIcon(SvgIcon.ARROW_LEFT, classes = "w-4 h-4")
                         +"Back to Events"
                     }
                 }
             }
 
-            // Admin Waiting List Section (Below Main Card)
+            // Admin Waiting List Section (Collapsible)
             if (isAdmin) {
-                div(classes = "mt-6 bg-white bg-opacity-80 shadow-lg p-6 rounded-xl border border-gray-200") {
+                div(classes = "mt-6 bg-white bg-opacity-80 shadow-lg px-6 py-2 rounded-xl border border-gray-200") {
                     id = "waiting-list-container"
-                    // Toggle Header
                     div(classes = "flex justify-between items-center mb-2 cursor-pointer") {
                         attributes["onclick"] = "toggleWaitingList()"
                         h2(classes = "text-2xl font-semibold text-gray-800") { +"Waiting List" }
                         button(classes = "text-blue-500 hover:text-blue-700 focus:outline-none") {
-                            svgIcon(SvgIcon.CHEVRON_DOWN, classes = "w-6 h-6")
+                            svgIcon(SvgIcon.CHEVRON_DOWN, classes = "w-6 h-6 waiting-list-toggle-icon")
                         }
                     }
-                    // Collapsible Content
                     div(classes = "hidden") {
                         id = "waiting-list"
                         if (event.waitingList.isEmpty()) {
-                            p(classes = "text-gray-600 text-base") { +"No users on the waiting list." }
+                            p(classes = "text-gray-600 text-base py-3") { +"No users on the waiting list." }
                         } else {
                             div {
-                                div(classes = "flex flex-row justify-between border-b border-gray-200") {
-                                    p(classes = "text-gray-700 font-semibold") { +"User" }
-                                    p(classes = "text-gray-700 font-semibold") { +"Joined At" }
-                                    p(classes = "text-gray-700 font-semibold") { +"Actions" }
+                                div(classes = "flex flex-row justify-between border-b border-gray-200 pb-2 font-medium") {
+                                    p(classes = "text-gray-700 w-1/3") { +"User" }
+                                    p(classes = "text-gray-700 w-1/3 text-center") { +"Joined At" }
+                                    p(classes = "text-gray-700 w-1/3 text-right") { +"Actions" }
                                 }
                                 event.waitingList.forEach { waitingList ->
                                     div(classes = "flex flex-row justify-between py-2 border-b border-gray-200 text-sm items-center") {
-                                        p(classes = "text-gray-700") { +"${waitingList.user.firstName} ${waitingList.user.lastName}" }
-                                        p(classes = "text-gray-700") { +waitingList.joinedAt.format(DateAndTimeFormatter) }
-                                        button(classes = "bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-700") {
-                                            attributes["onclick"] = "approveUser(${waitingList.eventId}, ${waitingList.user.userId})"
-                                            +"Approve"
+                                        div(classes = "flex items-center w-1/3") {
+                                            if (waitingList.user.profileImagePath.isNotEmpty()) {
+                                                img(
+                                                    src = "/resources/uploads/images/${waitingList.user.profileImagePath}",
+                                                    classes = "w-8 h-8 rounded-full object-cover mr-2"
+                                                )
+                                            } else {
+                                                div(classes = "w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center mr-2 text-white") {
+                                                    +(waitingList.user.firstName.firstOrNull()?.toString() ?: "")
+                                                }
+                                            }
+                                            p { +"${waitingList.user.firstName} ${waitingList.user.lastName}" }
+                                        }
+                                        p(classes = "w-1/3 text-center") {
+                                            +waitingList.joinedAt.format(DateAndTimeFormatter)
+                                        }
+                                        div(classes = "w-1/3 flex justify-end") {
+                                            button(classes = "bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-700 transition-colors duration-300") {
+                                                attributes["onclick"] = "approveUser(${waitingList.eventId}, ${waitingList.user.userId})"
+                                                +"Approve"
+                                            }
                                         }
                                     }
                                 }
@@ -145,10 +212,10 @@ fun HTML.eventDetail(event: Event) {
                 }
             }
 
-            // Define eventDate before loading the script
-            script {
-                +"const eventDate = '${event.date}';"
-            }
+            // Set the event date variable for the JavaScript to use
+            script { +"const eventDate = '${event.date}'; const eventId = ${event.id};" }
+
+            // Load the external JS file that contains the functions
             loadJs("event/event-detail")
         }
     }
