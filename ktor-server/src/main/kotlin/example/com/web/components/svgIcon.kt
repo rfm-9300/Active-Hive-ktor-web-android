@@ -87,11 +87,16 @@ fun HtmlBlockTag.svgIcon(icon: SvgIcon, classes: String = "", size: Int = 24) {
                     <polyline points="12 19 5 12 12 5"></polyline>
                 </svg>
                 """
+                SvgIcon.HOME -> +"""
+                <svg class="$classes" width="$size" height="$size" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2v-4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                </svg>
+                """
             }
         }
     }
 }
 
 enum class SvgIcon {
-    MENU, CLOSE, SEARCH, DEFAULT, LIKE, TIME, DELETE, EDIT, FACEBOOK, X, CHEVRON_DOWN, CALENDAR, ARROW_LEFT
+    MENU, CLOSE, SEARCH, DEFAULT, LIKE, TIME, DELETE, EDIT, FACEBOOK, X, CHEVRON_DOWN, CALENDAR, ARROW_LEFT, HOME
 }

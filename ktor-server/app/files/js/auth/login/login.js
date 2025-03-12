@@ -36,7 +36,6 @@ document.getElementById('login-form').addEventListener('submit', async function(
             window.location.href = '/';
 
         } catch (error) {
-            console.error('Error during the login process:', error);
-            document.getElementById('main-content').innerHTML = 'Login Failed. Please try again.';
+            showAlert('Login Failed. Please try again.');
         }
     });

@@ -74,3 +74,4 @@ function toggleParticipants() {
 
 setInterval(updateCountdown, 1000);
 updateCountdown(); // Initial call
+setNavigateUrl(ApiClient.ENDPOINTS.EVENTS_UPCOMING);

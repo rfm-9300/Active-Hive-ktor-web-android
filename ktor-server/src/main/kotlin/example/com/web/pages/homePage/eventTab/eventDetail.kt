@@ -24,10 +24,6 @@ fun HTML.eventDetail(event: Event, requestUser: UserProfile?) {
     }
     val isAdmin = true
 
-    val url = Routes.Ui.Event.DETAILS.replace("{eventId}", event.id.toString())
-    val encodedUrl = URLEncoder.encode(url, "utf-8")
-    val encodedTitle = URLEncoder.encode(event.title, "utf-8")
-
     val isParticipating = requestUser?.let { user -> event.attendees.any { it.userId == user.userId } } ?: false
     val isWaiting = requestUser?.let { user -> event.waitingList.any { it.user.userId == user.userId } } ?: false
 
@@ -214,6 +210,7 @@ fun HTML.eventDetail(event: Event, requestUser: UserProfile?) {
 
             // Set the event date variable for the JavaScript to use
             script { +"const eventDate = '${event.date}'; const eventId = ${event.id};" }
+            script { +"setNavigateUrl(${Routes.Ui.Event})" }
 
             // Load the external JS file that contains the functions
             loadJs("event/event-detail")

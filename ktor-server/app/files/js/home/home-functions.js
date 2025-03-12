@@ -27,3 +27,16 @@ async function submitPost() {
         showAlert('An error occurred while creating the post. Please try again later.', 'error');
     }
 }
+window.navigateUrl = "/home";
+
+function setNavigateUrl(url) {
+    console.log('setting navigate url to', url);
+    window.navigateUrl = url;
+}
+
+async function navigate() {
+    const contentDiv = document.getElementById('main-content');
+    const html = await window.api.getHtml(window.navigateUrl);
+    contentDiv.innerHTML = html;
+    htmx.process(contentDiv);
+}

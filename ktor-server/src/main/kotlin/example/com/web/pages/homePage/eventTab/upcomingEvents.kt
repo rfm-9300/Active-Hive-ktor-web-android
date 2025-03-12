@@ -24,9 +24,9 @@ fun HtmlBlockTag.upcomingEvents(
         }
     }
     // Container for the "Create Event" button
-    div(classes = "w-full py-4") {
+    div(classes = "w-full py-4 flex flex-col justify-center items-center") {
         // Add a button to create a new event
-        div(classes = "flex justify-end mb-4") {
+        div(classes = "w-[80%] flex justify-end mb-4") {
             projectButton("Create Event", hxGet = Routes.Ui.Event.CREATE, hxTarget = "#main-content")
         }
 

@@ -5,6 +5,7 @@ import example.com.plugins.Logger
 import example.com.routes.Routes
 import example.com.web.components.eventFilterTag
 import example.com.web.components.post.event
+import example.com.web.components.projectButton
 import example.com.web.loadJs
 import kotlinx.coroutines.runBlocking
 import kotlinx.html.*
@@ -23,21 +24,17 @@ fun HtmlBlockTag.pastEvents(
         }
     }
     // Container for the "Create Event" button
-    div(classes = "w-full py-4") {
+    div(classes = "w-full py-4 flex flex-col justify-center items-center") {
         // Add a button to create a new event
-        div(classes = "flex justify-end mb-4") {
-            button(classes = "bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700") {
-                attributes["hx-get"] = Routes.Ui.Event.CREATE
-                attributes["hx-target"] = "#main-content"
-                +"Create Event"
-            }
+        div(classes = "w-[80%] flex justify-end mb-4") {
+            projectButton("Create Event", hxGet = Routes.Ui.Event.CREATE, hxTarget = "#main-content")
         }
 
         // container for filter tags
         div(classes = "w-[80%] justify-end flex flex-row gap-1 mb-2") {
             // Filter tags
             eventFilterTag("Upcoming", Routes.Ui.Event.LIST_UPCOMING, active = false)
-            eventFilterTag("Past", Routes.Ui.Event.LIST_UPCOMING, active = true)
+            eventFilterTag("Past", Routes.Ui.Event.LIST_PAST, active = true)
         }
 
         // Render each event
