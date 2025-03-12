@@ -36,14 +36,14 @@ fun HTML.homePage(eventRepository: EventRepository) {
             div (classes = "w-full flex flex-col justify-center items-center relative") {
                 id = "main-content-bg"
                 // Back to Home Icon
-                div(classes = "fixed top-[15%] left-[15%] transform -translate-y-1/2 text-blue-500 hover:text-blue-700 hover:bg-blue-300 transition-colors duration-300 mt-8 mr-3 bg-blue-100 rounded-full p-2 shadow-md cursor-pointer") {
+                div(classes = "z-50 fixed top-[15%] left-[15%] transform -translate-y-1/2 text-blue-500 hover:text-blue-700 hover:bg-blue-300 transition-colors duration-300 mt-8 mr-3 bg-blue-100 rounded-full p-2 shadow-md cursor-pointer") {
                     attributes["onclick"] = "navigate()"
                     svgIcon(SvgIcon.ARROW_LEFT, classes = "w-6 h-6")
                 }
                 // content
                 div( classes = "flex flex-col justify-center items-center w-[70%] mt-1 py-2 px-4") {
                     id = "main-content"
-                    upcomingEvents(eventRepository, true)
+                    upcomingEvents(eventRepository, false)
                 }
             }
 

@@ -119,8 +119,24 @@ fun HTML.eventDetail(event: Event, requestUser: UserProfile?) {
                         }
                     }
 
+
+                }
+
+                // Action Buttons (Social Sharing, Calendar, Back)
+                div(classes = "flex flex-row justify-start gap-4") {
+                    a(classes = "flex items-center gap-1 text-blue-500 hover:text-blue-700 transition-colors duration-300",
+                        href = "webcal://yourdomain.com/events/${event.id}.ics") {
+                        svgIcon(SvgIcon.CALENDAR, classes = "w-4 h-4")
+                        +"Add to Calendar"
+                    }
+                    p(classes = "flex items-center gap-1 text-blue-500 hover:text-blue-700 transition-colors duration-300 cursor-pointer") {
+                        attributes["hx-get"] = Routes.Ui.Event.LIST_UPCOMING
+                        attributes["hx-target"] = "#main-content"
+                        svgIcon(SvgIcon.ARROW_LEFT, classes = "w-4 h-4")
+                        +"Back to Events"
+                    }
                     // Join Button Section
-                    div(classes = "mt-4 flex justify-end") {
+                    div(classes = "ml-auto flex justify-end") {
                         if (eventDate <= now) {
                             span(classes = "text-gray-500 text-base") { +"Event has started." }
                         } else if (event.attendees.size >= event.maxAttendees && !isParticipating) {
@@ -132,24 +148,9 @@ fun HTML.eventDetail(event: Event, requestUser: UserProfile?) {
                             projectButton(
                                 text = "Join Event",
                                 onClick = "joinEvent(${event.id})",
-                                extraClasses = "bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg shadow-md transition-colors duration-300"
+                                extraClasses = "bg-blue-600/60 hover:bg-blue-700 text-white px-4 py-3 rounded-lg shadow-md transition-colors duration-300"
                             )
                         }
-                    }
-                }
-
-                // Action Buttons (Social Sharing, Calendar, Back)
-                div(classes = "flex flex-wrap items-center gap-4") {
-                    a(classes = "flex items-center gap-1 text-blue-500 hover:text-blue-700 transition-colors duration-300",
-                        href = "webcal://yourdomain.com/events/${event.id}.ics") {
-                        svgIcon(SvgIcon.CALENDAR, classes = "w-4 h-4")
-                        +"Add to Calendar"
-                    }
-                    p(classes = "flex items-center gap-1 text-blue-500 hover:text-blue-700 transition-colors duration-300 cursor-pointer") {
-                        attributes["hx-get"] = Routes.Ui.Event.LIST_UPCOMING
-                        attributes["hx-target"] = "#main-content"
-                        svgIcon(SvgIcon.ARROW_LEFT, classes = "w-4 h-4")
-                        +"Back to Events"
                     }
                 }
             }

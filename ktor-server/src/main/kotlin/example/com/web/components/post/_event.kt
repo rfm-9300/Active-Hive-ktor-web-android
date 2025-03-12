@@ -27,26 +27,29 @@ fun HtmlBlockTag.event(event: Event, isAdminRequest: Boolean = false) {
         else -> "text-green-600"
     }
 
+    // padding if no icons
+    val padding = if (isAdminRequest) "" else "py-6"
+
     div(classes = "flex flex-col sm:flex-row items-center w-full sm:w-[80%] space-y-3 sm:space-y-0 sm:space-x-4 group mb-4") {
         // Date container
-        div(classes = "flex flex-col items-center justify-center w-full sm:w-24 min-w-[6rem] p-3 text-center shadow-md backdrop-blur-sm rounded-xl border transition-all duration-300 $todayClass") {
+        div(classes = "flex flex-col items-center justify-center w-full sm:w-24 min-w-[6rem] p-3 text-center shadow-md backdrop-blur-sm rounded-xl border transition-all duration-300 $todayClass $padding") {
             p(classes = "text-lg font-semibold text-blue-600") { +date }
             p(classes = "text-sm text-blue-400 capitalize") { +dayOfWeek.take(3).lowercase() }
 
             // Time badge
-            div(classes = "mt-1 px-2 py-1 bg-white/80 rounded-full text-xs font-medium text-blue-600 backdrop-blur-sm") {
+            div(classes = "mt-2 px-2 py-1 bg-white/80 rounded-full text-xs font-medium text-blue-600 backdrop-blur-sm") {
                 +time
             }
 
             // Admin controls
             if (isAdminRequest) {
                 div(classes = "w-full flex flex-row justify-center gap-1 mt-2") {
-                    span(classes = "p-1 rounded-full bg-blue-100/50 hover:bg-red-100 transition-colors") {
+                    span(classes = "p-1 rounded-full bg-blue-100/50 hover:bg-red-100 transition-colors cursor-pointer") {
                         attributes["data-event-id"] = event.id.toString()
                         attributes["onclick"] = "deleteEvent(${event.id})"
                         svgIcon(SvgIcon.DELETE, classes = "w-4 h-4 text-red-600")
                     }
-                    span(classes = "p-1 rounded-full bg-blue-100/50 hover:bg-blue-200/80 transition-colors") {
+                    span(classes = "p-1 rounded-full bg-blue-100/50 hover:bg-blue-200/80 transition-colors cursor-pointer") {
                         attributes["hx-get"] = Routes.Ui.Event.UPDATE.replace("{eventId}", event.id.toString())
                         attributes["hx-target"] = "#main-content"
                         svgIcon(SvgIcon.EDIT, classes = "w-4 h-4 text-blue-600")

@@ -27,7 +27,7 @@ async function submitPost() {
         showAlert('An error occurred while creating the post. Please try again later.', 'error');
     }
 }
-window.navigateUrl = "/home";
+window.navigateUrl = "/events/upcoming";
 
 function setNavigateUrl(url) {
     console.log('setting navigate url to', url);

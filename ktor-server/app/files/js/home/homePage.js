@@ -86,7 +86,7 @@ window.addEventListener('scroll', () => {
     header.style.boxShadow = scrollY > 50
         ? '0 2px 4px 0 rgba(0, 0, 0, 0.1)'
         : 'none';
-    mainContent.style.backgroundColor = scrollY > 120
+    mainContent.style.backgroundColor = scrollY > 200
         ? 'rgba(255, 255, 255, 1)'
         : 'rgba(255, 255, 255, 0)';
 
