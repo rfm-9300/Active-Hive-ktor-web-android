@@ -28,6 +28,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
                  expirationDate.setDate(expirationDate.getDate() + 10); // 1 day
                  document.cookie = `authToken=${token}; expires=${expirationDate.toUTCString()}; path=/`;
                  console.log('Token stored in a cookie as well:', document.cookie);
+                 showAlert('Login successful!', 'success');
             } else {
                 console.error('No token found in response');
             }

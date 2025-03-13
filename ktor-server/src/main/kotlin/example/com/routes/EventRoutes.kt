@@ -22,6 +22,7 @@ import io.ktor.utils.io.*
 import kotlinx.html.body
 import kotlinx.io.readByteArray
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 fun Route.eventRoutes(
     eventRepository: EventRepository,
@@ -202,12 +203,20 @@ fun Route.eventRoutes(
                     it.dispose
                 }
 
+                // Parse the date string to LocalDateTime
+                val parsedDate = try {
+                    LocalDateTime.parse(date, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+                } catch (e: Exception) {
+                    Logger.d("Error parsing date: $date")
+                    throw Exception("Invalid date format")
+                }
+
                 val event = Event(
                     title = title,
                     description = description,
-                    date = LocalDateTime.now(),
+                    date = parsedDate,
                     location = location,
-                    organizerId = 1,
+                    organizerId = userId.toInt(),
                     headerImagePath = image,
                     maxAttendees = maxAttendees
                 )

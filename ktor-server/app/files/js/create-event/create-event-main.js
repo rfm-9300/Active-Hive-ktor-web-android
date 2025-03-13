@@ -31,8 +31,7 @@ console.log('submit-btn clicked');
         const data = await api.post(ApiClient.ENDPOINTS.CREATE_EVENT, formData, {}, false)
 
         if (!data.success){
-            contentDiv.innerHTML = `<p class="text-red-500 font-bold">An error occurred while creating the event. Please try again later.</p>`;
-            console.error('Error during the event creation process:', response);
+            showAlert(data.message, 'error');
             return;
         }
 
@@ -41,7 +40,9 @@ console.log('submit-btn clicked');
         const eventContent = document.getElementById('event-content');
 
         if (data.success) {
-            eventContent.innerHTML = `<p class="text-green-500 font-bold">Event created successfully!</p>`;
+            showAlert('Event created successfully!', 'success');
+            setNavigateUrl(ApiClient.ENDPOINTS.EVENTS_UPCOMING);
+            navigate();
         } else {
             showAlert(data.message, 'error');
         }

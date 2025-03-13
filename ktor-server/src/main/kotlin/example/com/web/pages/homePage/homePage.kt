@@ -22,14 +22,16 @@ fun HTML.homePage(eventRepository: EventRepository) {
             //navbar()
 
             // Alert Box
-            div(classes = "fixed z-20 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 hidden p-4 rounded-lg shadow-lg bg-white bg-opacity-90 border border-blue-200") {
+            div(classes = "fixed z-20 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 hidden p-4 rounded-lg shadow-lg bg-white bg-opacity-90 border border-blue-200 min-w-[300px]") {
                 id = "alert-box"
-                span(classes = "text-gray-800 font-semibold") {
-                    id = "alert-message"
-                }
-                span(classes = "ml-4 cursor-pointer text-red-500 hover:text-red-700 transition-colors duration-300") {
-                    onClick = "closeAlert()"
-                    svgIcon(SvgIcon.CLOSE, classes = "w-5 h-5")
+                div(classes = "flex items-center justify-between") {
+                    span(classes = "text-gray-800 font-semibold flex-grow") {
+                        id = "alert-message"
+                    }
+                    span(classes = "ml-3 cursor-pointer text-red-500 hover:text-red-700 transition-colors duration-300 p-1 rounded-full hover:bg-red-100") {
+                        onClick = "closeAlert()"
+                        svgIcon(SvgIcon.CLOSE, classes = "w-5 h-5")
+                    }
                 }
             }
 

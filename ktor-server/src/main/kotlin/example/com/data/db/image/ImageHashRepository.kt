@@ -1,22 +1,24 @@
 package example.com.data.db.image
 
+import example.com.data.db.user.suspendTransaction
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
 
 interface ImageHashRepository {
-    fun findByHash(hash: Int): ImageHash?
-    fun save(imagePath: String, hash: Int): ImageHash
-    fun delete(imagePath: String)
+    suspend fun findByHash(hash: Int): ImageHash?
+    suspend fun save(imagePath: String, hash: Int): ImageHash
+    suspend fun delete(imagePath: String): Int
 }
 
 class ImageHashRepositoryImpl : ImageHashRepository {
-    override fun findByHash(hash: Int): ImageHash? = transaction {
+    override suspend fun findByHash(hash: Int): ImageHash? = suspendTransaction {
         ImageHashTable.select { ImageHashTable.hash eq hash }
             .map { it.toImageHash() }
             .firstOrNull()
     }
 
-    override fun save(imagePath: String, hash: Int): ImageHash = transaction {
+    override suspend fun save(imagePath: String, hash: Int): ImageHash = suspendTransaction {
         val id = ImageHashTable.insert {
             it[ImageHashTable.imagePath] = imagePath
             it[ImageHashTable.hash] = hash
@@ -25,7 +27,7 @@ class ImageHashRepositoryImpl : ImageHashRepository {
         ImageHash(id, imagePath, hash)
     }
 
-    override fun delete(imagePath: String) = transaction {
+    override suspend fun delete(imagePath: String): Int = suspendTransaction {
         ImageHashTable.deleteWhere { ImageHashTable.imagePath eq imagePath }
     }
 } 

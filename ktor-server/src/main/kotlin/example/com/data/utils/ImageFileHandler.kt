@@ -4,6 +4,8 @@ import java.util.UUID
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.imageio.ImageIO
+import example.com.data.db.image.ImageHashRepository
+import example.com.data.db.image.ImageHashRepositoryImpl
 
 object ImageFileHandler {
     private const val UPLOAD_DIR = "${Strings.RESOURCES_DIR}/uploads/images"
@@ -14,10 +16,8 @@ object ImageFileHandler {
     private const val MIN_IMAGE_WIDTH = 50 // pixels
     private const val MIN_IMAGE_HEIGHT = 50 // pixels
 
-    init {
-        // Create upload directory if it doesn't exist
-        File(UPLOAD_DIR).mkdirs()
-    }
+    private var imageHashRepository: ImageHashRepository = ImageHashRepositoryImpl()
+
 
     suspend fun saveImage(fileBytes: ByteArray, originalFileName: String): String {
         return withContext(Dispatchers.IO) {
@@ -27,6 +27,15 @@ object ImageFileHandler {
 
                 // Validate image dimensions
                 validateImageDimensions(fileBytes)
+
+                // Calculate hash of the image content
+                val imageHash = fileBytes.contentHashCode()
+
+                // Check if we already have this image
+                val existingImage = imageHashRepository.findByHash(imageHash)
+                if (existingImage != null) {
+                    return@withContext existingImage.imagePath
+                }
 
                 // Generate unique filename while preserving original extension
                 val extension = originalFileName.substringAfterLast('.', "").lowercase()
@@ -51,13 +60,8 @@ object ImageFileHandler {
                     throw ImageSaveException("File size mismatch: expected ${fileBytes.size} bytes but got ${file.length()} bytes")
                 }
 
-                // Verify file contents match with hash comparison
-                val savedFileHash = file.readBytes().contentHashCode()
-                val originalHash = fileBytes.contentHashCode()
-                if (savedFileHash != originalHash) {
-                    file.delete() // Clean up corrupted file
-                    throw ImageSaveException("File content verification failed: hash mismatch")
-                }
+                // Save the hash to database
+                imageHashRepository.save(fileName, imageHash)
 
                 fileName // Return the generated filename
             } catch (e: ImageSaveException) {
