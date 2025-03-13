@@ -2,60 +2,57 @@ package example.com.web.pages.profilePage
 
 import kotlinx.html.*
 
-fun HtmlBlockTag.profileEditBox() {
-    div(classes = "w-[90%] z-10 absolute p-4 rounded-lg hidden") {
-        id = "floating-profile-page"
-        form(
-            action = "#",
-            method = FormMethod.post,
-            classes = "w-full bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4",
+fun FlowContent.profileEditBox() {
+    div(classes = "fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl shadow-xl p-6 w-96 z-50 hidden") {
+        id = "profile-edit-box"
+        
+        // Close button
+        div(classes = "absolute top-3 right-3 cursor-pointer text-gray-500 hover:text-gray-700") {
+            onClick = "hideEditProfile()"
+            span(classes = "text-2xl") { +"×" }
+        }
+        
+        // Title
+        h3(classes = "text-xl font-semibold text-gray-800 mb-4") {
+            +"Update Profile Picture"
+        }
+        
+        // Form
+        form(classes = "space-y-4") {
             encType = FormEncType.multipartFormData
-        ) {
-            id = "profile-edit-form"
-            // Image upload
-            div(classes = "mb-4") {
-                label(classes = "block text-gray-700 text-sm font-bold mb-2") {
-                    attributes["for"] = "image"
-                    +"Profile Image"
+            method = FormMethod.post
+            action = "#"
+            
+            // File input
+            div(classes = "flex flex-col") {
+                label(classes = "text-sm font-medium text-gray-700 mb-1") {
+                    htmlFor = "image"
+                    +"Select new image"
                 }
-                div(classes = "mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md") {
-                    div(classes = "flex flex-col space-y-1 text-center") {
-                        div(classes = "flex text-sm text-gray-600 justify-center items-center") {
-                            label(classes = "relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 items-center") {
-                                input(classes = "sr-only") {
-                                    attributes["type"] = "file"
-                                    attributes["name"] = "image"
-                                    attributes["id"] = "image"
-                                    attributes["accept"] = "image/*"
-                                }
-                                div(classes = "items-center") {
-                                    span { +"Upload a file"}
-                                    span(classes = "pl-1") { +" or drag and drop" }
-                                }
-                            }
-                        }
-                        p(classes = "text-xs text-gray-500") {
-                            id = "image-upload-text"
-                            +"PNG, JPG, GIF up to 10MB"
-                        }
-                        p(classes = "text-sm text-green-600 mt-2") {
-                            id = "upload-status"
-                            +""
-                        }
+                div(classes = "relative border border-gray-300 rounded-md px-3 py-2 shadow-sm focus-within:ring-1 focus-within:ring-blue-600 focus-within:border-blue-600") {
+                    input(classes = "block w-full border-0 p-0 text-gray-900 placeholder-gray-500 focus:ring-0 sm:text-sm") {
+                        type = InputType.file
+                        name = "image"
+                        id = "image"
+                        accept = "image/*"
                     }
                 }
-                // Image preview and cropping area
-                div(classes = "mt-4 hidden") {
-                    id = "image-cropper-container"
-                    img( src = "", alt = "Image Preview", classes = "max-w-full h-[300px]"){
-                        id = "image-preview"
-                    }
+                p(classes = "mt-1 text-xs text-gray-500") {
+                    +"JPG, PNG or GIF files up to 5MB"
                 }
             }
 
+            // Image preview and cropping area
+            div(classes = "mt-4 hidden") {
+                id = "image-cropper-container"
+                img( src = "", alt = "Image Preview", classes = "max-w-full h-[300px]"){
+                    id = "image-preview"
+                }
+            }
+            
             // Submit button
-            div(classes = "flex items-center justify-center") {
-                button(classes = "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded") {
+            div(classes = "flex justify-end") {
+                button(classes = "inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500") {
                     attributes["type"] = "button"
                     onClick = "submitProfileEdit()"
                     +"Save"
@@ -63,4 +60,7 @@ fun HtmlBlockTag.profileEditBox() {
             }
         }
     }
+    
+    // Add the script for showing/hiding the edit box
+
 }

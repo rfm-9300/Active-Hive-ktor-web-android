@@ -38,6 +38,8 @@ data class UserProfile(
     val joinedAt: LocalDateTime? = null,
     val hostedEvents : List<Event> = emptyList(),
     val attendedEvents : List<Event> = emptyList(),
+    val waitingListEvents: List<Event> = emptyList(),
+    val attendingEvents: List<Event> = emptyList(),
     val profileImagePath: String = ""
 )
 

@@ -29,12 +29,14 @@ document.getElementById('login-form').addEventListener('submit', async function(
                  document.cookie = `authToken=${token}; expires=${expirationDate.toUTCString()}; path=/`;
                  console.log('Token stored in a cookie as well:', document.cookie);
                  showAlert('Login successful!', 'success');
+                 //delay 1 second
+                 setTimeout(() => {
+                    window.location.href = '/';
+                 }, 1000);
             } else {
-                console.error('No token found in response');
+                showAlert('Login Failed. Please try again.');
             }
 
-            // Redirect to the home page
-            window.location.href = '/';
 
         } catch (error) {
             showAlert('Login Failed. Please try again.');

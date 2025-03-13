@@ -1,8 +1,9 @@
 package example.com.data.db.user
 
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.update
+import example.com.data.db.event.EventAttendeeTable
+import example.com.data.db.event.EventTable
+import example.com.data.db.event.toEvent
+import org.jetbrains.exposed.sql.*
 import java.time.LocalDateTime
 
 class UserRepositoryImpl: UserRepository {
@@ -62,11 +63,36 @@ class UserRepositoryImpl: UserRepository {
     override suspend fun getUserProfile(userId: Int): UserProfile? = suspendTransaction {
         try {
             val userProfile = UserProfilesTable.select { UserProfilesTable.userId eq userId }.single().toUserProfile()
-            userProfile
+            val now = LocalDateTime.now()
+            
+            // Get all events where the user is the organizer
+            val hostedEvents = EventTable
+                .select { EventTable.organizerId eq userId }
+                .map { it.toEvent() }
+
+            // Get all events the user is registered for
+            val userEvents = EventAttendeeTable
+                .join(EventTable, JoinType.INNER) { EventTable.id eq EventAttendeeTable.eventId }
+                .select { EventAttendeeTable.userId eq userId }
+                .map { it.toEvent() }
+            
+            // Split events into past (attended) and future (attending)
+            val attendedEvents = userEvents.filter { it.date.isBefore(now) }
+            val attendingEvents = userEvents.filter { it.date.isAfter(now) }
+            
+            // For waiting list events, we need logic from EventWaitingListTable
+            // This would be implemented if we had that table
+            val waitingListEvents = emptyList<example.com.data.db.event.Event>()
+
+            userProfile.copy(
+                hostedEvents = hostedEvents,
+                attendedEvents = attendedEvents,
+                attendingEvents = attendingEvents,
+                waitingListEvents = waitingListEvents
+            )
         } catch (e: Exception) {
             null
         }
-
     }
 
     override suspend fun updateUserProfile(userProfile: UserProfile): Boolean = suspendTransaction {
