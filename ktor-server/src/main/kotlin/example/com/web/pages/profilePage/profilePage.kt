@@ -21,169 +21,157 @@ fun HTML.profilePage(user: UserProfile) {
     val dateFormatter = DateTimeFormatter.ofPattern("MMM dd, yyyy 'at' HH:mm")
 
     layout {
-        div(classes = "flex flex-col w-full items-center justify-center relative") {
+        div(classes = "flex flex-col w-full items-center justify-center relative max-w-4xl mx-auto px-4") {
             // hidden floating box change profile picture
             div(classes = "relative w-full flex justify-center") {
                 profileEditBox()
             }
+            // Profile Header Section
+            div(classes = "w-full bg-white rounded-xl shadow-sm p-6 mb-8") {
+                div(classes = "flex flex-col md:flex-row items-center md:items-start gap-6") {
+                    // Profile Image Section
+                    div(classes = "relative group") {
+                        img(
+                            src = "/resources/uploads/images/${user.profileImagePath}",
+                            alt = "Profile picture of $userName",
+                            classes = "w-32 h-32 rounded-full object-cover border-4 border-blue-100 shadow-lg"
+                        )
 
-            // profile info div
-            div(classes = "flex flex-row items-center w-full p-4 rounded-xl") {
-                div(classes = "relative group") {
-                    img(
-                        src = "/resources/uploads/images/${user.profileImagePath}",
-                        classes = "w-20 h-20 rounded-full object-cover border-2 border-blue-100"
-                    )
-
-                    // Edit button (hidden by default, shown on hover)
-                    button(classes = "absolute inset-0 flex items-center justify-center w-20 h-20 " +
-                            "rounded-full bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 " +
-                            "transition-opacity duration-200 text-white") {
-                        onClick = "showEditProfile()"
-                        +"Edit"
-                    }
-                }
-
-                // user info
-                div(classes = "flex flex-col ml-4") {
-                    p(classes = "font-bold text-xl") { +userName }
-                    p(classes = "text-sm text-gray-600") { +joinString }
-                    div(classes = "flex gap-4 mt-2") {
-                        div(classes = "flex items-center text-sm text-gray-500") {
-                            svgIcon(SvgIcon.CALENDAR, "w-4 h-4 mr-1")
-                            +"$hostedEvents hosted"
+                        // Edit button (hidden by default, shown on hover)
+                        button(classes = "absolute inset-0 flex items-center justify-center w-32 h-32 " +
+                                "rounded-full bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 " +
+                                "transition-opacity duration-200 text-white font-medium") {
+                            onClick = "showEditProfile()"
+                            attributes["aria-label"] = "Edit profile picture"
+                            +"Edit"
                         }
-                        div(classes = "flex items-center text-sm text-gray-500") {
-                            svgIcon(SvgIcon.PROFILE, "w-4 h-4 mr-1")
-                            +"$attendedEvents attended"
+                    }
+
+                    // User Info Section
+                    div(classes = "flex-1 text-center md:text-left") {
+                        h1(classes = "text-2xl font-bold text-gray-900 mb-2") { +userName }
+                        p(classes = "text-sm text-gray-600 mb-4") { +joinString }
+                        
+                        // Stats Grid
+                        div(classes = "grid grid-cols-2 md:grid-cols-4 gap-4") {
+                            statItem("Hosted", hostedEvents, SvgIcon.CALENDAR)
+                            statItem("Attended", attendedEvents, SvgIcon.PROFILE)
+                            statItem("Waiting", waitingEvents, SvgIcon.TIME)
+                            statItem("Attending", attendingEvents, SvgIcon.CHECK_CIRCLE)
                         }
                     }
                 }
             }
 
-            // Events Tabs
-            div(classes = "w-full mt-8") {
-                // Tabs
-                div(classes = "flex border-b border-gray-200") {
-                    button(classes = "px-4 py-2 text-sm font-medium text-blue-600 border-b-2 border-blue-600") {
-                        attributes["onclick"] = "switchTab('hosted')"
-                        id = "hosted-tab"
-                        +"Hosted Events ($hostedEvents)"
-                    }
-                    button(classes = "px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700") {
-                        attributes["onclick"] = "switchTab('attended')"
-                        id = "attended-tab"
-                        +"Attended Events ($attendedEvents)"
-                    }
-                    button(classes = "px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700") {
-                        attributes["onclick"] = "switchTab('waiting')"
-                        id = "waiting-tab"
-                        +"Waiting List ($waitingEvents)"
-                    }
-                    button(classes = "px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700") {
-                        attributes["onclick"] = "switchTab('attending')"
-                        id = "attending-tab"
-                        +"Attending Events ($attendingEvents)"
-                    }
+            // Events Section
+            div(classes = "w-full bg-white rounded-xl shadow-sm p-6") {
+                // Tabs Navigation
+                div(classes = "flex flex-wrap border-b border-gray-200 mb-6") {
+                    tabButton("hosted", "Hosted Events", hostedEvents, true)
+                    tabButton("attended", "Attended Events", attendedEvents, false)
+                    tabButton("waiting", "Waiting List", waitingEvents, false)
+                    tabButton("attending", "Attending Events", attendingEvents, false)
                 }
 
                 // Tab Content
                 div(classes = "mt-4") {
                     // Hosted Events
-                    div(classes = "space-y-4") {
-                        id = "hosted-content"
-                        if (user.hostedEvents.isEmpty()) {
-                            p(classes = "text-gray-500 text-center py-4") {
-                                +"No hosted events yet"
-                            }
-                        } else {
-                            user.hostedEvents.forEach { event ->
-                                eventCard(event, dateFormatter)
-                            }
-                        }
-                    }
+                    tabContent("hosted", user.hostedEvents, dateFormatter, "No hosted events yet")
 
                     // Attended Events
-                    div(classes = "hidden space-y-4") {
-                        id = "attended-content"
-                        if (user.attendedEvents.isEmpty()) {
-                            p(classes = "text-gray-500 text-center py-4") {
-                                +"No attended events yet"
-                            }
-                        } else {
-                            user.attendedEvents.forEach { event ->
-                                eventCard(event, dateFormatter)
-                            }
-                        }
-                    }
+                    tabContent("attended", user.attendedEvents, dateFormatter, "No attended events yet")
 
                     // Waiting List Events
-                    div(classes = "hidden space-y-4") {
-                        id = "waiting-content"
-                        if (user.waitingListEvents.isEmpty()) {
-                            p(classes = "text-gray-500 text-center py-4") {
-                                +"No events in waiting list"
-                            }
-                        } else {
-                            user.waitingListEvents.forEach { event ->
-                                eventCard(event, dateFormatter)
-                            }
-                        }
-                    }
+                    tabContent("waiting", user.waitingListEvents, dateFormatter, "No events in waiting list")
 
                     // Attending Events
-                    div(classes = "hidden space-y-4") {
-                        id = "attending-content"
-                        if (user.attendingEvents.isEmpty()) {
-                            p(classes = "text-gray-500 text-center py-4") {
-                                +"No attending events yet"
-                            }
-                        } else {
-                            user.attendingEvents.forEach { event ->
-                                eventCard(event, dateFormatter)
-                            }
-                        }
-                    }
+                    tabContent("attending", user.attendingEvents, dateFormatter, "No attending events yet")
                 }
             }
-            loadJs("profile-page")
+        }
+        loadJs("profile-page")
+    }
+}
+
+private fun FlowContent.statItem(label: String, count: Int, icon: SvgIcon) {
+    div(classes = "bg-gray-50 rounded-lg p-3 text-center") {
+        div(classes = "flex items-center justify-center text-blue-600 mb-1") {
+            svgIcon(icon, "w-5 h-5")
+        }
+        div(classes = "text-lg font-semibold text-gray-900") { +count.toString() }
+        div(classes = "text-sm text-gray-600") { +label }
+    }
+}
+
+private fun FlowContent.tabButton(id: String, label: String, count: Int, isActive: Boolean) {
+    button(classes = "px-4 py-2 text-sm font-medium transition-colors duration-200 " +
+            if (isActive) "text-blue-600 border-b-2 border-blue-600" else "text-gray-500 hover:text-gray-700") {
+        attributes["onclick"] = "switchTab('$id')"
+        attributes["aria-selected"] = isActive.toString()
+        this.id = "$id-tab"
+        +"$label ($count)"
+    }
+}
+
+private fun FlowContent.tabContent(id2: String, events: List<Event>, dateFormatter: DateTimeFormatter, emptyMessage: String) {
+    div(classes = if (id2 == "hosted") "" else "hidden") {
+        id = "$id2-content"
+        if (events.isEmpty()) {
+            emptyState(emptyMessage)
+        } else {
+            div(classes = "grid gap-4 md:grid-cols-2") {
+                events.forEach { event ->
+                    eventCard(event, dateFormatter)
+                }
+            }
         }
     }
 }
 
+private fun FlowContent.emptyState(message: String) {
+    div(classes = "text-center py-12") {
+        svgIcon(SvgIcon.CALENDAR, "w-12 h-12 mx-auto text-gray-400 mb-4")
+        p(classes = "text-gray-500 text-lg") { +message }
+    }
+}
+
 private fun FlowContent.eventCard(event: Event, dateFormatter: DateTimeFormatter) {
-    div(classes = "bg-white rounded-lg shadow p-4 hover:shadow-md transition-shadow") {
-        div(classes = "flex justify-between items-start") {
-            div(classes = "flex-1") {
+    div(classes = "bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-200 border border-gray-100") {
+        div(classes = "p-4") {
+            // Event Header
+            div(classes = "flex justify-between items-start mb-3") {
                 h3(classes = "font-semibold text-lg text-gray-900") {
                     +event.title
                 }
-                p(classes = "text-sm text-gray-600 mt-1") {
-                    +event.description
+                a(classes = "px-3 py-1 text-sm bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg transition-colors") {
+                    href = "/events/${event.id}"
+                    +"View"
                 }
-                div(classes = "flex items-center gap-4 mt-2") {
-                    div(classes = "flex items-center text-sm text-gray-500") {
-                        svgIcon(SvgIcon.CALENDAR, "w-4 h-4 mr-1")
-                        +event.date.format(dateFormatter)
-                    }
-                    div(classes = "flex items-center text-sm text-gray-500") {
-                        svgIcon(SvgIcon.PROFILE, "w-4 h-4 mr-1")
-                        +"${event.attendees.size} attendees"
-                    }
-                    
-                    // Location
-                    div(classes = "flex items-center text-sm text-gray-500 mt-1") {
-                        svgIcon(SvgIcon.HOME, "w-4 h-4 mr-1")
-                        +event.location
-                    }
-                }
+            }
 
-                // View button
-                div(classes = "ml-4") {
-                    a(classes = "px-3 py-1 text-sm bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg transition-colors") {
-                        href = "/events/${event.id}"
-                        +"View"
-                    }
+            // Event Description
+            p(classes = "text-sm text-gray-600 mb-4 line-clamp-2") {
+                +event.description
+            }
+
+            // Event Details
+            div(classes = "space-y-2") {
+                // Date and Attendees
+                div(classes = "flex items-center text-sm text-gray-500") {
+                    svgIcon(SvgIcon.CALENDAR, "w-4 h-4 mr-2")
+                    +event.date.format(dateFormatter)
+                }
+                
+                // Attendee Count
+                div(classes = "flex items-center text-sm text-gray-500") {
+                    svgIcon(SvgIcon.PROFILE, "w-4 h-4 mr-2")
+                    +"${event.attendees.size} attendees"
+                }
+                
+                // Location
+                div(classes = "flex items-center text-sm text-gray-500") {
+                    svgIcon(SvgIcon.HOME, "w-4 h-4 mr-2")
+                    +event.location
                 }
             }
         }
