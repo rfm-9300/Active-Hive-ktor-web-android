@@ -17,14 +17,20 @@ import java.time.LocalDateTime
 data class User(
     val id: Int? = null,
     val email: String,
-    val password: String,
-    val salt: String,
+    val password: String = "",
+    val salt: String = "",
     val verified: Boolean = false,
     @Serializable(with = LocalDateTimeSerializer::class)
     val createdAt: LocalDateTime = LocalDateTime.now(),
     val verificationToken: String? = null,
-    val profile: UserProfile? = null
+    val profile: UserProfile? = null,
+    val googleId: String? = null,
+    val authProvider: AuthProvider = AuthProvider.LOCAL
 )
+
+enum class AuthProvider {
+    LOCAL, GOOGLE
+}
 
 @Serializable
 data class UserProfile(
@@ -50,6 +56,8 @@ object UserTable : IntIdTable("user") {
     val verified = bool("verified").default(false)
     val createdAt = datetime("created_at")
     val verificationToken = varchar("verification_token", 256).nullable()
+    val googleId = varchar("google_id", 256).nullable()
+    val authProvider = varchar("auth_provider", 20).default(AuthProvider.LOCAL.name)
 }
 
 // UserProfilesTable now extends IntIdTable
@@ -99,7 +107,9 @@ fun ResultRow.toUser() = User(
     salt = this[UserTable.salt],
     verified = this[UserTable.verified],
     createdAt = this[UserTable.createdAt],
-    verificationToken = this[UserTable.verificationToken]
+    verificationToken = this[UserTable.verificationToken],
+    googleId = this[UserTable.googleId],
+    authProvider = AuthProvider.valueOf(this[UserTable.authProvider])
 )
 
 fun ResultRow.toUserProfile() = UserProfile(

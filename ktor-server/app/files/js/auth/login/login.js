@@ -42,3 +42,72 @@ document.getElementById('login-form').addEventListener('submit', async function(
             showAlert('Login Failed. Please try again.');
         }
     });
+
+// Google Sign-In initialization
+function initGoogleSignIn() {
+    // Load the Google Sign-In API script
+    const script = document.createElement('script');
+    script.src = 'https://accounts.google.com/gsi/client';
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+    
+    script.onload = function() {
+        // Initialize Google Sign-In client
+        google.accounts.id.initialize({
+            client_id: 'YOUR_GOOGLE_CLIENT_ID', // Replace with your actual Google Client ID
+            callback: handleGoogleSignIn,
+            auto_select: false,
+            cancel_on_tap_outside: true,
+        });
+        
+        // Handle Google Sign-In button click
+        document.getElementById('google-signin-btn').addEventListener('click', function() {
+            google.accounts.id.prompt();
+        });
+    };
+}
+
+// Handle Google Sign-In response
+async function handleGoogleSignIn(response) {
+    if (!response.credential) {
+        showAlert('Google Sign-In failed. Please try again.');
+        return;
+    }
+    
+    try {
+        // Send the ID token to your backend for verification
+        const data = await window.api.post(ApiClient.ENDPOINTS.GOOGLE_LOGIN, {
+            idToken: response.credential
+        });
+        
+        if (data && data.data && data.data.token) {
+            const token = data.data.token;
+            
+            // Store the token in localStorage and cookie
+            localStorage.setItem('authToken', token);
+            
+            // Store the token in a cookie (valid for 10 days)
+            const expirationDate = new Date();
+            expirationDate.setDate(expirationDate.getDate() + 10);
+            document.cookie = `authToken=${token}; expires=${expirationDate.toUTCString()}; path=/`;
+            
+            showAlert('Google Sign-In successful!', 'success');
+            
+            // Redirect to home page after a short delay
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 1000);
+        } else {
+            showAlert('Google Sign-In failed. Please try again.');
+        }
+    } catch (error) {
+        console.error('Google Sign-In error:', error);
+        showAlert('Google Sign-In failed. Please try again.');
+    }
+}
+
+// Initialize Google Sign-In when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+    initGoogleSignIn();
+});

@@ -7,6 +7,7 @@ class ApiClient {
         SSE_CONNECTION: '%%SSE_CONNECTION%%',
         DELETE_POST: '%%API_DELETE_POST%%',
         LOGIN: '%%API_LOGIN%%',
+        GOOGLE_LOGIN: '%%API_GOOGLE_LOGIN%%',
         SIGNUP: '%%API_SIGNUP%%',
         JOIN_EVENT: '%%API_JOIN_EVENT%%',
         PROFILE_MENU: '%%PROFILE_MENU%%',

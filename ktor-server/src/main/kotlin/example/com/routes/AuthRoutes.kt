@@ -5,6 +5,7 @@ import example.com.data.requests.AuthRequest
 import example.com.data.db.user.User
 import example.com.data.db.user.UserProfile
 import example.com.data.db.user.UserRepository
+import example.com.data.requests.GoogleAuthRequest
 import example.com.data.requests.SingUpRequest
 import example.com.data.requests.VerificationRequest
 import example.com.data.responses.ApiResponse
@@ -15,6 +16,7 @@ import example.com.security.hashing.SaltedHash
 import example.com.security.token.TokenClaim
 import example.com.security.token.TokenConfig
 import example.com.security.token.TokenService
+import example.com.useCases.AuthUser
 import example.com.web.pages.auth.loginPage
 import example.com.web.pages.auth.signupPage
 import io.ktor.http.*
@@ -33,7 +35,8 @@ fun Route.loginRoutes(
     tokenService: TokenService,
     tokenConfig: TokenConfig
 ) {
-
+    // Initialize AuthUser service
+    val authUser = AuthUser(userRepository)
 
     /****
      * UI Routes
@@ -50,9 +53,6 @@ fun Route.loginRoutes(
             loginPage()
         }
     }
-
-
-
 
 
     /****
@@ -92,6 +92,32 @@ fun Route.loginRoutes(
         Logger.d("UserID in token: ${decodedJWT.getClaim("userId").asString()}")
 
         respondHelper(success = true, message = "User logged in", data = ApiResponseData.AuthResponse(token = token), call = call)
+    }
+    
+    // Google Sign-In route
+    post(Routes.Api.Auth.GOOGLE_LOGIN) {
+        val request = kotlin.runCatching { call.receiveNullable<GoogleAuthRequest>() }.getOrNull() 
+            ?: return@post respondHelper(success = false, message = "Invalid request", call = call)
+            
+        if (request.idToken.isBlank()) {
+            return@post respondHelper(success = false, message = "ID token is required", call = call, statusCode = HttpStatusCode.BadRequest)
+        }
+        
+        // Authenticate with Google
+        val user = authUser.authenticateGoogleUser(request.idToken)
+            ?: return@post respondHelper(success = false, message = "Failed to authenticate with Google", call = call, statusCode = HttpStatusCode.Unauthorized)
+            
+        // Generate JWT token
+        val token = tokenService.generateAuthToken(
+            config = tokenConfig,
+            TokenClaim(
+                name = "userId",
+                value = user.id.toString()
+            )
+        )
+        
+        Logger.d("Generated token for Google user: $token")
+        respondHelper(success = true, message = "Google sign-in successful", data = ApiResponseData.AuthResponse(token = token), call = call)
     }
 
     post(Routes.Api.Auth.SIGNUP){

@@ -55,6 +55,7 @@ object Routes {
 
         object Auth {
             const val LOGIN = "/api/auth/login"
+            const val GOOGLE_LOGIN = "/api/auth/google-login"
             const val SIGNUP = "/api/auth/signup"
             const val VERIFY = "/api/auth/verify"
         }
@@ -82,6 +83,7 @@ object Routes {
             "%%API_LIST_EVENTS%%" to Api.Event.LIST,
             "%%SSE_CONNECTION%%" to Sse.SSE_CONNECTION,
             "%%API_LOGIN%%" to Api.Auth.LOGIN,
+            "%%API_GOOGLE_LOGIN%%" to Api.Auth.GOOGLE_LOGIN,
             "%%API_SIGNUP%%" to Api.Auth.SIGNUP,
             "%%API_JOIN_EVENT%%" to Api.Event.JOIN_EVENT,
             "%%PROFILE_MENU%%" to Ui.Home.PROFILE_MENU,
