@@ -27,7 +27,7 @@ document.getElementById('signup-form').addEventListener('submit', async function
             // Check if the request was successful
             if (!data.success) {
                 console.log('HTTP error:', data.message);
-                showAlert('Signup Failed. Please try again.', 'danger');
+                showAlert(data.message, 'error');
                 return;
             }
 
@@ -38,7 +38,7 @@ document.getElementById('signup-form').addEventListener('submit', async function
 
         } catch (error) {
             console.error('Error during the login process:', error);
-            //document.getElementById('main-content').innerHTML = 'Signup Failed. Please try again. MESSAGE: ' + error.message;
+            showAlert('Signup Failed. Please try again.', 'error');
         }
     });
 

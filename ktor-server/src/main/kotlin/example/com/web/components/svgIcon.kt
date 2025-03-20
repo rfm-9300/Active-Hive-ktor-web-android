@@ -117,11 +117,38 @@ fun HtmlBlockTag.svgIcon(icon: SvgIcon, classes: String = "", size: Int = 24) {
                     <polyline points="22 4 12 14.01 9 11.01"></polyline>
                 </svg>
                 """
+                SvgIcon.BEE -> +"""
+                    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Bee Body -->
+    <ellipse cx="80" cy="100" rx="40" ry="30" fill="#FFD700" stroke="black"/>
+    <line x1="60" y1="85" x2="100" y2="85" stroke="black" stroke-width="4"/>
+    <line x1="60" y1="100" x2="100" y2="100" stroke="black" stroke-width="4"/>
+    <line x1="60" y1="115" x2="100" y2="115" stroke="black" stroke-width="4"/>
+    
+    <!-- Bee Head -->
+    <circle cx="40" cy="100" r="15" fill="#FFD700" stroke="black"/>
+    <circle cx="35" cy="95" r="3" fill="black"/>
+    <circle cx="45" cy="95" r="3" fill="black"/>
+    
+    <!-- Antennae -->
+    <line x1="30" y1="85" x2="25" y2="70" stroke="black"/>
+    <line x1="50" y1="85" x2="55" y2="70" stroke="black"/>
+    
+    <!-- Wings -->
+    <ellipse cx="90" cy="80" rx="20" ry="10" fill="white" stroke="black"/>
+    <ellipse cx="90" cy="120" rx="20" ry="10" fill="white" stroke="black"/>
+    
+    <!-- Volleyball -->
+    <circle cx="140" cy="100" r="20" fill="white" stroke="black"/>
+    <path d="M122,110 Q140,90 158,110" stroke="black" fill="none"/>
+    <path d="M140,80 Q150,100 130,120" stroke="black" fill="none"/>
+</svg>
+                """
             }
         }
     }
 }
 
 enum class SvgIcon {
-    MENU, CLOSE, SEARCH, DEFAULT, LIKE, TIME, DELETE, EDIT, FACEBOOK, X, CHEVRON_DOWN, CALENDAR, ARROW_LEFT, HOME, PROFILE, SETTINGS, LOGOUT, CHECK_CIRCLE
+    BEE, MENU, CLOSE, SEARCH, DEFAULT, LIKE, TIME, DELETE, EDIT, FACEBOOK, X, CHEVRON_DOWN, CALENDAR, ARROW_LEFT, HOME, PROFILE, SETTINGS, LOGOUT, CHECK_CIRCLE
 }

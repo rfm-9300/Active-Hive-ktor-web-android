@@ -131,6 +131,16 @@ fun Route.loginRoutes(
             return@post respondHelper(success = false, message = "Empty fields or weak password", call = call, statusCode = HttpStatusCode.BadRequest)
         }
 
+        if (!request.email.contains('@')) {
+            return@post respondHelper(success = false, message = "Invalid email", call = call, statusCode = HttpStatusCode.BadRequest)
+        }
+
+        if (request.password != request.confirmPassword) {
+            return@post respondHelper(success = false, message = "Passwords do not match", call = call, statusCode = HttpStatusCode.BadRequest)
+        }
+
+        
+
         val user = userRepository.getUser(request.email)
         if (user != null) {
             return@post respondHelper(success = false, message = "User already exists", call = call, statusCode = HttpStatusCode.Conflict)
@@ -153,7 +163,8 @@ fun Route.loginRoutes(
             profile = UserProfile(
                 email = request.email,
                 firstName = request.firstName,
-                lastName = request.lastName
+                lastName = request.lastName,
+                profileImagePath = "default-user-image.webp"
             )
         )
 

@@ -34,7 +34,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
                     window.location.href = '/';
                  }, 1000);
             } else {
-                showAlert('Login Failed. Please try again.');
+                showAlert(data.message, 'error');
             }
 
 
@@ -45,6 +45,7 @@ document.getElementById('login-form').addEventListener('submit', async function(
 
 // Google Sign-In initialization
 function initGoogleSignIn() {
+    console.log('Initializing Google Sign-In');
     // Load the Google Sign-In API script
     const script = document.createElement('script');
     script.src = 'https://accounts.google.com/gsi/client';
@@ -108,6 +109,4 @@ async function handleGoogleSignIn(response) {
 }
 
 // Initialize Google Sign-In when the page loads
-document.addEventListener('DOMContentLoaded', function() {
-    initGoogleSignIn();
-});
+initGoogleSignIn();

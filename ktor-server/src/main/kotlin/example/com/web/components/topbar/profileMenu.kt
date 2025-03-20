@@ -8,7 +8,8 @@ import kotlinx.html.*
 
 
 fun HtmlBlockTag.profileMenu(user: UserProfile) {
-    img(classes = "object-cover w-full h-full", src = "/resources/uploads/images/${user.profileImagePath}", alt = "Active Hive Logo")
+    val profileImagePath = if (user.profileImagePath.isEmpty()) "/resources/images/default-user-image.webp" else "/resources/uploads/images/${user.profileImagePath}"
+    img(classes = "object-cover w-full h-full", src = profileImagePath, alt = "Active Hive Logo")
 
     // toggle menu
     div(classes = "flex flex-col gap-2 w-80 absolute -right-2 top-full hidden rounded-xl bg-white mt-3 shadow-lg text-gray-700 border border-blue-100 overflow-hidden transition-all duration-300") {
@@ -20,7 +21,7 @@ fun HtmlBlockTag.profileMenu(user: UserProfile) {
             div(classes = "flex flex-row items-center") {
                 // user profile image/icon
                 div(classes = "w-14 h-14 rounded-full overflow-hidden border-2 border-white shadow-md") {
-                    img(classes = "object-cover w-full h-full", src = "/resources/uploads/images/${user.profileImagePath}", alt = "${user.firstName}'s profile")
+                    img(classes = "object-cover w-full h-full", src = profileImagePath, alt = "${user.firstName}'s profile")
                 }
 
                 // username and email

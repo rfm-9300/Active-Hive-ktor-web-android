@@ -22,7 +22,7 @@ fun HTML.eventDetail(event: Event, requestUser: UserProfile?) {
         isTomorrow -> "Tomorrow at " + eventDate.format(TimeFormatter)
         else -> eventDate.format(DateAndTimeFormatter)
     }
-    val isAdmin = true
+    val isAdmin = requestUser?.userId == event.organizerId
 
     val isParticipating = requestUser?.let { user -> event.attendees.any { it.userId == user.userId } } ?: false
     val isWaiting = requestUser?.let { user -> event.waitingList.any { it.user.userId == user.userId } } ?: false

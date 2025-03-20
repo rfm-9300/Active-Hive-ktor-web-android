@@ -280,12 +280,10 @@ fun Route.eventRoutes(
                     }
                 }
                 val joined = eventRepository.joinEventWaitingList(eventId, userId.toInt())
-                if (joined) {
-                    sseManager.emitEvent(SseAction.RefreshEvents)
-                }
+
                 call.respond(HttpStatusCode.OK, CreateEventResponse(
                     success = joined,
-                    message = if (joined) "Joined event" else "Failed to join event"
+                    message = if (joined) "Joined waiting list. Wait until the organizer approves you" else "Failed to join event"
                 ))
                 return@post
             }

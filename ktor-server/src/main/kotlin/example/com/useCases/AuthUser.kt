@@ -4,6 +4,7 @@ import example.com.data.db.user.UserRepository
 import example.com.data.db.user.User
 import example.com.data.db.user.AuthProvider
 import io.ktor.client.*
+import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
@@ -13,9 +14,11 @@ import kotlinx.serialization.json.*
 import java.security.MessageDigest
 import java.util.*
 
-class AuthUser(private val userRepository: UserRepository) {
+class AuthUser(
+    private val userRepository: UserRepository, 
+    private val httpClient: HttpClient = HttpClient(CIO) // Specify CIO engine explicitly
+) {
     private val secret = "your-jwt-secret-key" // Replace with your actual secret
-    private val httpClient = HttpClient()
     
     suspend fun authenticateUser(email: String, password: String): User? {
         val user = userRepository.getUser(email) ?: return null
