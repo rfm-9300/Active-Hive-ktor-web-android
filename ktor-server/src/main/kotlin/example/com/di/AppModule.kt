@@ -3,6 +3,8 @@ import example.com.data.db.event.EventRepository
 import example.com.data.db.event.EventRepositoryImpl
 import example.com.data.db.post.PostRepository
 import example.com.data.db.post.PostRepositoryImpl
+import example.com.data.db.user.UserRepository
+import example.com.data.db.user.UserRepositoryImpl
 import example.com.data.utils.SseManager
 import org.koin.core.module.dsl.bind
 import org.koin.core.module.dsl.singleOf
@@ -12,4 +14,6 @@ val appModule = module {
     single { SseManager() }
     singleOf(::EventRepositoryImpl) { bind<EventRepository>() }
     singleOf(::PostRepositoryImpl) { bind<PostRepository>() }
+    singleOf(::UserRepositoryImpl) { bind<UserRepository>() }
+
 }

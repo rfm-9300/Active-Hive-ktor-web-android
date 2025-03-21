@@ -24,7 +24,7 @@ fun HTML.loginPage() {
                 div {
                     label(classes = "block text-sm font-medium text-gray-700") {
                         attributes["for"] = "email"
-                        +"email"
+                        +"Email"
                     }
                     input(classes = "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50") {
                         id = "email"
@@ -57,7 +57,7 @@ fun HTML.loginPage() {
                 }
                 
                 // Social login separator
-                div(classes = "relative flex items-center justify-center mt-6") {
+                /*div(classes = "relative flex items-center justify-center mt-6") {
                     div(classes = "border-t border-gray-300 flex-grow") {}
                     div(classes = "text-sm text-gray-500 px-3") {
                         +"Or continue with"
@@ -86,7 +86,7 @@ fun HTML.loginPage() {
                         }
                         +"Sign in with Google"
                     }
-                }
+                }*/
 
                 div(classes = "text-center mt-6") {
                     p(classes = "text-sm text-gray-600") {
