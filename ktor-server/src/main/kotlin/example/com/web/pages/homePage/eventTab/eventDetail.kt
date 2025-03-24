@@ -35,7 +35,7 @@ fun HTML.eventDetail(event: Event, requestUser: UserProfile?) {
                     h1(classes = "text-3xl font-bold text-gray-900 mb-2") { +event.title }
                     p(classes = "text-gray-600 text-base") { +formattedDate }
                 }
-                p(classes = "text-gray-700 text-lg leading-relaxed mb-6") { +event.description }
+                p(classes = "text-gray-700 text-lg leading-relaxed mb-6 whitespace-pre-line") { +event.description }
                 div(classes = "space-y-3 mb-6") {
                     p(classes = "text-gray-700 text-base") {
                         +"Location: "
