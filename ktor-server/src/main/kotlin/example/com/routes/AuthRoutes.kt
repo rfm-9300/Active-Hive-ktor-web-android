@@ -164,7 +164,8 @@ fun Route.loginRoutes(
                 email = request.email,
                 firstName = request.firstName,
                 lastName = request.lastName,
-                profileImagePath = "default-user-image.webp"
+                profileImagePath = "default-user-image.webp",
+                isAdmin = false
             )
         )
 

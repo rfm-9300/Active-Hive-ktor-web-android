@@ -48,7 +48,17 @@ fun Application.configureDatabases(config: ApplicationConfig) {
             EventWaitingListTable,
             ImageHashTable
         )
-        SchemaUtils.createMissingTablesAndColumns(UserTable)
+        SchemaUtils.createMissingTablesAndColumns(
+            UserTable,
+            UserProfilesTable,
+            EventTable,
+            EventAttendeeTable,
+            PostTable,
+            PostLikeTable,
+            PostCommentTable,
+            EventWaitingListTable,
+            ImageHashTable
+        )
     }
 }
 

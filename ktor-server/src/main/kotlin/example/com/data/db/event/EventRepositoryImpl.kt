@@ -51,16 +51,7 @@ class EventRepositoryImpl: EventRepository {
             attendeesQuery.forEach { attendeeRow ->
                 val userId = attendeeRow[EventAttendeeTable.userId].value
                 val userProfile = UserProfilesTable.select { UserProfilesTable.userId eq userId }
-                    .map { row ->
-                        UserProfile(
-                            id = row[UserProfilesTable.id].value,
-                            firstName = row[UserProfilesTable.firstName],
-                            lastName = row[UserProfilesTable.lastName],
-                            email = row[UserProfilesTable.email],
-                            phone = row[UserProfilesTable.phone]
-                        )
-                    }
-                    .firstOrNull()
+                    .firstOrNull()?.toUserProfile()
                 Logger.d("User: $userProfile")
                 userProfile?.let { user ->
                     // Reassign the list with the new user added using the + operator
@@ -137,17 +128,7 @@ class EventRepositoryImpl: EventRepository {
             attendeesQuery.forEach { attendeeRow ->
                 val userId = attendeeRow[EventAttendeeTable.userId].value
                 val userProfile = UserProfilesTable.select { UserProfilesTable.userId eq userId }
-                    .map { row ->
-                        UserProfile(
-                            id = row[UserProfilesTable.id].value,
-                            userId = row[UserProfilesTable.userId].value,
-                            firstName = row[UserProfilesTable.firstName],
-                            lastName = row[UserProfilesTable.lastName],
-                            email = row[UserProfilesTable.email],
-                            phone = row[UserProfilesTable.phone]
-                        )
-                    }
-                    .firstOrNull()
+                    .firstOrNull()?.toUserProfile()
                 userProfile?.let { user ->
                     attendees.add(user)
                 }

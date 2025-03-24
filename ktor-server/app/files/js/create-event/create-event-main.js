@@ -6,7 +6,7 @@ console.log('submit-btn clicked');
     const contentDiv = document.getElementById('event-content');
 
     if (!api.token) {
-        contentDiv.innerHTML = `<p class="text-red-500 font-bold">Please log in to create an event.</p>`;
+        showAlert('Please log in to create an event.', 'error');
         return;
     }
 

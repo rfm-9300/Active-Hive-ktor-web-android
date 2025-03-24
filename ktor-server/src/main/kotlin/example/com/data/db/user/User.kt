@@ -46,7 +46,8 @@ data class UserProfile(
     val attendedEvents : List<Event> = emptyList(),
     val waitingListEvents: List<Event> = emptyList(),
     val attendingEvents: List<Event> = emptyList(),
-    val profileImagePath: String = ""
+    val profileImagePath: String = "",
+    val isAdmin: Boolean
 )
 
 object UserTable : IntIdTable("user") {
@@ -69,16 +70,9 @@ object UserProfilesTable : IntIdTable("user_profile") {
     val phone = varchar("phone", 18)
     val joinedAt = datetime("joined_at").default(LocalDateTime.now())
     val imagePath = varchar("image_path", 100)
+    val isAdmin = bool("is_admin").default(false)
 }
 
-class UserDao(id: EntityID<Int>) : IntEntity(id) {
-    companion object : IntEntityClass<UserDao>(UserTable)
-
-    var name by UserTable.email
-    var password by UserTable.password
-    var salt by UserTable.salt
-    var profile by UserProfileDao referencedOn UserProfilesTable.userId
-}
 
 class UserProfileDao(id: EntityID<Int>) : IntEntity(id) {
     companion object : IntEntityClass<UserProfileDao>(UserProfilesTable)
@@ -92,13 +86,7 @@ class UserProfileDao(id: EntityID<Int>) : IntEntity(id) {
 suspend fun <T> suspendTransaction(block: Transaction.() -> T): T =
     newSuspendedTransaction(Dispatchers.IO, statement = block)
 
-fun UserDao.toUser() = UserProfile(
-    id = profile.id.value,
-    firstName = profile.firstName,
-    lastName = profile.lastName,
-    email = profile.email,
-    phone = profile.phone
-)
+
 
 fun ResultRow.toUser() = User(
     id = this[UserTable.id].value,
@@ -120,5 +108,6 @@ fun ResultRow.toUserProfile() = UserProfile(
     email = this[UserProfilesTable.email],
     phone = this[UserProfilesTable.phone],
     joinedAt = this[UserProfilesTable.joinedAt],
-    profileImagePath = this[UserProfilesTable.imagePath]
+    profileImagePath = this[UserProfilesTable.imagePath],
+    isAdmin = this[UserProfilesTable.isAdmin]
 )
