@@ -29,26 +29,54 @@ fun HTML.eventDetail(event: Event, requestUser: UserProfile?) {
 
     body {
         div(classes = "w-[90%] mx-auto py-6") {
-            div(classes = "bg-white bg-opacity-80 shadow-lg p-6 rounded-xl border border-blue-200 transition-all duration-300") {
-                img(src = "/resources/uploads/images/${event.headerImagePath}", classes = "w-full h-56 object-cover rounded-t-xl mb-6", alt = event.title)
+            div(classes = "bg-gradient-to-br from-blue-50/80 to-indigo-50/90 shadow-lg p-6 rounded-xl border border-blue-200 transition-all duration-300") {
+                img(src = "/resources/uploads/images/${event.headerImagePath}", classes = "w-full h-56 object-cover rounded-xl mb-6 shadow-md", alt = event.title)
+                
+                // Title and essential info section
                 div(classes = "mb-6") {
-                    h1(classes = "text-3xl font-bold text-gray-900 mb-2") { +event.title }
-                    p(classes = "text-gray-600 text-base") { +formattedDate }
-                }
-                p(classes = "text-gray-700 text-lg leading-relaxed mb-6 whitespace-pre-line") { +event.description }
-                div(classes = "space-y-3 mb-6") {
-                    p(classes = "text-gray-700 text-base") {
-                        +"Location: "
-                        a(href = "https://www.google.com/maps/place/${event.location}", target = "_blank", classes = "text-blue-500 hover:underline") { +event.location }
+                    h1(classes = "text-3xl font-bold text-blue-800 mb-3") { +event.title }
+                    
+                    // Date information with icon
+                    div(classes = "flex items-center text-blue-600 mb-3") {
+                        svgIcon(SvgIcon.CALENDAR, classes = "w-5 h-5 mr-2 text-blue-500")
+                        p(classes = "font-medium") { +formattedDate }
                     }
-                    p(classes = "text-gray-700 text-base") { +"Organized by: ${event.organizerName}" }
+                    
+                    // Location with icon - moved up as requested
+                    div(classes = "flex items-center text-blue-600 mb-3") {
+                        svgIcon(SvgIcon.LOCATION, classes = "w-5 h-5 mr-2 text-blue-500") 
+                        a(href = "https://www.google.com/maps/place/${event.location}", target = "_blank", classes = "hover:underline hover:text-blue-700 transition-colors") { +event.location }
+                    }
+                    
+                    // Organizer with icon - moved up as requested
+                    div(classes = "flex items-center text-blue-600") {
+                        svgIcon(SvgIcon.PROFILE, classes = "w-5 h-5 mr-2 text-blue-500")
+                        span { +"Organized by: " }
+                        span(classes = "font-medium ml-1") { +event.organizerName }
+                    }
+                }
+                
+                // Description section with improved styling
+                div(classes = "mb-6 bg-white/60 p-4 rounded-lg border border-blue-100 shadow-sm") {
+                    h3(classes = "text-lg font-semibold text-blue-700 mb-2") { +"About This Event" }
+                    p(classes = "text-blue-900 leading-relaxed whitespace-pre-line") { +event.description }
+                }
+                
+                // Countdown section
+                div(classes = "space-y-3 mb-6") {
                     if (eventDate > now) {
-                        p(classes = "text-blue-500 text-base") {
-                            +"Starts in "
-                            span { id = "countdown" }
+                        div(classes = "flex items-center bg-blue-100/70 p-3 rounded-lg shadow-sm") {
+                            svgIcon(SvgIcon.TIME, classes = "w-5 h-5 mr-2 text-blue-600")
+                            p(classes = "text-blue-700 font-medium") {
+                                +"Starts in "
+                                span(classes = "text-blue-800") { id = "countdown" }
+                            }
                         }
                     } else {
-                        p(classes = "text-green-500 text-base") { +"Event has started!" }
+                        div(classes = "flex items-center bg-green-100/70 p-3 rounded-lg shadow-sm") {
+                            svgIcon(SvgIcon.CHECK_CIRCLE, classes = "w-5 h-5 mr-2 text-green-600")
+                            p(classes = "text-green-700 font-medium") { +"Event has started!" }
+                        }
                     }
                 }
 
