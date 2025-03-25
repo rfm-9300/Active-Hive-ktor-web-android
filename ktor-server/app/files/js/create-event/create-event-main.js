@@ -14,18 +14,30 @@ console.log('submit-btn clicked');
         // Create FormData object
         const formData = new FormData();
 
+        // Combine date and time into a single datetime string
+        const date = document.getElementById('date').value;
+        const hour = document.getElementById('hour').value.padStart(2, '0');
+        const minute = document.getElementById('minute').value.padStart(2, '0');
+        const dateTime = `${date}T${hour}:${minute}`;
+
         // Add all form fields
         formData.append('source', 'web');
         formData.append('title', document.getElementById('title').value);
         formData.append('description', document.getElementById('description').value);
-        formData.append('date', document.getElementById('date').value);
+        formData.append('date', dateTime);
         formData.append('location', document.getElementById('location').value);
         formData.append('maxAttendees', document.getElementById('maxAttendees').value);
+        formData.append('needsApproval', document.getElementById('needsApproval').checked);
 
-        // Add image file if it exists
-        const fileInput = document.getElementById('image');
-        if (fileInput.files[0]) {
-            formData.append('image', fileInput.files[0]);
+        // Add cropped image if it exists
+        if (cropper) {
+            // Get the cropped image as BLOB
+            const blob = await new Promise(resolve => {
+                cropper.getCroppedCanvas().toBlob(resolve, 'image/jpeg', 0.9);
+            });
+            
+            // Append as file with filename
+            formData.append('image', blob, 'event.jpg');
         }
 
         const data = await api.post(ApiClient.ENDPOINTS.CREATE_EVENT, formData, {}, false)

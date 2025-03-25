@@ -178,6 +178,7 @@ fun Route.eventRoutes(
                 var location = ""
                 var image = ""
                 var maxAttendees = 0
+                var needsApproval = false
 
                 multiPart.forEachPart {
                     when(it) {
@@ -189,6 +190,7 @@ fun Route.eventRoutes(
                                 "date" -> date = it.value
                                 "location" -> location = it.value
                                 "maxAttendees" -> maxAttendees = it.value.toInt()
+                                "needsApproval" -> needsApproval = it.value.toBoolean()
                             }
                         }
                         is PartData.FileItem -> {
@@ -218,7 +220,8 @@ fun Route.eventRoutes(
                     location = location,
                     organizerId = userId.toInt(),
                     headerImagePath = image,
-                    maxAttendees = maxAttendees
+                    maxAttendees = maxAttendees,
+                    needsApproval = needsApproval
                 )
 
                 val eventID = eventRepository.addEvent(event) ?: throw Exception("Error creating event")

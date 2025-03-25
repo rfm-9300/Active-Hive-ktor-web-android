@@ -19,6 +19,7 @@ class EventRepositoryImpl: EventRepository {
                 it[organizerId] = organizer.id.value
                 it[headerImagePath] = event.headerImagePath
                 it[maxAttendees] = event.maxAttendees
+                it[needsApproval] = event.needsApproval
             }.value
             eventId // Return the generated event ID
         } catch (e: Exception) {
