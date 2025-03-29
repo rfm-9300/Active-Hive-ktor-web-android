@@ -25,7 +25,9 @@ data class User(
     val verificationToken: String? = null,
     val profile: UserProfile? = null,
     val googleId: String? = null,
-    val authProvider: AuthProvider = AuthProvider.LOCAL
+    val authProvider: AuthProvider = AuthProvider.LOCAL,
+    val resetToken: String? = null,
+    val resetTokenExpiresAt: Long? = null
 )
 
 enum class AuthProvider {
@@ -59,6 +61,17 @@ object UserTable : IntIdTable("user") {
     val verificationToken = varchar("verification_token", 256).nullable()
     val googleId = varchar("google_id", 256).nullable()
     val authProvider = varchar("auth_provider", 20).default(AuthProvider.LOCAL.name)
+    val resetToken = varchar("reset_token", 256).nullable()
+    val resetTokenExpiresAt = long("reset_token_expires_at").nullable()
+}
+
+// Table for storing password reset tokens
+object PasswordResetTable : IntIdTable("password_reset") {
+    val userId = reference("user_id", UserTable)
+    val token = varchar("token", 256)
+    val expiresAt = long("expires_at")
+    val createdAt = datetime("created_at").default(LocalDateTime.now())
+    val isUsed = bool("is_used").default(false)
 }
 
 // UserProfilesTable now extends IntIdTable
@@ -97,7 +110,9 @@ fun ResultRow.toUser() = User(
     createdAt = this[UserTable.createdAt],
     verificationToken = this[UserTable.verificationToken],
     googleId = this[UserTable.googleId],
-    authProvider = AuthProvider.valueOf(this[UserTable.authProvider])
+    authProvider = AuthProvider.valueOf(this[UserTable.authProvider]),
+    resetToken = this[UserTable.resetToken],
+    resetTokenExpiresAt = this[UserTable.resetTokenExpiresAt]
 )
 
 fun ResultRow.toUserProfile() = UserProfile(

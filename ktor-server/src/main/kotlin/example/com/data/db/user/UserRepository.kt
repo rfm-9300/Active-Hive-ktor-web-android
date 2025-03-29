@@ -16,4 +16,10 @@ interface UserRepository {
         lastName: String = "", 
         profileImageUrl: String = ""
     ): User?
+    
+    // Password reset methods
+    suspend fun saveResetToken(email: String, token: String, expiresAt: Long): Boolean
+    suspend fun getUserByResetToken(token: String): User?
+    suspend fun updatePassword(userId: Int, newPasswordHash: String, newSalt: String): Boolean
+    suspend fun deleteResetToken(userId: Int): Boolean
 }

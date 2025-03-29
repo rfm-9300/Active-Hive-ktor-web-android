@@ -7,6 +7,7 @@ import example.com.data.db.image.ImageHashTable
 import example.com.data.db.post.PostCommentTable
 import example.com.data.db.post.PostLikeTable
 import example.com.data.db.post.PostTable
+import example.com.data.db.user.PasswordResetTable
 import example.com.data.db.user.UserProfilesTable
 import example.com.data.db.user.UserTable
 import io.ktor.http.*
@@ -46,7 +47,8 @@ fun Application.configureDatabases(config: ApplicationConfig) {
             PostLikeTable,
             PostCommentTable,
             EventWaitingListTable,
-            ImageHashTable
+            ImageHashTable,
+            PasswordResetTable
         )
         SchemaUtils.createMissingTablesAndColumns(
             UserTable,
@@ -57,7 +59,8 @@ fun Application.configureDatabases(config: ApplicationConfig) {
             PostLikeTable,
             PostCommentTable,
             EventWaitingListTable,
-            ImageHashTable
+            ImageHashTable,
+            PasswordResetTable
         )
     }
 }

@@ -5,9 +5,7 @@ import example.com.data.requests.AuthRequest
 import example.com.data.db.user.User
 import example.com.data.db.user.UserProfile
 import example.com.data.db.user.UserRepository
-import example.com.data.requests.GoogleAuthRequest
-import example.com.data.requests.SingUpRequest
-import example.com.data.requests.VerificationRequest
+import example.com.data.requests.*
 import example.com.data.responses.ApiResponse
 import example.com.data.responses.ApiResponseData
 import example.com.plugins.Logger
@@ -16,15 +14,19 @@ import example.com.security.hashing.SaltedHash
 import example.com.security.token.TokenClaim
 import example.com.security.token.TokenConfig
 import example.com.security.token.TokenService
+import example.com.services.EmailService
 import example.com.useCases.AuthUser
 import example.com.web.pages.auth.loginPage
 import example.com.web.pages.auth.signupPage
+import example.com.web.pages.auth.resetPasswordPage
 import io.ktor.http.*
 import io.ktor.server.auth.*
 import io.ktor.server.html.*
+import io.ktor.server.plugins.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import java.util.UUID
 
 const val PASSWORD_MIN_LENGTH = 8
 
@@ -33,7 +35,8 @@ fun Route.loginRoutes(
     hashingService: HashingService,
     userRepository: UserRepository,
     tokenService: TokenService,
-    tokenConfig: TokenConfig
+    tokenConfig: TokenConfig,
+    emailService: EmailService
 ) {
     // Initialize AuthUser service
     val authUser = AuthUser(userRepository)
@@ -43,14 +46,28 @@ fun Route.loginRoutes(
      ****/
 
     get(Routes.Ui.Auth.SIGNUP) {
-        call.respondHtml {
+        call.respondHtml(HttpStatusCode.OK) {
             signupPage()
         }
     }
 
-    get("/login") {
-        call.respondHtml {
+    get(Routes.Ui.Auth.LOGIN) {
+        call.respondHtml(HttpStatusCode.OK) {
             loginPage()
+        }
+    }
+
+    get(Routes.Ui.Auth.FORGOT_PASSWORD) {
+        call.respondHtml(HttpStatusCode.OK) {
+            resetPasswordPage()
+        }
+    }
+
+    get(Routes.Ui.Auth.RESET_PASSWORD_WITH_TOKEN) {
+        val token = call.parameters["token"] ?: return@get call.respond(HttpStatusCode.BadRequest)
+        Logger.d("Received reset password token: $token")
+        call.respondHtml(HttpStatusCode.OK) {
+            resetPasswordPage(token)
         }
     }
 
@@ -212,5 +229,75 @@ fun Route.loginRoutes(
                 statusCode = if (isTokenValid) HttpStatusCode.OK else HttpStatusCode.Unauthorized
             )
         }
+    }
+    
+    // Password reset request
+    post(Routes.Api.Auth.REQUEST_PASSWORD_RESET) {
+        val request = kotlin.runCatching { call.receiveNullable<PasswordResetRequest>() }.getOrNull() 
+            ?: return@post respondHelper(success = false, message = "Invalid request", call = call, statusCode = HttpStatusCode.BadRequest)
+        
+        val email = request.email
+        if (email.isBlank() || !email.contains('@')) {
+            return@post respondHelper(success = false, message = "Invalid email", call = call, statusCode = HttpStatusCode.BadRequest)
+        }
+        
+        val user = userRepository.getUser(email)
+        if (user == null) {
+            // For security reasons, don't reveal if the email exists or not
+            return@post respondHelper(success = true, message = "If your email exists, you will receive a password reset link", call = call)
+        }
+        
+        // Generate a unique reset token
+        val resetToken = UUID.randomUUID().toString()
+        val expiresAt = System.currentTimeMillis() + (24 * 60 * 60 * 1000) // 24 hours
+        
+        val tokenSaved = userRepository.saveResetToken(email, resetToken, expiresAt)
+        if (!tokenSaved) {
+            return@post respondHelper(success = false, message = "Failed to process request", call = call, statusCode = HttpStatusCode.InternalServerError)
+        }
+        
+        // Send email with reset token
+        try {
+            // Get base URL from request
+            val baseUrl = call.request.origin.scheme + "://" + call.request.host()
+            emailService.sendPasswordResetEmail(email, resetToken, baseUrl)
+            respondHelper(success = true, message = "Password reset link sent", call = call)
+        } catch (e: Exception) {
+            Logger.d("Failed to send password reset email: ${e.message}")
+            respondHelper(success = false, message = "Failed to send password reset email", call = call, statusCode = HttpStatusCode.InternalServerError)
+        }
+    }
+    
+    // Reset password with token
+    post(Routes.Api.Auth.RESET_PASSWORD) {
+        val request = kotlin.runCatching { call.receiveNullable<ResetPasswordRequest>() }.getOrNull() 
+            ?: return@post respondHelper(success = false, message = "Invalid request", call = call, statusCode = HttpStatusCode.BadRequest)
+        
+        val token = request.token
+        val newPassword = request.newPassword
+        
+        if (newPassword.length < PASSWORD_MIN_LENGTH) {
+            return@post respondHelper(success = false, message = "Password too short", call = call, statusCode = HttpStatusCode.BadRequest)
+        }
+        
+        // Verify token and get user
+        val user = userRepository.getUserByResetToken(token)
+        if (user == null) {
+            return@post respondHelper(success = false, message = "Invalid or expired token", call = call, statusCode = HttpStatusCode.BadRequest)
+        }
+        
+        // Generate new password hash
+        val saltedHash = hashingService.generateSaltedHash(newPassword)
+        
+        // Update password
+        val updated = userRepository.updatePassword(user.id!!, saltedHash.hash, saltedHash.salt)
+        if (!updated) {
+            return@post respondHelper(success = false, message = "Failed to update password", call = call, statusCode = HttpStatusCode.InternalServerError)
+        }
+        
+        // Delete used token
+        userRepository.deleteResetToken(user.id)
+        
+        respondHelper(success = true, message = "Password has been reset successfully", call = call)
     }
 }

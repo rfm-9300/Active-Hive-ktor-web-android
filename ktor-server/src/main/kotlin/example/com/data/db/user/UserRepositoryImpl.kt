@@ -234,4 +234,82 @@ class UserRepositoryImpl: UserRepository {
             false
         }
     }
+    
+    override suspend fun saveResetToken(email: String, token: String, expiresAt: Long): Boolean = suspendTransaction {
+        try {
+            val user = UserTable.select { UserTable.email eq email }.singleOrNull() ?: return@suspendTransaction false
+            
+            // Update user record with reset token
+            UserTable.update({ UserTable.id eq user[UserTable.id] }) {
+                it[resetToken] = token
+                it[resetTokenExpiresAt] = expiresAt
+            }
+            
+            // Also create a record in the password reset table for tracking
+            PasswordResetTable.insert {
+                it[userId] = user[UserTable.id]
+                it[this.token] = token
+                it[this.expiresAt] = expiresAt
+                it[createdAt] = LocalDateTime.now()
+                it[isUsed] = false
+            }
+            
+            true
+        } catch (e: Exception) {
+            println("Error saving reset token: ${e.message}")
+            false
+        }
+    }
+    
+    override suspend fun getUserByResetToken(token: String): User? = suspendTransaction {
+        try {
+            val now = System.currentTimeMillis()
+            UserTable
+                .select { 
+                    (UserTable.resetToken eq token) and 
+                    (UserTable.resetTokenExpiresAt greater now) 
+                }
+                .singleOrNull()?.toUser()
+        } catch (e: Exception) {
+            println("Error getting user by reset token: ${e.message}")
+            null
+        }
+    }
+    
+    override suspend fun updatePassword(userId: Int, newPasswordHash: String, newSalt: String): Boolean = suspendTransaction {
+        try {
+            UserTable.update({ UserTable.id eq userId }) {
+                it[password] = newPasswordHash
+                it[salt] = newSalt
+            }
+            
+            // Also mark the token as used in the password reset table
+            val userResetToken = UserTable.select { UserTable.id eq userId }
+                .singleOrNull()?.get(UserTable.resetToken)
+                
+            if (userResetToken != null) {
+                PasswordResetTable.update({ (PasswordResetTable.userId eq userId) and (PasswordResetTable.token eq userResetToken) }) {
+                    it[isUsed] = true
+                }
+            }
+            
+            true
+        } catch (e: Exception) {
+            println("Error updating password: ${e.message}")
+            false
+        }
+    }
+    
+    override suspend fun deleteResetToken(userId: Int): Boolean = suspendTransaction {
+        try {
+            UserTable.update({ UserTable.id eq userId }) {
+                it[resetToken] = null
+                it[resetTokenExpiresAt] = null
+            }
+            true
+        } catch (e: Exception) {
+            println("Error deleting reset token: ${e.message}")
+            false
+        }
+    }
 }

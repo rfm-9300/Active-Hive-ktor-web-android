@@ -74,6 +74,14 @@ fun HTML.loginPage() {
                                 placeholder = "Enter your password"
                             }
                         }
+                        // Forgot password link
+                        div(classes = "text-right mt-1") {
+                            span(classes = "text-sm font-medium text-purple-600 hover:text-purple-500 cursor-pointer transition-colors duration-300") {
+                                attributes["hx-get"] = Routes.Ui.Auth.FORGOT_PASSWORD
+                                attributes["hx-target"] = "#main-content"
+                                +"Forgot Password?"
+                            }
+                        }
                     }
 
                     div {

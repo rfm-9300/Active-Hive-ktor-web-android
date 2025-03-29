@@ -23,6 +23,9 @@ object Routes {
         object Auth {
             const val LOGIN = "/login"
             const val SIGNUP = "/signup"
+            const val FORGOT_PASSWORD = "/forgot-password"
+            const val RESET_PASSWORD = "/reset-password"
+            const val RESET_PASSWORD_WITH_TOKEN = "/reset-password/{token}"
         }
 
         object Profile {
@@ -59,6 +62,8 @@ object Routes {
             const val GOOGLE_LOGIN = "/api/auth/google-login"
             const val SIGNUP = "/api/auth/signup"
             const val VERIFY = "/api/auth/verify"
+            const val REQUEST_PASSWORD_RESET = "/api/auth/request-password-reset"
+            const val RESET_PASSWORD = "/api/auth/reset-password"
         }
 
         object Profile {
@@ -98,7 +103,12 @@ object Routes {
             "%%API_UPDATE_PROFILE%%" to Api.Profile.UPDATE,
             "%%API_APPROVE_USER%%" to Api.Event.APPROVE_USER,
             "%%API_REMOVE_USER%%" to Api.Event.REMOVE_USER,
-            "%%UI_EVENT_DETAIL%%" to Ui.Event.DETAILS
+            "%%UI_EVENT_DETAIL%%" to Ui.Event.DETAILS,
+            "%%API_REQUEST_PASSWORD_RESET%%" to Api.Auth.REQUEST_PASSWORD_RESET,
+            "%%API_RESET_PASSWORD%%" to Api.Auth.RESET_PASSWORD,
+            "%%UI_FORGOT_PASSWORD%%" to Ui.Auth.FORGOT_PASSWORD,
+            "%%UI_RESET_PASSWORD%%" to Ui.Auth.RESET_PASSWORD,
+            "%%UI_RESET_PASSWORD_WITH_TOKEN%%" to Ui.Auth.RESET_PASSWORD_WITH_TOKEN
         )
     }
 }

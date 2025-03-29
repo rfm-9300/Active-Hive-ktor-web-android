@@ -6,6 +6,7 @@ val h2_version: String by project
 val exposed_version: String by project
 val commons_codec_version: String by project
 val koinVersion: String by project
+val jakarta_mail_version = "2.0.1"
 
 plugins {
     kotlin("jvm") version "2.0.20"
@@ -110,8 +111,9 @@ dependencies {
     // dotenv
     implementation("io.github.cdimascio:dotenv-kotlin:6.2.2") // Adjust the version if necessary
 
-
-
+    // Email
+    implementation("com.sun.mail:jakarta.mail:$jakarta_mail_version")
+    implementation("jakarta.activation:jakarta.activation-api:2.0.1")
 
     testImplementation("io.ktor:ktor-server-test-host-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")

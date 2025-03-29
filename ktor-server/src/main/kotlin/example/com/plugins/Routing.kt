@@ -8,6 +8,7 @@ import example.com.routes.*
 import example.com.security.hashing.HashingService
 import example.com.security.token.TokenConfig
 import example.com.security.token.TokenService
+import example.com.services.EmailService
 import io.ktor.server.application.*
 import io.ktor.server.routing.*
 
@@ -19,11 +20,12 @@ fun Application.configureRouting(
     tokenConfig: TokenConfig,
     sseManager: SseManager,  // Add these
     eventRepository: EventRepository,
-    postRepository: PostRepository
+    postRepository: PostRepository,
+    emailService: EmailService
 )  {
     routing {
         homeRoutes(sseManager, eventRepository, userRepository, postRepository )
-        loginRoutes(hashingService, userRepository, tokenService, tokenConfig)
+        loginRoutes(hashingService, userRepository, tokenService, tokenConfig, emailService)
         eventRoutes(eventRepository, sseManager, userRepository)
         dynamicJsProcessing()
         profileRoutes(userRepository)

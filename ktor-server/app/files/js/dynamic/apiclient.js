@@ -19,6 +19,10 @@ class ApiClient {
         APPROVE_USER: '%%API_APPROVE_USER%%',
         EVENT_DETAIL: '%%UI_EVENT_DETAIL%%',
         REMOVE_USER: '%%API_REMOVE_USER%%',
+        REQUEST_PASSWORD_RESET: '%%API_REQUEST_PASSWORD_RESET%%',
+        RESET_PASSWORD: '%%API_RESET_PASSWORD%%',
+        FORGOT_PASSWORD: '%%UI_FORGOT_PASSWORD%%',
+        RESET_PASSWORD_PAGE: '%%UI_RESET_PASSWORD%%',
     }
 
     constructor(baseURL = '') {
