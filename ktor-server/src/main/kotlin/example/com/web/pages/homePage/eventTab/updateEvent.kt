@@ -14,14 +14,14 @@ fun HTML.updateEvent(event: Event) {
             div(classes = "w-[80%] mx-auto") {
                 // Header section
                 div(classes = "flex justify-between items-center mb-6") {
-                    p(classes = "text-2xl font-bold text-blue-600") { +"Update Event" }
+                    p(classes = "text-2xl font-bold text-slate-800") { +"Update Event" }
                 }
 
                 // Form container with consistent styling
                 form(
                     action = "#",
                     method = FormMethod.post,
-                    classes = "bg-white bg-opacity-80 shadow-lg rounded-xl border border-blue-200 p-6 transition-all duration-300",
+                    classes = "bg-white bg-opacity-80 shadow-lg rounded-xl border border-slate-200 p-6 transition-all duration-300",
                     encType = FormEncType.multipartFormData
                 ) {
                     id = "event-form"
@@ -39,7 +39,7 @@ fun HTML.updateEvent(event: Event) {
                             attributes["for"] = "title"
                             +"Event Title"
                         }
-                        input(classes = "shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent") {
+                        input(classes = "shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent") {
                             attributes["type"] = "text"
                             attributes["name"] = "title"
                             attributes["id"] = "title"
@@ -54,7 +54,7 @@ fun HTML.updateEvent(event: Event) {
                             attributes["for"] = "description"
                             +"Description"
                         }
-                        textArea(classes = "shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent") {
+                        textArea(classes = "shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent") {
                             attributes["name"] = "description"
                             attributes["id"] = "description"
                             attributes["rows"] = "4"
@@ -76,7 +76,7 @@ fun HTML.updateEvent(event: Event) {
                                     attributes["for"] = "date"
                                     +"Date"
                                 }
-                                input(classes = "shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent") {
+                                input(classes = "shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent") {
                                     attributes["type"] = "date"
                                     attributes["name"] = "date"
                                     attributes["id"] = "date"
@@ -93,7 +93,7 @@ fun HTML.updateEvent(event: Event) {
                                 div(classes = "flex items-center gap-2") {
                                     // Hour input
                                     div(classes = "flex-1") {
-                                        input(classes = "shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent") {
+                                        input(classes = "shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent") {
                                             attributes["type"] = "number"
                                             attributes["name"] = "hour"
                                             attributes["id"] = "hour"
@@ -110,7 +110,7 @@ fun HTML.updateEvent(event: Event) {
                                     
                                     // Minute input
                                     div(classes = "flex-1") {
-                                        input(classes = "shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent") {
+                                        input(classes = "shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent") {
                                             attributes["type"] = "number"
                                             attributes["name"] = "minute"
                                             attributes["id"] = "minute"
@@ -143,7 +143,7 @@ fun HTML.updateEvent(event: Event) {
                             attributes["for"] = "location"
                             +"Location"
                         }
-                        input(classes = "shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent") {
+                        input(classes = "shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent") {
                             attributes["type"] = "text"
                             attributes["name"] = "location"
                             attributes["id"] = "location"
@@ -157,7 +157,7 @@ fun HTML.updateEvent(event: Event) {
                             attributes["for"] = "maxAttendees"
                             +"Max Attendees"
                         }
-                        input(classes = "shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent") {
+                        input(classes = "shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent") {
                             attributes["type"] = "number"
                             attributes["name"] = "maxAttendees"
                             attributes["id"] = "maxAttendees"
@@ -173,10 +173,10 @@ fun HTML.updateEvent(event: Event) {
                             attributes["for"] = "image"
                             +"Event Image"
                         }
-                        div(classes = "mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-blue-500 transition-colors duration-300") {
+                        div(classes = "mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-lg hover:border-purple-500 transition-colors duration-300") {
                             div(classes = "space-y-2 text-center") {
                                 div(classes = "flex text-sm text-gray-600 justify-center items-center") {
-                                    label(classes = "relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-blue-500") {
+                                    label(classes = "relative cursor-pointer bg-white rounded-md font-medium text-purple-600 hover:text-purple-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-purple-500") {
                                         input(classes = "sr-only") {
                                             attributes["type"] = "file"
                                             attributes["name"] = "image"
@@ -216,7 +216,7 @@ fun HTML.updateEvent(event: Event) {
                     // Approval requirement checkbox
                     div(classes = "mb-6") {
                         div(classes = "flex items-center") {
-                            input(classes = "h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded") {
+                            input(classes = "h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded") {
                                 attributes["type"] = "checkbox"
                                 attributes["name"] = "needsApproval"
                                 attributes["id"] = "needsApproval"
@@ -236,13 +236,13 @@ fun HTML.updateEvent(event: Event) {
 
                     // Action buttons with consistent styling
                     div(classes = "flex items-center justify-between gap-4") {
-                        button(classes = "bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded-lg shadow-md transition-colors duration-300") {
+                        button(classes = "bg-slate-500 hover:bg-slate-600 text-white px-6 py-2 rounded-lg shadow-md transition-colors duration-300") {
                             attributes["type"] = "button"
                             attributes["hx-get"] = "/events/upcoming"
                             attributes["hx-target"] = "#main-content"
                             +"Cancel"
                         }
-                        button(classes = "bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg shadow-md transition-colors duration-300") {
+                        button(classes = "bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg shadow-md transition-colors duration-300") {
                             attributes["type"] = "button"
                             attributes["id"] = "submit-btn"
                             +"Update Event"

@@ -101,7 +101,10 @@ fun Route.homeRoutes(
 
     get("/") {
         call.respondHtml(HttpStatusCode.OK){
-            homePage(eventRepository)
+            homePage(
+                eventRepository = eventRepository,
+                isAdminRequest = isUserAdmin(getUserIdFromCookies().toString())
+            )
         }
     }
 
