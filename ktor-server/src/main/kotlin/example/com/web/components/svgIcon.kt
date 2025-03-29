@@ -150,11 +150,30 @@ fun HtmlBlockTag.svgIcon(icon: SvgIcon, classes: String = "", size: Int = 24) {
                     <circle cx="12" cy="9" r="2.5"/>
                 </svg>
                 """
+                SvgIcon.EMAIL -> +"""
+                <svg class="$classes" width="$size" height="$size" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                """
+                SvgIcon.LOCK -> +"""
+                <svg class="$classes" width="$size" height="$size" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
+                """
+                SvgIcon.LOGIN -> +"""
+                <svg class="$classes" width="$size" height="$size" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                    <polyline points="10 17 15 12 10 7"></polyline>
+                    <line x1="15" y1="12" x2="3" y2="12"></line>
+                </svg>
+                """
             }
         }
     }
 }
 
 enum class SvgIcon {
-    BEE, MENU, CLOSE, SEARCH, DEFAULT, LIKE, TIME, DELETE, EDIT, FACEBOOK, X, CHEVRON_DOWN, CALENDAR, ARROW_LEFT, HOME, PROFILE, SETTINGS, LOGOUT, CHECK_CIRCLE, LOCATION
+    BEE, MENU, CLOSE, SEARCH, DEFAULT, LIKE, TIME, DELETE, EDIT, FACEBOOK, X, CHEVRON_DOWN, CALENDAR, ARROW_LEFT, HOME, PROFILE, SETTINGS, LOGOUT, CHECK_CIRCLE, LOCATION, EMAIL, LOCK, LOGIN
 }
