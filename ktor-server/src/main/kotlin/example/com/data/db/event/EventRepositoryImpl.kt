@@ -165,22 +165,37 @@ class EventRepositoryImpl: EventRepository {
     }
 
     override suspend fun approveUser(eventId: Int, userId: Int): Boolean = suspendTransaction {
-        Logger.d("Approving user: $userId for event: $eventId")
+        // First, check if the user is in the waiting list
+        val waitingListEntry = EventWaitingListTable.select {
+            (EventWaitingListTable.eventId eq eventId) and (EventWaitingListTable.userId eq userId)
+        }.firstOrNull() ?: return@suspendTransaction false
+
+        // Delete from waiting list
+        EventWaitingListTable.deleteWhere {
+            (EventWaitingListTable.eventId eq eventId) and (EventWaitingListTable.userId eq userId)
+        }
+
+        // Add to attendees
+        EventAttendeeTable.insert {
+            it[EventAttendeeTable.eventId] = eventId
+            it[EventAttendeeTable.userId] = userId
+            it[joinedAt] = LocalDateTime.now()
+        }
+
+        true
+    }
+
+    override suspend fun removeUserFromEvent(eventId: Int, userId: Int): Boolean = suspendTransaction {
         try {
-            val removedFromWaitingList = EventWaitingListTable.deleteWhere {
-                (EventWaitingListTable.eventId eq eventId) and (EventWaitingListTable.userId eq userId)
+            // Delete the user from attendees
+            val deletedRows = EventAttendeeTable.deleteWhere {
+                (EventAttendeeTable.eventId eq eventId) and (EventAttendeeTable.userId eq userId)
             }
-            if (removedFromWaitingList < 0) {
-                return@suspendTransaction false
-            }
-            val joinedEvent = EventAttendeeTable.insert {
-                it[this.eventId] = eventId
-                it[this.userId] = userId
-                it[joinedAt] = LocalDateTime.now()
-            }.insertedCount
-            joinedEvent > 0
+            
+            // Return true if at least one row was deleted
+            deletedRows > 0
         } catch (e: Exception) {
-            Logger.d("Error approving user: $e")
+            Logger.d("Error removing user from event: ${e.message}")
             false
         }
     }

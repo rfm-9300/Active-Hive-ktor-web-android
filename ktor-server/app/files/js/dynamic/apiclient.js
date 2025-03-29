@@ -18,6 +18,7 @@ class ApiClient {
         CREATE_POST: '%%API_CREATE_POST%%',
         APPROVE_USER: '%%API_APPROVE_USER%%',
         EVENT_DETAIL: '%%UI_EVENT_DETAIL%%',
+        REMOVE_USER: '%%API_REMOVE_USER%%',
     }
 
     constructor(baseURL = '') {

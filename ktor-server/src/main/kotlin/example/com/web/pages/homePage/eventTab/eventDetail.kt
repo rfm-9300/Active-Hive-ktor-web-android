@@ -123,7 +123,7 @@ fun HTML.eventDetail(event: Event, requestUser: UserProfile?) {
                         } else {
                             div(classes = "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2") {
                                 event.attendees.forEach { attendee ->
-                                    div(classes = "flex items-center p-2 rounded-md ${if (requestUser?.userId == attendee.userId) "bg-blue-100" else ""}") {
+                                    div(classes = "flex items-center p-2 rounded-md ${if (requestUser?.userId == attendee.userId) "bg-purple-100" else ""}") {
                                         // Profile image placeholder or actual image if available
                                         if (attendee.profileImagePath.isNotEmpty()) {
                                             img(
@@ -131,15 +131,28 @@ fun HTML.eventDetail(event: Event, requestUser: UserProfile?) {
                                                 classes = "w-8 h-8 rounded-full object-cover mr-2"
                                             )
                                         } else {
-                                            div(classes = "w-8 h-8 rounded-full bg-blue-300 flex items-center justify-center mr-2 text-white font-bold") {
+                                            div(classes = "w-8 h-8 rounded-full bg-purple-300 flex items-center justify-center mr-2 text-white font-bold") {
                                                 +(attendee.firstName.firstOrNull()?.toString() ?: "")
                                             }
                                         }
 
-                                        span { +"${attendee.firstName} ${attendee.lastName}" }
+                                        // User name with flex-grow to push remove button to right
+                                        div(classes = "flex-grow") {
+                                            span { +"${attendee.firstName} ${attendee.lastName}" }
 
-                                        if (requestUser?.userId == attendee.userId) {
-                                            span(classes = "ml-1 text-blue-600 text-xs font-bold") { +"(You)" }
+                                            if (requestUser?.userId == attendee.userId) {
+                                                span(classes = "ml-1 text-purple-600 text-xs font-bold") { +"(You)" }
+                                            }
+                                        }
+                                        
+                                        // Remove button - only visible to organizer/admin
+                                        if (isAdmin && requestUser?.userId != attendee.userId) {
+                                            button(classes = "text-slate-400 hover:text-red-500 transition-colors ml-2") {
+                                                attributes["type"] = "button"
+                                                attributes["title"] = "Remove user"
+                                                attributes["onclick"] = "removeUser(${event.id}, ${attendee.userId})"
+                                                svgIcon(SvgIcon.CLOSE, "w-4 h-4")
+                                            }
                                         }
                                     }
                                 }

@@ -5,6 +5,7 @@ import example.com.data.db.event.EventRepository
 import example.com.data.db.user.UserRepository
 import example.com.data.requests.ApproveUserEventRequest
 import example.com.data.requests.EventRequest
+import example.com.data.requests.RemoveUserEventRequest
 import example.com.data.responses.CreateEventResponse
 import example.com.data.utils.SseAction
 import example.com.data.utils.SseManager
@@ -62,6 +63,46 @@ fun Route.eventRoutes(
                     HttpStatusCode.BadRequest, CreateEventResponse(
                         success = false,
                         message = "Error approving user: ${e.message}"
+                    )
+                )
+            }
+        }
+    }
+
+    // api remove user from event
+    authenticate {
+        post(Routes.Api.Event.REMOVE_USER) {
+            try {
+                val request = call.receive<RemoveUserEventRequest>()
+                val requestUserId = getUserIdFromRequestToken(call) ?: return@post respondHelper(success = false, message = "User not found", call = call)
+
+                if(!isUserAdmin(requestUserId)) {
+                    return@post respondHelper(success = false, message = "Unauthorized", call = call)
+                }
+
+                val event = eventRepository.getEvent(request.eventId) ?: return@post respondHelper(success = false, message = "Event not found", call = call)
+
+                // Make sure the requester is either an admin or the event organizer
+                if(requestUserId.toInt() != event.organizerId && !isUserAdmin(requestUserId)) {
+                    return@post respondHelper(success = false, message = "Unauthorized", call = call)
+                }
+
+                val removed = eventRepository.removeUserFromEvent(eventId = request.eventId, userId = request.userId)
+                
+                if (removed) {
+                    sseManager.emitEvent(SseAction.RefreshEvents)
+                }
+
+                call.respond(HttpStatusCode.OK, CreateEventResponse(
+                    success = removed,
+                    message = if (removed) "User removed successfully" else "Failed to remove user"
+                ))
+            } catch (e: Exception) {
+                Logger.d("Error removing user: ${e.message}")
+                call.respond(
+                    HttpStatusCode.BadRequest, CreateEventResponse(
+                        success = false,
+                        message = "Error removing user: ${e.message}"
                     )
                 )
             }

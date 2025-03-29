@@ -7,3 +7,9 @@ data class ApproveUserEventRequest(
     val eventId: Int,
     val userId: Int
 )
+
+@Serializable
+data class RemoveUserEventRequest(
+    val eventId: Int,
+    val userId: Int
+)

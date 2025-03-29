@@ -43,6 +43,7 @@ object Routes {
             const val LIST = "/api/events"
             const val JOIN_EVENT = "/api/events/join"
             const val APPROVE_USER = "/api/events/approve"
+            const val REMOVE_USER = "/api/events/remove-user"
         }
 
         object Post {
@@ -96,6 +97,7 @@ object Routes {
             "%%UI_EVENTS_UPCOMING%%" to Ui.Event.LIST_UPCOMING,
             "%%API_UPDATE_PROFILE%%" to Api.Profile.UPDATE,
             "%%API_APPROVE_USER%%" to Api.Event.APPROVE_USER,
+            "%%API_REMOVE_USER%%" to Api.Event.REMOVE_USER,
             "%%UI_EVENT_DETAIL%%" to Ui.Event.DETAILS
         )
     }

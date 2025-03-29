@@ -37,6 +37,27 @@ async function approveUser(eventId, userId) {
     }
 }
 
+async function removeUser(eventId, userId) {
+    // Show confirmation dialog
+    if (!confirm("Are you sure you want to remove this user from the event?")) {
+        return;
+    }
+    
+    const data = await window.api.post(ApiClient.ENDPOINTS.REMOVE_USER, { eventId: eventId, userId: userId });
+    console.log('User removed:', data.success);
+    
+    if (data.success) {
+        // Refresh the event details page to show updated attendee list
+        const contentDiv = document.getElementById('main-content');
+        const eventDetailUrl = `${ApiClient.ENDPOINTS.EVENT_DETAIL.replace("{eventId}", eventId)}`;
+        const html = await window.api.getHtml(eventDetailUrl);
+        contentDiv.innerHTML = html;
+        showAlert("User removed successfully", "success");
+    } else {
+        showAlert(data.message || "Failed to remove user", "error");
+    }
+}
+
 function updateCountdown() {
     const now = new Date();
     const eventTime = new Date(eventDate);
