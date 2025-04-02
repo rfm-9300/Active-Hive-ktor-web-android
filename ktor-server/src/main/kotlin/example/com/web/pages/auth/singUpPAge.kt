@@ -30,7 +30,6 @@ fun HTML.signupPage() {
                         name = "first-name"
                         required = true
                         placeholder = "Enter your first name"
-                        value = "Rodrigo"
                     }
                 }
                 div {
@@ -44,7 +43,6 @@ fun HTML.signupPage() {
                         name = "last-name"
                         required = true
                         placeholder = "Enter your last name"
-                        value = "Doe"
                     }
                 }
 
@@ -59,7 +57,6 @@ fun HTML.signupPage() {
                         name = "email"
                         required = true
                         placeholder = "Enter your email"
-                        value = "eventpagetest@hive.com"
                     }
                 }
 
@@ -74,7 +71,6 @@ fun HTML.signupPage() {
                         name = "password"
                         required = true
                         placeholder = "Enter your password"
-                        value = "passwordsdsd!!!sSSD-ée"
                     }
                 }
 
@@ -89,7 +85,6 @@ fun HTML.signupPage() {
                         name = "confirm-password"
                         required = true
                         placeholder = "Confirm your password"
-                        value = "passwordsdsd!!!sSSD-ée"
                     }
                 }
 
