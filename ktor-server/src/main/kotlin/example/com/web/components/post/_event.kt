@@ -6,6 +6,7 @@ import example.com.data.db.user.UserRepository
 import example.com.routes.Routes
 import example.com.web.components.SvgIcon
 import example.com.web.components.svgIcon
+import example.com.web.components.userProfileImage
 import kotlinx.coroutines.runBlocking
 import kotlinx.html.*
 import org.koin.java.KoinJavaComponent.getKoin
@@ -39,12 +40,11 @@ fun HtmlBlockTag.event(event: Event, isAdminRequest: Boolean = false) {
     // padding if no icons
     val padding = if (isAdminRequest) "" else "py-6"
 
-    val profileImagePath = if (user?.profileImagePath?.isEmpty() == true) "/resources/images/default-user-image.webp" else "/resources/uploads/images/${user?.profileImagePath}"
-
-
     div(classes = "flex flex-col sm:flex-row items-center w-full sm:w-[80%] space-y-3 sm:space-y-0 sm:space-x-4 group mb-4") {
         // Date container
-        div(classes = "flex flex-col items-center justify-center w-full sm:w-24 min-w-[6rem] p-3 text-center shadow-md backdrop-blur-sm rounded-xl border transition-all duration-300 $todayClass $padding") {
+        div(classes = "flex flex-col items-center justify-center w-full sm:w-24 min-w-[6rem] p-3 text-center shadow-md backdrop-blur-sm rounded-xl border transition-all duration-300 " + 
+             (if (isToday) "border-indigo-400 bg-indigo-50/80" else "border-blue-200 bg-blue-50/80") +
+             (if (isAdminRequest) "" else " py-6")) {
             p(classes = "text-lg font-semibold text-blue-600") { +date }
             p(classes = "text-sm text-blue-400 capitalize") { +dayOfWeek.take(3).lowercase() }
 
@@ -89,11 +89,17 @@ fun HtmlBlockTag.event(event: Event, isAdminRequest: Boolean = false) {
                         }
 
                         div(classes = "flex items-center") {
-                            span {
-                                img(classes = "object-cover w-4 h-4 rounded-full mr-2", src = profileImagePath, alt = "Active Hive Logo")
+                            // Updated to use userProfileImage component
+                            div(classes = "w-4 h-4 rounded-full overflow-hidden mr-2") {
+                                user?.profileImagePath?.let { 
+                                    userProfileImage(
+                                        it,
+                                        "Profile picture of ${event.organizerName}",
+                                        "w-full h-full object-cover"
+                                    )
+                                }
                             }
                             p(classes = "text-sm text-blue-500") {
-
                                 +"Hosted by "
                                 span(classes = "font-medium text-blue-600") { +event.organizerName }
                             }
@@ -127,9 +133,6 @@ fun HtmlBlockTag.event(event: Event, isAdminRequest: Boolean = false) {
                         }
                     }
                 }
-
-
-
             }
         }
     }
