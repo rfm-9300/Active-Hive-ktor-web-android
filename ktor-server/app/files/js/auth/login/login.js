@@ -56,7 +56,7 @@ function initGoogleSignIn() {
     script.onload = function() {
         // Initialize Google Sign-In client
         google.accounts.id.initialize({
-            client_id: 'YOUR_GOOGLE_CLIENT_ID', // Replace with your actual Google Client ID
+            client_id: '1033467061192-r10l64e9rui96nr6qo0m1h46u4u6up3i.apps.googleusercontent.com', // Replace with your actual Google Client ID
             callback: handleGoogleSignIn,
             auto_select: false,
             cancel_on_tap_outside: true,

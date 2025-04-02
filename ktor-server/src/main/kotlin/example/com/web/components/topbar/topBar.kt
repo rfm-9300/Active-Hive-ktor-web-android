@@ -8,7 +8,6 @@ import example.com.web.utils.Strings
 import kotlinx.html.*
 
 fun HtmlBlockTag.topbar() {
-    val title = Strings.Home.COMMUNITY_NAME
 
     div(classes = "w-full flex items-center justify-between px-4 backdrop-blur-sm transition-all duration-300") {
         style = "border-bottom: 1px solid rgba(0, 0, 0, 0.05);"

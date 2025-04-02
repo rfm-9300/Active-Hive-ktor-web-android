@@ -87,7 +87,7 @@ class UserRepositoryImpl: UserRepository {
                         it[UserProfilesTable.firstName] = firstName
                         it[UserProfilesTable.lastName] = lastName
                         it[UserProfilesTable.email] = email
-                        // Only update image if provided
+                        // For Google users, store the complete URL
                         if (profileImageUrl.isNotEmpty()) {
                             it[UserProfilesTable.imagePath] = profileImageUrl
                         }
@@ -114,7 +114,7 @@ class UserRepositoryImpl: UserRepository {
                         it[UserTable.authProvider] = AuthProvider.GOOGLE.name
                         it[UserTable.verified] = true
                     }
-                    
+
                     return@suspendTransaction User(
                         id = existingEmailUser[UserTable.id].value,
                         email = email,
@@ -134,7 +134,7 @@ class UserRepositoryImpl: UserRepository {
                         it[UserTable.createdAt] = LocalDateTime.now()
                     } get UserTable.id
                     
-                    // Create user profile
+                    // Create user profile with Google profile image URL
                     UserProfilesTable.insert {
                         it[UserProfilesTable.userId] = userId
                         it[UserProfilesTable.firstName] = firstName
@@ -142,6 +142,7 @@ class UserRepositoryImpl: UserRepository {
                         it[UserProfilesTable.email] = email
                         it[UserProfilesTable.phone] = ""
                         it[UserProfilesTable.joinedAt] = LocalDateTime.now()
+                        // Store the full URL for Google profile images
                         it[UserProfilesTable.imagePath] = profileImageUrl.ifEmpty { "profile" }
                     }
                     

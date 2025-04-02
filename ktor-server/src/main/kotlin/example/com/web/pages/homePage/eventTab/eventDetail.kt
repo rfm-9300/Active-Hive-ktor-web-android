@@ -6,6 +6,7 @@ import example.com.routes.Routes
 import example.com.web.components.SvgIcon
 import example.com.web.components.projectButton
 import example.com.web.components.svgIcon
+import example.com.web.components.userProfileImage
 import example.com.web.loadJs
 import kotlinx.html.*
 import java.net.URLEncoder
@@ -124,16 +125,13 @@ fun HTML.eventDetail(event: Event, requestUser: UserProfile?) {
                             div(classes = "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2") {
                                 event.attendees.forEach { attendee ->
                                     div(classes = "flex items-center p-2 rounded-md ${if (requestUser?.userId == attendee.userId) "bg-purple-100" else ""}") {
-                                        // Profile image placeholder or actual image if available
-                                        if (attendee.profileImagePath.isNotEmpty()) {
-                                            img(
-                                                src = "/resources/uploads/images/${attendee.profileImagePath}",
-                                                classes = "w-8 h-8 rounded-full object-cover mr-2"
+                                        // Profile image - UPDATED
+                                        div(classes = "w-8 h-8 rounded-full overflow-hidden mr-2") {
+                                            userProfileImage(
+                                                attendee.profileImagePath,
+                                                "${attendee.firstName}'s profile",
+                                                "w-full h-full object-cover"
                                             )
-                                        } else {
-                                            div(classes = "w-8 h-8 rounded-full bg-purple-300 flex items-center justify-center mr-2 text-white font-bold") {
-                                                +(attendee.firstName.firstOrNull()?.toString() ?: "")
-                                            }
                                         }
 
                                         // User name with flex-grow to push remove button to right
@@ -221,15 +219,13 @@ fun HTML.eventDetail(event: Event, requestUser: UserProfile?) {
                                 event.waitingList.forEach { waitingList ->
                                     div(classes = "flex flex-row justify-between py-2 border-b border-gray-200 text-sm items-center") {
                                         div(classes = "flex items-center w-1/3") {
-                                            if (waitingList.user.profileImagePath.isNotEmpty()) {
-                                                img(
-                                                    src = "/resources/uploads/images/${waitingList.user.profileImagePath}",
-                                                    classes = "w-8 h-8 rounded-full object-cover mr-2"
+                                            // UPDATED: Use userProfileImage
+                                            div(classes = "w-8 h-8 rounded-full overflow-hidden mr-2") {
+                                                userProfileImage(
+                                                    waitingList.user.profileImagePath,
+                                                    "${waitingList.user.firstName}'s profile",
+                                                    "w-full h-full object-cover"
                                                 )
-                                            } else {
-                                                div(classes = "w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center mr-2 text-white") {
-                                                    +(waitingList.user.firstName.firstOrNull()?.toString() ?: "")
-                                                }
                                             }
                                             p { +"${waitingList.user.firstName} ${waitingList.user.lastName}" }
                                         }
@@ -252,7 +248,7 @@ fun HTML.eventDetail(event: Event, requestUser: UserProfile?) {
 
             // Set the event date variable for the JavaScript to use
             script { +"const eventDate = '${event.date}'; const eventId = ${event.id};" }
-            script { +"setNavigateUrl(${Routes.Ui.Event})" }
+            script { +"setNavigateUrl('${Routes.Ui.Event}');" }
 
             // Load the external JS file that contains the functions
             loadJs("event/event-detail")

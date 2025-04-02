@@ -6,6 +6,7 @@ import example.com.data.utils.monthYear
 import example.com.web.components.layout.layout
 import example.com.web.components.svgIcon
 import example.com.web.components.SvgIcon
+import example.com.web.components.userProfileImage
 import example.com.web.loadJs
 import kotlinx.html.*
 import java.time.format.DateTimeFormatter
@@ -31,10 +32,10 @@ fun HTML.profilePage(user: UserProfile) {
                 div(classes = "flex flex-col md:flex-row items-center md:items-start gap-6") {
                     // Profile Image Section
                     div(classes = "relative group") {
-                        img(
-                            src = "/resources/uploads/images/${user.profileImagePath}",
-                            alt = "Profile picture of $userName",
-                            classes = "w-32 h-32 rounded-full object-cover border-4 border-blue-100 shadow-lg"
+                        userProfileImage(
+                            user.profileImagePath,
+                            "Profile picture of $userName",
+                            "w-32 h-32 rounded-full object-cover border-4 border-blue-100 shadow-lg"
                         )
 
                         // Edit button (hidden by default, shown on hover)

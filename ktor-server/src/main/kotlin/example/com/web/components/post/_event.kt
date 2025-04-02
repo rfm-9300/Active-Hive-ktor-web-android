@@ -74,7 +74,6 @@ fun HtmlBlockTag.event(event: Event, isAdminRequest: Boolean = false) {
         div(classes = "flex-1 p-4 bg-white backdrop-blur-sm rounded-xl border border-blue-100 shadow-md hover:shadow-lg hover:border-blue-400 hover:bg-blue-50 transition-all duration-300 cursor-pointer group-hover:translate-x-1 w-full") {
             attributes["hx-get"] = url
             attributes["hx-target"] = "#main-content"
-            attributes["hx-swap"] = "innerHTML transition:fade duration:300ms"
 
             div(classes = "flex flex-col items-center justify-between gap-3") {
 
