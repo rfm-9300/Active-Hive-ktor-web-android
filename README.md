@@ -1,4 +1,4 @@
-# Active Hive - Event Management Platform
+# Events Lisbon - Event Management Platform
 - WIP -  finished the web page and starting now the mobile apps
 
 - app in production at: https://eventslisbon.tech/
