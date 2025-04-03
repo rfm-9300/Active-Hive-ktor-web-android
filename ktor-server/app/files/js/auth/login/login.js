@@ -101,6 +101,8 @@ function initFacebookSignIn() {
         document.getElementById('facebook-login-btn').addEventListener('click', function() {
             FB.login(function(response) {
                 if (response.authResponse) {
+                    console.log('Facebook auth response:', response);
+                    // Pass the access token directly to the handler instead of using global state
                     handleFacebookSignIn(response.authResponse.accessToken);
                 } else {
                     showAlert('Facebook login was cancelled or failed', 'error');

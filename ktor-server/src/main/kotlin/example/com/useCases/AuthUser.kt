@@ -96,15 +96,25 @@ class AuthUser(
     
     private suspend fun verifyFacebookToken(accessToken: String): JsonObject? {
         return try {
-            // First validate the token with Facebook
-            val validateUrl = "https://graph.facebook.com/debug_token?input_token=$accessToken&access_token=$accessToken"
+            // Use App ID and App Secret to create an app access token for validation
+            val appId = System.getenv("FACEBOOK_APP_ID") ?: "2148179182319157"
+            val appSecret = System.getenv("FACEBOOK_APP_SECRET") ?: "87db1b61aa742278aa08d6514fe9d510"
+            
+            // First validate the token with Facebook using App Access Token
+            val appAccessToken = "$appId|$appSecret"
+            val validateUrl = "https://graph.facebook.com/debug_token?input_token=$accessToken&access_token=$appAccessToken"
+            
+            println("Validating Facebook token with URL: $validateUrl")
             
             val validateResponse = withContext(Dispatchers.IO) {
                 httpClient.get(validateUrl)
             }
             
             if (validateResponse.status.isSuccess()) {
-                val validateData = Json.parseToJsonElement(validateResponse.bodyAsText()).jsonObject
+                val validateResponseText = validateResponse.bodyAsText()
+                println("Facebook validation response: $validateResponseText")
+                
+                val validateData = Json.parseToJsonElement(validateResponseText).jsonObject
                 val isValid = validateData["data"]?.jsonObject?.get("is_valid")?.jsonPrimitive?.booleanOrNull ?: false
                 
                 if (!isValid) {
@@ -121,15 +131,20 @@ class AuthUser(
                 
                 if (userResponse.status.isSuccess()) {
                     val responseText = userResponse.bodyAsText()
+                    println("Facebook user info response: $responseText")
                     Json.parseToJsonElement(responseText).jsonObject
                 } else {
+                    println("Failed to get Facebook user info: ${userResponse.status}")
                     null
                 }
             } else {
+                println("Failed to validate Facebook token: ${validateResponse.status}")
+                println("Response body: ${validateResponse.bodyAsText()}")
                 null
             }
         } catch (e: Exception) {
             println("Error verifying Facebook token: ${e.message}")
+            e.printStackTrace()
             null
         }
     }

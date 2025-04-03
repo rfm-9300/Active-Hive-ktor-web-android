@@ -91,6 +91,7 @@ object Routes {
             "%%SSE_CONNECTION%%" to Sse.SSE_CONNECTION,
             "%%API_LOGIN%%" to Api.Auth.LOGIN,
             "%%API_GOOGLE_LOGIN%%" to Api.Auth.GOOGLE_LOGIN,
+            "%%API_FACEBOOK_LOGIN%%" to Api.Auth.FACEBOOK_LOGIN,
             "%%API_SIGNUP%%" to Api.Auth.SIGNUP,
             "%%API_JOIN_EVENT%%" to Api.Event.JOIN_EVENT,
             "%%PROFILE_MENU%%" to Ui.Home.PROFILE_MENU,
