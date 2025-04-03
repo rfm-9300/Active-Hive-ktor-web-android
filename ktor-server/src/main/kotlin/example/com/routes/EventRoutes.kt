@@ -266,7 +266,11 @@ fun Route.eventRoutes(
                     needsApproval = needsApproval
                 )
 
-                val eventID = eventRepository.addEvent(event) ?: throw Exception("Error creating event")
+                Logger.d("Attempting to create event: $event")
+                val eventID = eventRepository.addEvent(event)
+                if (eventID == null) {
+                    throw Exception("Failed to add event to database")
+                }
                 Logger.d("Event created successfully")
                 call.respond(
                     HttpStatusCode.Created,

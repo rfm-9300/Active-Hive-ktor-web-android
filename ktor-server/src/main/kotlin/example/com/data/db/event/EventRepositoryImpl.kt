@@ -23,7 +23,9 @@ class EventRepositoryImpl: EventRepository {
             }.value
             eventId // Return the generated event ID
         } catch (e: Exception) {
-            throw e
+            Logger.d("Detailed event creation error: ${e.message}")
+            e.printStackTrace() // Add this to get full stack trace
+            null
         }
     }
 

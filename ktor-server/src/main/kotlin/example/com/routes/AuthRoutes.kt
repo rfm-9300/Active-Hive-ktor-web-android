@@ -26,6 +26,9 @@ import io.ktor.server.plugins.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.UUID
 
 const val PASSWORD_MIN_LENGTH = 8
@@ -263,10 +266,22 @@ fun Route.loginRoutes(
         try {
             // Get base URL from request
             val baseUrl = call.request.origin.scheme + "://" + call.request.host()
-            emailService.sendPasswordResetEmail(email, resetToken, baseUrl)
+
+            // First respond to the client
             respondHelper(success = true, message = "Password reset link sent", call = call)
+
+            // Then send the email in the background
+
+            CoroutineScope(Dispatchers.Default).launch {
+                try {
+                    emailService.sendPasswordResetEmail(email, resetToken, baseUrl)
+                    Logger.d("Password reset email sent to $email")
+                } catch (e: Exception) {
+                    Logger.d("Failed to send password reset email: ${e.message}")
+                }
+            }
         } catch (e: Exception) {
-            Logger.d("Failed to send password reset email: ${e.message}")
+            Logger.d("Failed to setup email sending: ${e.message}")
             respondHelper(success = false, message = "Failed to send password reset email", call = call, statusCode = HttpStatusCode.InternalServerError)
         }
     }

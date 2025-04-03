@@ -41,17 +41,16 @@ fun Application.module() {
     )
     val hashingService = SHA256HashingService()
 
-    val isProduction = environment.config.propertyOrNull("smtp.production")?.getString() == "true"
-    Logger.d("Is production: $isProduction")
     // Create email service
     val emailService = EmailService(
-        smtpHost = environment.config.propertyOrNull("smtp.host")?.getString() ?: "smtp.example.com",
+        smtpHost = environment.config.propertyOrNull("smtp.host")?.getString() ?: "smtp.gmail.com",
         smtpPort = environment.config.propertyOrNull("smtp.port")?.getString()?.toInt() ?: 587,
-        username = environment.config.propertyOrNull("smtp.username")?.getString() ?: "user",
+        username = environment.config.propertyOrNull("smtp.username")?.getString() ?: "abizaria@gmail.com",
         password = environment.config.propertyOrNull("smtp.password")?.getString() ?: "password",
         fromEmail = environment.config.propertyOrNull("smtp.from")?.getString() ?: "noreply@activehive.com",
         isProduction = environment.config.propertyOrNull("smtp.production")?.getString()?.toBoolean() ?: false
     )
+    emailService.testSmtpConnection()
 
     configureSecurity(tokenConfig)
     configureSerialization()
