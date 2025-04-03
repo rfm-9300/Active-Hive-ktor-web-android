@@ -97,7 +97,10 @@ class AuthUser(
         return try {
             // Use App ID and App Secret to create an app access token for validation
             val appId = System.getenv("FACEBOOK_APP_ID") ?: "2148179182319157"
-            val appSecret = System.getenv("FACEBOOK_APP_SECRET") ?: "87db1b61aa742278aa08d6514fe9d510"
+            val appSecret = System.getenv("FACEBOOK_APP_SECRET") ?: ""
+
+            Logger.d("Facebook App ID: $appId")
+            Logger.d("Facebook App Secret: $appSecret")
             
             // First validate the token with Facebook using App Access Token
             val appAccessToken = "$appId|$appSecret"

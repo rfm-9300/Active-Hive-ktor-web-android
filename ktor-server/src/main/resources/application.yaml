@@ -32,9 +32,9 @@ jwt:
   secret: $JWT_SECRET
 
 smtp:
-  host: $SMTP_HOST
-  port: $SMTP_PORT
-  username: $SMTP_USERNAME
+  host: smtp.gmail.com
+  port: 587
+  username: abizaria@gmail.com
   password: $SMTP_PASSWORD
-  from: $SMTP_FROM
-  production: false # Set to true in production
+  from: abizaria@gmail.com
+  production: true

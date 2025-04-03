@@ -40,7 +40,9 @@ fun Application.module() {
         secret = environment.config.property("jwt.secret").getString()
     )
     val hashingService = SHA256HashingService()
-    
+
+    val isProduction = environment.config.propertyOrNull("smtp.production")?.getString() == "true"
+    Logger.d("Is production: $isProduction")
     // Create email service
     val emailService = EmailService(
         smtpHost = environment.config.propertyOrNull("smtp.host")?.getString() ?: "smtp.example.com",
