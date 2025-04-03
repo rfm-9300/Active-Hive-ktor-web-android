@@ -16,31 +16,36 @@ import io.ktor.server.sse.*
 import org.koin.ktor.plugin.Koin
 import org.koin.ktor.ext.get
 import java.io.File
-import java.nio.file.Files
-import java.nio.file.StandardCopyOption
+import java.io.FileInputStream
+import java.security.KeyStore
 
 fun main(args: Array<String>) {
-    // Generate SSL certificates before starting the server
-    SSLKeyGenerator.generate()
+    val keystorePath = KeystoreGenerator.KEYSTORE_PATH
+    val keystoreFile = File(keystorePath)
     
-    // Copy the keystore to the exact location where Ktor is looking for it
-    try {
-        val source = File(SSLKeyGenerator.KEYSTORE_PATH)
-        val dest = File("./keystore.jks")
-        
-        if (source.exists()) {
-            println("Copying keystore from ${source.absolutePath} to ${dest.absolutePath}")
-            Files.copy(source.toPath(), dest.toPath(), StandardCopyOption.REPLACE_EXISTING)
-            println("Keystore copied successfully!")
-        } else {
-            println("Source keystore does not exist at ${source.absolutePath}")
+    // Create the keystore if it doesn't exist
+    if (!keystoreFile.exists()) {
+        val success = KeystoreGenerator.generate()
+        if (!success) {
+            // If keystore creation failed, print instructions and exit
+            KeystoreGenerator.printInstructions()
+            return
         }
-    } catch (e: Exception) {
-        println("Error copying keystore: ${e.message}")
-        e.printStackTrace()
     }
     
-    EngineMain.main(args)
+    // Start the embedded server with SSL
+    try {
+        // Load the keystore
+        val keyStore = KeyStore.getInstance("JKS")
+        FileInputStream(keystoreFile).use { fis ->
+            keyStore.load(fis, "password123".toCharArray())
+        }
+        
+        EngineMain.main(args)
+    } catch (e: Exception) {
+        println("Error starting server: ${e.message}")
+        e.printStackTrace()
+    }
 }
 
 fun Application.module() {
@@ -84,3 +89,4 @@ fun Application.module() {
         emailService = emailService
     )
 }
+

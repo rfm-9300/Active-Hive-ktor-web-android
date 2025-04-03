@@ -4,18 +4,18 @@ ktor:
       - example.com.ApplicationKt.module
   deployment:
     port: 8080
-    # Disable SSL for now to get the server running
-    #sslPort: 8443
+    # SSL configuration for Facebook Authentication
+    sslPort: 8443
     watch:
       - classes
       - resources
   development: true
-  # security:
-  #   ssl:
-  #     keyStore: keystore.jks
-  #     keyAlias: sampleAlias
-  #     keyStorePassword: password123
-  #     privateKeyPassword: password123
+  security:
+    ssl:
+      keyStore: "/Users/rodrigomartins/Desktop/Dev/Active-Hive-ktor-web-android/ktor-server/keystore.jks"
+      keyAlias: sampleAlias
+      keyStorePassword: password123
+      privateKeyPassword: password123
 
 
 storage:

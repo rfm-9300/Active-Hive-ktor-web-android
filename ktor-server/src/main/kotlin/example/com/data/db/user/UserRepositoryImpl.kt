@@ -287,7 +287,7 @@ class UserRepositoryImpl: UserRepository {
         } catch (e: Exception) {
             println("Error creating/updating Facebook user: ${e.message}")
             null
-        }
+            }
     }
 
     override suspend fun addUser(user: User): Boolean = suspendTransaction {
