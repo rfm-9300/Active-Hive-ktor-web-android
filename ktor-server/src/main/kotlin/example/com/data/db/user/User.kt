@@ -84,7 +84,7 @@ object UserProfilesTable : IntIdTable("user_profile") {
     val email = varchar("email", 128)
     val phone = varchar("phone", 18)
     val joinedAt = datetime("joined_at").default(LocalDateTime.now())
-    val imagePath = varchar("image_path", 100)
+    val imagePath = varchar("image_path", 500)
     val isAdmin = bool("is_admin").default(false)
 }
 

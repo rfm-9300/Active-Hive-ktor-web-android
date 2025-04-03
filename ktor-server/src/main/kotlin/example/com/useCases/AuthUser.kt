@@ -3,6 +3,7 @@ package example.com.useCases
 import example.com.data.db.user.UserRepository
 import example.com.data.db.user.User
 import example.com.data.db.user.AuthProvider
+import example.com.plugins.Logger
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.request.*
@@ -30,13 +31,12 @@ class AuthUser(
         val lastName = googleUserInfo["family_name"]?.jsonPrimitive?.content ?: ""
         val pictureUrl = googleUserInfo["picture"]?.jsonPrimitive?.content ?: ""
         
+        Logger.d("Got Google user info - ID: $googleId, Email: $email, Picture URL: $pictureUrl")
+        
         // Check if user exists by Google ID
         val existingUser = userRepository.getUserByGoogleId(googleId)
-        if (existingUser != null) {
-            return existingUser
-        }
         
-        // Create or update Google user
+        // Always update profile information regardless of whether user exists or not
         return userRepository.createOrUpdateGoogleUser(
             email = email,
             googleId = googleId,
@@ -57,13 +57,12 @@ class AuthUser(
         val lastName = facebookUserInfo["last_name"]?.jsonPrimitive?.content ?: ""
         val pictureUrl = facebookUserInfo["picture"]?.jsonObject?.get("data")?.jsonObject?.get("url")?.jsonPrimitive?.content ?: ""
         
+        Logger.d("Got Facebook user info - ID: $facebookId, Email: $email, Picture URL: $pictureUrl")
+        
         // Check if user exists by Facebook ID
         val existingUser = userRepository.getUserByFacebookId(facebookId)
-        if (existingUser != null) {
-            return existingUser
-        }
         
-        // Create or update Facebook user
+        // Always update profile information regardless of whether user exists or not
         return userRepository.createOrUpdateFacebookUser(
             email = email,
             facebookId = facebookId,
@@ -104,7 +103,7 @@ class AuthUser(
             val appAccessToken = "$appId|$appSecret"
             val validateUrl = "https://graph.facebook.com/debug_token?input_token=$accessToken&access_token=$appAccessToken"
             
-            println("Validating Facebook token with URL: $validateUrl")
+            Logger.d("Validating Facebook token with URL: $validateUrl")
             
             val validateResponse = withContext(Dispatchers.IO) {
                 httpClient.get(validateUrl)
@@ -112,13 +111,13 @@ class AuthUser(
             
             if (validateResponse.status.isSuccess()) {
                 val validateResponseText = validateResponse.bodyAsText()
-                println("Facebook validation response: $validateResponseText")
+                Logger.d("Facebook validation response: $validateResponseText")
                 
                 val validateData = Json.parseToJsonElement(validateResponseText).jsonObject
                 val isValid = validateData["data"]?.jsonObject?.get("is_valid")?.jsonPrimitive?.booleanOrNull ?: false
                 
                 if (!isValid) {
-                    println("Facebook token is not valid")
+                    Logger.d("Facebook token is not valid")
                     return null
                 }
                 
@@ -131,19 +130,19 @@ class AuthUser(
                 
                 if (userResponse.status.isSuccess()) {
                     val responseText = userResponse.bodyAsText()
-                    println("Facebook user info response: $responseText")
+                    Logger.d("Facebook user info response: $responseText")
                     Json.parseToJsonElement(responseText).jsonObject
                 } else {
-                    println("Failed to get Facebook user info: ${userResponse.status}")
+                    Logger.d("Failed to get Facebook user info: ${userResponse.status}")
                     null
                 }
             } else {
-                println("Failed to validate Facebook token: ${validateResponse.status}")
-                println("Response body: ${validateResponse.bodyAsText()}")
+                Logger.d("Failed to validate Facebook token: ${validateResponse.status}")
+                Logger.d("Response body: ${validateResponse.bodyAsText()}")
                 null
             }
         } catch (e: Exception) {
-            println("Error verifying Facebook token: ${e.message}")
+            Logger.d("Error verifying Facebook token: ${e.message}")
             e.printStackTrace()
             null
         }
