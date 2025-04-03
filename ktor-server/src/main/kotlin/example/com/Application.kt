@@ -20,32 +20,8 @@ import java.io.FileInputStream
 import java.security.KeyStore
 
 fun main(args: Array<String>) {
-    val keystorePath = KeystoreGenerator.KEYSTORE_PATH
-    val keystoreFile = File(keystorePath)
-    
-    // Create the keystore if it doesn't exist
-    if (!keystoreFile.exists()) {
-        val success = KeystoreGenerator.generate()
-        if (!success) {
-            // If keystore creation failed, print instructions and exit
-            KeystoreGenerator.printInstructions()
-            return
-        }
-    }
-    
-    // Start the embedded server with SSL
-    try {
-        // Load the keystore
-        val keyStore = KeyStore.getInstance("JKS")
-        FileInputStream(keystoreFile).use { fis ->
-            keyStore.load(fis, "password123".toCharArray())
-        }
         
         EngineMain.main(args)
-    } catch (e: Exception) {
-        println("Error starting server: ${e.message}")
-        e.printStackTrace()
-    }
 }
 
 fun Application.module() {
