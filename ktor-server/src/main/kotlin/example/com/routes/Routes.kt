@@ -60,6 +60,7 @@ object Routes {
         object Auth {
             const val LOGIN = "/api/auth/login"
             const val GOOGLE_LOGIN = "/api/auth/google-login"
+            const val FACEBOOK_LOGIN = "/api/auth/facebook-login"
             const val SIGNUP = "/api/auth/signup"
             const val VERIFY = "/api/auth/verify"
             const val REQUEST_PASSWORD_RESET = "/api/auth/request-password-reset"

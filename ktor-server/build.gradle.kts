@@ -114,6 +114,9 @@ dependencies {
     // Email
     implementation("com.sun.mail:jakarta.mail:$jakarta_mail_version")
     implementation("jakarta.activation:jakarta.activation-api:2.0.1")
+    
+    // SSL for development
+    implementation("io.ktor:ktor-network-tls-certificates:$ktor_version")
 
     testImplementation("io.ktor:ktor-server-test-host-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")

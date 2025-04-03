@@ -46,6 +46,33 @@ class AuthUser(
         )
     }
     
+    suspend fun authenticateFacebookUser(accessToken: String): User? {
+        // Verify the token with Facebook
+        val facebookUserInfo = verifyFacebookToken(accessToken) ?: return null
+        
+        // Extract user information from Facebook response
+        val facebookId = facebookUserInfo["id"]?.jsonPrimitive?.content ?: return null
+        val email = facebookUserInfo["email"]?.jsonPrimitive?.content ?: return null
+        val firstName = facebookUserInfo["first_name"]?.jsonPrimitive?.content ?: ""
+        val lastName = facebookUserInfo["last_name"]?.jsonPrimitive?.content ?: ""
+        val pictureUrl = facebookUserInfo["picture"]?.jsonObject?.get("data")?.jsonObject?.get("url")?.jsonPrimitive?.content ?: ""
+        
+        // Check if user exists by Facebook ID
+        val existingUser = userRepository.getUserByFacebookId(facebookId)
+        if (existingUser != null) {
+            return existingUser
+        }
+        
+        // Create or update Facebook user
+        return userRepository.createOrUpdateFacebookUser(
+            email = email,
+            facebookId = facebookId,
+            firstName = firstName,
+            lastName = lastName,
+            profileImageUrl = pictureUrl
+        )
+    }
+    
     private suspend fun verifyGoogleToken(idToken: String): JsonObject? {
         return try {
             // Google endpoint to verify token
@@ -63,6 +90,46 @@ class AuthUser(
             }
         } catch (e: Exception) {
             println("Error verifying Google token: ${e.message}")
+            null
+        }
+    }
+    
+    private suspend fun verifyFacebookToken(accessToken: String): JsonObject? {
+        return try {
+            // First validate the token with Facebook
+            val validateUrl = "https://graph.facebook.com/debug_token?input_token=$accessToken&access_token=$accessToken"
+            
+            val validateResponse = withContext(Dispatchers.IO) {
+                httpClient.get(validateUrl)
+            }
+            
+            if (validateResponse.status.isSuccess()) {
+                val validateData = Json.parseToJsonElement(validateResponse.bodyAsText()).jsonObject
+                val isValid = validateData["data"]?.jsonObject?.get("is_valid")?.jsonPrimitive?.booleanOrNull ?: false
+                
+                if (!isValid) {
+                    println("Facebook token is not valid")
+                    return null
+                }
+                
+                // Token is valid, get user info
+                val userUrl = "https://graph.facebook.com/me?fields=id,email,first_name,last_name,picture&access_token=$accessToken"
+                
+                val userResponse = withContext(Dispatchers.IO) {
+                    httpClient.get(userUrl)
+                }
+                
+                if (userResponse.status.isSuccess()) {
+                    val responseText = userResponse.bodyAsText()
+                    Json.parseToJsonElement(responseText).jsonObject
+                } else {
+                    null
+                }
+            } else {
+                null
+            }
+        } catch (e: Exception) {
+            println("Error verifying Facebook token: ${e.message}")
             null
         }
     }

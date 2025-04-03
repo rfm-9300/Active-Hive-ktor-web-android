@@ -56,6 +56,22 @@ class UserRepositoryImpl: UserRepository {
             }
     }
 
+    override suspend fun getUserByFacebookId(facebookId: String): User? = suspendTransaction {
+        UserTable
+            .select { UserTable.facebookId eq facebookId }
+            .singleOrNull()?.let {
+                User(
+                    id = it[UserTable.id].value,
+                    email = it[UserTable.email],
+                    password = "",
+                    salt = "",
+                    verified = true,
+                    facebookId = it[UserTable.facebookId],
+                    authProvider = AuthProvider.valueOf(it[UserTable.authProvider])
+                )
+            }
+    }
+
     override suspend fun createOrUpdateGoogleUser(
         email: String, 
         googleId: String, 
@@ -157,6 +173,119 @@ class UserRepositoryImpl: UserRepository {
             }
         } catch (e: Exception) {
             println("Error creating/updating Google user: ${e.message}")
+            null
+        }
+    }
+
+    override suspend fun createOrUpdateFacebookUser(
+        email: String, 
+        facebookId: String, 
+        firstName: String, 
+        lastName: String, 
+        profileImageUrl: String
+    ): User? = suspendTransaction {
+        try {
+            // Check if user with this Facebook ID already exists
+            val existingUser = UserTable
+                .select { UserTable.facebookId eq facebookId }
+                .singleOrNull()
+                
+            if (existingUser != null) {
+                // Update existing user
+                UserTable.update({ UserTable.id eq existingUser[UserTable.id] }) {
+                    it[UserTable.email] = email
+                    it[UserTable.verified] = true
+                }
+                
+                // Update profile if it exists
+                val userProfileId = existingUser[UserTable.id]
+                val userProfile = UserProfilesTable
+                    .select { UserProfilesTable.userId eq userProfileId }
+                    .singleOrNull()
+                    
+                if (userProfile != null) {
+                    UserProfilesTable.update({ UserProfilesTable.userId eq userProfileId }) {
+                        it[UserProfilesTable.firstName] = firstName
+                        it[UserProfilesTable.lastName] = lastName
+                        it[UserProfilesTable.email] = email
+                        // For Facebook users, store the complete URL
+                        if (profileImageUrl.isNotEmpty()) {
+                            it[UserProfilesTable.imagePath] = profileImageUrl
+                        }
+                    }
+                }
+                
+                return@suspendTransaction User(
+                    id = existingUser[UserTable.id].value,
+                    email = email,
+                    verified = true,
+                    facebookId = facebookId,
+                    authProvider = AuthProvider.FACEBOOK
+                )
+            } else {
+                // Check if user with same email exists
+                val existingEmailUser = UserTable
+                    .select { UserTable.email eq email }
+                    .singleOrNull()
+                    
+                if (existingEmailUser != null) {
+                    // Update the existing user to link with Facebook
+                    UserTable.update({ UserTable.id eq existingEmailUser[UserTable.id] }) {
+                        it[UserTable.facebookId] = facebookId
+                        it[UserTable.authProvider] = AuthProvider.FACEBOOK.name
+                        it[UserTable.verified] = true
+                    }
+                    
+                    // Update profile image to use Facebook profile image
+                    val userProfileId = existingEmailUser[UserTable.id]
+                    UserProfilesTable.update({ UserProfilesTable.userId eq userProfileId }) {
+                        if (profileImageUrl.isNotEmpty()) {
+                            it[UserProfilesTable.imagePath] = profileImageUrl
+                        }
+                    }
+                    
+                    return@suspendTransaction User(
+                        id = existingEmailUser[UserTable.id].value,
+                        email = email,
+                        verified = true,
+                        facebookId = facebookId,
+                        authProvider = AuthProvider.FACEBOOK
+                    )
+                } else {
+                    // Create new user
+                    val userId = UserTable.insert {
+                        it[UserTable.email] = email
+                        it[UserTable.password] = ""
+                        it[UserTable.salt] = ""
+                        it[UserTable.verified] = true
+                        it[UserTable.facebookId] = facebookId
+                        it[UserTable.authProvider] = AuthProvider.FACEBOOK.name
+                        it[UserTable.createdAt] = LocalDateTime.now()
+                    } get UserTable.id
+                    
+                    // Create user profile with Facebook profile image URL
+                    UserProfilesTable.insert {
+                        it[UserProfilesTable.userId] = userId
+                        it[UserProfilesTable.firstName] = firstName
+                        it[UserProfilesTable.lastName] = lastName
+                        it[UserProfilesTable.email] = email
+                        it[UserProfilesTable.phone] = ""
+                        it[UserProfilesTable.joinedAt] = LocalDateTime.now()
+                        // Store the full URL for Facebook profile images
+                        it[UserProfilesTable.imagePath] = profileImageUrl.ifEmpty { "profile" }
+                    }
+                    
+                    return@suspendTransaction User(
+                        id = userId.value,
+                        email = email,
+                        verified = true,
+                        facebookId = facebookId,
+                        authProvider = AuthProvider.FACEBOOK
+                    )
+                }
+            }
+        } catch (e: Exception) {
+            println("Error creating/updating Facebook user: ${e.message}")
             null
         }
     }

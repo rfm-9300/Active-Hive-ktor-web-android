@@ -186,6 +186,7 @@ fun Route.eventRoutes(
             try {
                 val request = kotlin.runCatching { call.receiveNullable<EventRequest>() }.getOrNull() ?: return@post call.respond(HttpStatusCode.BadRequest)
                 val deletedEventAttendees = eventRepository.deleteEventAttendees(request.eventId)
+
                 val deletedEvent = eventRepository.deleteEvent(request.eventId)
 
                 if (deletedEvent) {

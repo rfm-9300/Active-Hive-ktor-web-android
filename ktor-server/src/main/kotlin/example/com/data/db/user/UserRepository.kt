@@ -17,6 +17,16 @@ interface UserRepository {
         profileImageUrl: String = ""
     ): User?
     
+    // Facebook authentication methods
+    suspend fun getUserByFacebookId(facebookId: String): User?
+    suspend fun createOrUpdateFacebookUser(
+        email: String, 
+        facebookId: String, 
+        firstName: String = "", 
+        lastName: String = "", 
+        profileImageUrl: String = ""
+    ): User?
+    
     // Password reset methods
     suspend fun saveResetToken(email: String, token: String, expiresAt: Long): Boolean
     suspend fun getUserByResetToken(token: String): User?

@@ -8,7 +8,7 @@ import example.com.web.loadJs
 import kotlinx.html.*
 import kotlinx.html.InputType.*
 
-fun HTML.loginPage() {
+fun HTML.loginPage(googleClientId: String = "", facebookAppId: String = "") {
     layout {
         div(classes = "flex items-center justify-center min-h-[80vh]") {
             div(classes = "bg-white bg-opacity-90 p-8 rounded-xl shadow-lg border border-slate-200 w-[28rem] max-w-full transform transition-all duration-300") {
@@ -18,6 +18,17 @@ fun HTML.loginPage() {
                     classes = "space-y-6"
                 ) {
                     id = "login-form"
+                    
+                    // Hidden inputs for social login configurations
+                    input(type = InputType.hidden, name = "google-client-id") {
+                        id = "google-client-id"
+                        value = googleClientId
+                    }
+                    
+                    input(type = InputType.hidden, name = "facebook-app-id") {
+                        id = "facebook-app-id"
+                        value = facebookAppId
+                    }
                     
                     // Title with icon
                     div(classes = "text-center mb-6") {
@@ -110,7 +121,7 @@ fun HTML.loginPage() {
                     div {
                         button(classes = "w-full flex justify-center items-center py-3 px-4 border border-slate-300 rounded-lg shadow-sm text-base font-medium text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors duration-300") {
                             type = ButtonType.button
-                            id = "google-signin-btn"
+                            id = "google-login-btn"
                             
                             // Google icon (simple G icon)
                             div(classes = "w-5 h-5 mr-2 flex items-center justify-center") {
@@ -126,6 +137,26 @@ fun HTML.loginPage() {
                                 }
                             }
                             +"Sign in with Google"
+                        }
+                    }
+
+                    // Facebook Sign-In Button
+                    div(classes = "mt-2") {
+                        button(classes = "w-full flex justify-center items-center py-3 px-4 border border-slate-300 rounded-lg shadow-sm text-base font-medium text-slate-700 bg-white hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 transition-colors duration-300") {
+                            type = ButtonType.button
+                            id = "facebook-login-btn"
+                            
+                            // Facebook icon
+                            div(classes = "w-5 h-5 mr-2 flex items-center justify-center") {
+                                unsafe {
+                                    +"""
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
+                                        <path fill="#1877F2" d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                                    </svg>
+                                    """
+                                }
+                            }
+                            +"Sign in with Facebook"
                         }
                     }
 

@@ -25,13 +25,14 @@ data class User(
     val verificationToken: String? = null,
     val profile: UserProfile? = null,
     val googleId: String? = null,
+    val facebookId: String? = null,
     val authProvider: AuthProvider = AuthProvider.LOCAL,
     val resetToken: String? = null,
     val resetTokenExpiresAt: Long? = null
 )
 
 enum class AuthProvider {
-    LOCAL, GOOGLE
+    LOCAL, GOOGLE, FACEBOOK
 }
 
 @Serializable
@@ -60,6 +61,7 @@ object UserTable : IntIdTable("user") {
     val createdAt = datetime("created_at")
     val verificationToken = varchar("verification_token", 256).nullable()
     val googleId = varchar("google_id", 256).nullable()
+    val facebookId = varchar("facebook_id", 256).nullable()
     val authProvider = varchar("auth_provider", 20).default(AuthProvider.LOCAL.name)
     val resetToken = varchar("reset_token", 256).nullable()
     val resetTokenExpiresAt = long("reset_token_expires_at").nullable()
@@ -110,6 +112,7 @@ fun ResultRow.toUser() = User(
     createdAt = this[UserTable.createdAt],
     verificationToken = this[UserTable.verificationToken],
     googleId = this[UserTable.googleId],
+    facebookId = this[UserTable.facebookId],
     authProvider = AuthProvider.valueOf(this[UserTable.authProvider]),
     resetToken = this[UserTable.resetToken],
     resetTokenExpiresAt = this[UserTable.resetTokenExpiresAt]

@@ -15,17 +15,32 @@ import io.ktor.server.sessions.*
 import io.ktor.server.sse.*
 import org.koin.ktor.plugin.Koin
 import org.koin.ktor.ext.get
-
+import java.io.File
+import java.nio.file.Files
+import java.nio.file.StandardCopyOption
 
 fun main(args: Array<String>) {
+    // Generate SSL certificates before starting the server
+    SSLKeyGenerator.generate()
+    
+    // Copy the keystore to the exact location where Ktor is looking for it
+    try {
+        val source = File(SSLKeyGenerator.KEYSTORE_PATH)
+        val dest = File("./keystore.jks")
+        
+        if (source.exists()) {
+            println("Copying keystore from ${source.absolutePath} to ${dest.absolutePath}")
+            Files.copy(source.toPath(), dest.toPath(), StandardCopyOption.REPLACE_EXISTING)
+            println("Keystore copied successfully!")
+        } else {
+            println("Source keystore does not exist at ${source.absolutePath}")
+        }
+    } catch (e: Exception) {
+        println("Error copying keystore: ${e.message}")
+        e.printStackTrace()
+    }
+    
     EngineMain.main(args)
-    embeddedServer(
-        Netty,
-        port = 8080,
-        host = "0.0.0.0",
-        module = Application::module,
-        watchPaths = listOf("classes", "resources")
-    ).start(wait = true)
 }
 
 fun Application.module() {

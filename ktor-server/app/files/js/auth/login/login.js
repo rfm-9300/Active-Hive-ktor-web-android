@@ -43,9 +43,17 @@ document.getElementById('login-form').addEventListener('submit', async function(
         }
     });
 
+
 // Google Sign-In initialization
 function initGoogleSignIn() {
     console.log('Initializing Google Sign-In');
+    const googleClientId = document.getElementById('google-client-id')?.value;
+    
+    if (!googleClientId) {
+        console.warn('Google client ID not found');
+        return;
+    }
+    
     // Load the Google Sign-In API script
     const script = document.createElement('script');
     script.src = 'https://accounts.google.com/gsi/client';
@@ -56,17 +64,59 @@ function initGoogleSignIn() {
     script.onload = function() {
         // Initialize Google Sign-In client
         google.accounts.id.initialize({
-            client_id: '1033467061192-r10l64e9rui96nr6qo0m1h46u4u6up3i.apps.googleusercontent.com', // Replace with your actual Google Client ID
+            client_id: googleClientId,
             callback: handleGoogleSignIn,
             auto_select: false,
             cancel_on_tap_outside: true,
         });
         
         // Handle Google Sign-In button click
-        document.getElementById('google-signin-btn').addEventListener('click', function() {
+        document.getElementById('google-login-btn').addEventListener('click', function() {
             google.accounts.id.prompt();
         });
     };
+}
+
+// Facebook initialization
+function initFacebookSignIn() {
+    console.log('Initializing Facebook Sign-In');
+    
+    const facebookAppId = document.getElementById('facebook-app-id')?.value;
+    
+    if (!facebookAppId) {
+        console.warn('Facebook App ID not found');
+        return;
+    }
+    
+    // Load the Facebook SDK
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId: facebookAppId,
+            cookie: true,
+            xfbml: true,
+            version: 'v18.0'
+        });
+        
+        // Handle Facebook login button click
+        document.getElementById('facebook-login-btn').addEventListener('click', function() {
+            FB.login(function(response) {
+                if (response.authResponse) {
+                    handleFacebookSignIn(response.authResponse.accessToken);
+                } else {
+                    showAlert('Facebook login was cancelled or failed', 'error');
+                }
+            }, {scope: 'email,public_profile'});
+        });
+    };
+    
+    // Load Facebook SDK script
+    (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = "https://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
 }
 
 // Handle Google Sign-In response
@@ -108,5 +158,40 @@ async function handleGoogleSignIn(response) {
     }
 }
 
+// Handle Facebook login response
+async function handleFacebookSignIn(accessToken) {
+    try {
+        // Send token to backend
+        const data = await window.api.post(ApiClient.ENDPOINTS.FACEBOOK_LOGIN, {
+            accessToken: accessToken
+        });
+        
+        if (data.success && data.data.token) {
+            const token = data.data.token;
+            
+            // Store token in localStorage and cookie
+            localStorage.setItem('authToken', token);
+            
+            // Store cookie valid for 10 days
+            const expirationDate = new Date();
+            expirationDate.setDate(expirationDate.getDate() + 10);
+            document.cookie = `authToken=${token}; expires=${expirationDate.toUTCString()}; path=/`;
+            
+            showAlert('Login successful!', 'success');
+            
+            // Redirect after successful login
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 1000);
+        } else {
+            showAlert('Facebook login failed', 'error');
+        }
+    } catch (error) {
+        console.error('Error during Facebook authentication:', error);
+        showAlert('Authentication failed. Please try again.', 'error');
+    }
+}
+
 // Initialize Google Sign-In when the page loads
 initGoogleSignIn();
+initFacebookSignIn();

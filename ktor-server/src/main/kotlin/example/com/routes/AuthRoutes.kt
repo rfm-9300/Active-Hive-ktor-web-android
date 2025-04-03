@@ -52,8 +52,11 @@ fun Route.loginRoutes(
     }
 
     get(Routes.Ui.Auth.LOGIN) {
+        val googleClientId = System.getenv("GOOGLE_CLIENT_ID") ?: "1033467061192-r10l64e9rui96nr6qo0m1h46u4u6up3i.apps.googleusercontent.com"
+        val facebookAppId = System.getenv("FACEBOOK_APP_ID") ?: "2148179182319157"
+        
         call.respondHtml(HttpStatusCode.OK) {
-            loginPage()
+            loginPage(googleClientId, facebookAppId)
         }
     }
 
@@ -299,5 +302,31 @@ fun Route.loginRoutes(
         userRepository.deleteResetToken(user.id)
         
         respondHelper(success = true, message = "Password has been reset successfully", call = call)
+    }
+
+    // Facebook Sign-In route
+    post(Routes.Api.Auth.FACEBOOK_LOGIN) {
+        val request = kotlin.runCatching { call.receiveNullable<FacebookAuthRequest>() }.getOrNull() 
+            ?: return@post respondHelper(success = false, message = "Invalid request", call = call)
+            
+        if (request.accessToken.isBlank()) {
+            return@post respondHelper(success = false, message = "Access token is required", call = call, statusCode = HttpStatusCode.BadRequest)
+        }
+        
+        // Authenticate with Facebook
+        val user = authUser.authenticateFacebookUser(request.accessToken)
+            ?: return@post respondHelper(success = false, message = "Failed to authenticate with Facebook", call = call, statusCode = HttpStatusCode.Unauthorized)
+            
+        // Generate JWT token
+        val token = tokenService.generateAuthToken(
+            config = tokenConfig,
+            TokenClaim(
+                name = "userId",
+                value = user.id.toString()
+            )
+        )
+        
+        Logger.d("Generated token for Facebook user: $token")
+        respondHelper(success = true, message = "Facebook sign-in successful", data = ApiResponseData.AuthResponse(token = token), call = call)
     }
 }
