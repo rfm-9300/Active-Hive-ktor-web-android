@@ -52,8 +52,8 @@ fun Route.loginRoutes(
     }
 
     get(Routes.Ui.Auth.LOGIN) {
-        val googleClientId = System.getenv("GOOGLE_CLIENT_ID") ?: "1033467061192-r10l64e9rui96nr6qo0m1h46u4u6up3i.apps.googleusercontent.com"
-        val facebookAppId = System.getenv("FACEBOOK_APP_ID") ?: "2148179182319157"
+        val googleClientId = System.getenv("GOOGLE_CLIENT_ID") ?: ""
+        val facebookAppId = System.getenv("FACEBOOK_APP_ID") ?: ""
         
         call.respondHtml(HttpStatusCode.OK) {
             loginPage(googleClientId, facebookAppId)

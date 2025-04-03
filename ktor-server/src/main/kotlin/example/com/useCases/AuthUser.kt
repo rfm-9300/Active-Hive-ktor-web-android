@@ -96,7 +96,7 @@ class AuthUser(
     private suspend fun verifyFacebookToken(accessToken: String): JsonObject? {
         return try {
             // Use App ID and App Secret to create an app access token for validation
-            val appId = System.getenv("FACEBOOK_APP_ID") ?: "2148179182319157"
+            val appId = System.getenv("FACEBOOK_APP_ID") ?: ""
             val appSecret = System.getenv("FACEBOOK_APP_SECRET") ?: ""
 
             Logger.d("Facebook App ID: $appId")
