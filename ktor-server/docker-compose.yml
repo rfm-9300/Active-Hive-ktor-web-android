@@ -20,6 +20,7 @@ services:
     container_name: backend-ktor
     volumes:
       - ./app/files:/app/files
+      - ./keystore.jks:/app/keystore.jks
     restart: always
     ports:
       - "8080:8080"
