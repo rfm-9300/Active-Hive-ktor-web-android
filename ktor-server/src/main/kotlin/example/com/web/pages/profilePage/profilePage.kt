@@ -28,14 +28,14 @@ fun HTML.profilePage(user: UserProfile) {
                 profileEditBox()
             }
             // Profile Header Section
-            div(classes = "w-full bg-white rounded-xl shadow-sm p-6 mb-8") {
+            div(classes = "w-full bg-white rounded-xl shadow-sm p-6 mb-8 border border-yellow-200") {
                 div(classes = "flex flex-col md:flex-row items-center md:items-start gap-6") {
                     // Profile Image Section
                     div(classes = "relative group") {
                         userProfileImage(
                             user.profileImagePath,
                             "Profile picture of $userName",
-                            "w-32 h-32 rounded-full object-cover border-4 border-blue-100 shadow-lg"
+                            "w-32 h-32 rounded-full object-cover border-4 border-yellow-100 shadow-lg"
                         )
 
                         // Edit button (hidden by default, shown on hover)
@@ -50,8 +50,8 @@ fun HTML.profilePage(user: UserProfile) {
 
                     // User Info Section
                     div(classes = "flex-1 text-center md:text-left") {
-                        h1(classes = "text-2xl font-bold text-gray-900 mb-2") { +userName }
-                        p(classes = "text-sm text-gray-600 mb-4") { +joinString }
+                        h1(classes = "text-2xl font-bold text-black mb-2") { +userName }
+                        p(classes = "text-sm text-yellow-800 mb-4") { +joinString }
                         
                         // Stats Grid
                         div(classes = "grid grid-cols-2 md:grid-cols-4 gap-4") {
@@ -65,9 +65,9 @@ fun HTML.profilePage(user: UserProfile) {
             }
 
             // Events Section
-            div(classes = "w-full bg-white rounded-xl shadow-sm p-6") {
+            div(classes = "w-full bg-white rounded-xl shadow-sm p-6 border border-yellow-200") {
                 // Tabs Navigation
-                div(classes = "flex flex-wrap border-b border-gray-200 mb-6") {
+                div(classes = "flex flex-wrap border-b border-yellow-300 mb-6") {
                     tabButton("hosted", "Hosted Events", hostedEvents, true)
                     tabButton("attended", "Attended Events", attendedEvents, false)
                     tabButton("waiting", "Waiting List", waitingEvents, false)
@@ -95,18 +95,18 @@ fun HTML.profilePage(user: UserProfile) {
 }
 
 private fun FlowContent.statItem(label: String, count: Int, icon: SvgIcon) {
-    div(classes = "bg-gray-50 rounded-lg p-3 text-center") {
-        div(classes = "flex items-center justify-center text-blue-600 mb-1") {
+    div(classes = "bg-yellow-50/80 rounded-lg p-3 text-center border border-yellow-200") {
+        div(classes = "flex items-center justify-center text-yellow-600 mb-1") {
             svgIcon(icon, "w-5 h-5")
         }
-        div(classes = "text-lg font-semibold text-gray-900") { +count.toString() }
-        div(classes = "text-sm text-gray-600") { +label }
+        div(classes = "text-lg font-semibold text-black") { +count.toString() }
+        div(classes = "text-sm text-yellow-800") { +label }
     }
 }
 
 private fun FlowContent.tabButton(id: String, label: String, count: Int, isActive: Boolean) {
     button(classes = "px-4 py-2 text-sm font-medium transition-colors duration-200 " +
-            if (isActive) "text-blue-600 border-b-2 border-blue-600" else "text-gray-500 hover:text-gray-700") {
+            if (isActive) "text-yellow-600 border-b-2 border-yellow-500" else "text-gray-500 hover:text-yellow-700") {
         attributes["onclick"] = "switchTab('$id')"
         attributes["aria-selected"] = isActive.toString()
         this.id = "$id-tab"
@@ -131,47 +131,47 @@ private fun FlowContent.tabContent(id2: String, events: List<Event>, dateFormatt
 
 private fun FlowContent.emptyState(message: String) {
     div(classes = "text-center py-12") {
-        svgIcon(SvgIcon.CALENDAR, "w-12 h-12 mx-auto text-gray-400 mb-4")
-        p(classes = "text-gray-500 text-lg") { +message }
+        svgIcon(SvgIcon.CALENDAR, "w-12 h-12 mx-auto text-yellow-400 mb-4")
+        p(classes = "text-yellow-800 text-lg") { +message }
     }
 }
 
 private fun FlowContent.eventCard(event: Event, dateFormatter: DateTimeFormatter) {
-    div(classes = "bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-200 border border-gray-100") {
+    div(classes = "bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-200 border border-yellow-200 hover:border-yellow-400 hover:bg-yellow-50/80") {
         div(classes = "p-4") {
             // Event Header
             div(classes = "flex justify-between items-start mb-3") {
-                h3(classes = "font-semibold text-lg text-gray-900") {
+                h3(classes = "font-semibold text-lg text-black") {
                     +event.title
                 }
-                a(classes = "px-3 py-1 text-sm bg-blue-50 hover:bg-blue-100 text-blue-700 rounded-lg transition-colors") {
+                a(classes = "px-3 py-1 text-sm bg-yellow-50 hover:bg-yellow-100 text-yellow-700 rounded-lg transition-colors") {
                     href = "/events/${event.id}"
                     +"View"
                 }
             }
 
             // Event Description
-            p(classes = "text-sm text-gray-600 mb-4 line-clamp-2") {
+            p(classes = "text-sm text-yellow-800 mb-4 line-clamp-2") {
                 +event.description
             }
 
             // Event Details
             div(classes = "space-y-2") {
                 // Date and Attendees
-                div(classes = "flex items-center text-sm text-gray-500") {
-                    svgIcon(SvgIcon.CALENDAR, "w-4 h-4 mr-2")
+                div(classes = "flex items-center text-sm text-yellow-700") {
+                    svgIcon(SvgIcon.CALENDAR, "w-4 h-4 mr-2 text-yellow-600")
                     +event.date.format(dateFormatter)
                 }
                 
                 // Attendee Count
-                div(classes = "flex items-center text-sm text-gray-500") {
-                    svgIcon(SvgIcon.PROFILE, "w-4 h-4 mr-2")
+                div(classes = "flex items-center text-sm text-yellow-700") {
+                    svgIcon(SvgIcon.PROFILE, "w-4 h-4 mr-2 text-yellow-600")
                     +"${event.attendees.size} attendees"
                 }
                 
                 // Location
-                div(classes = "flex items-center text-sm text-gray-500") {
-                    svgIcon(SvgIcon.HOME, "w-4 h-4 mr-2")
+                div(classes = "flex items-center text-sm text-yellow-700") {
+                    svgIcon(SvgIcon.HOME, "w-4 h-4 mr-2 text-yellow-600")
                     +event.location
                 }
             }
