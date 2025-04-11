@@ -27,7 +27,7 @@ fun HtmlBlockTag.topbar() {
             id = "profile-container"
 
             // login button
-            projectButton("Sign in", hxGet = "/login", hxTarget = "#main-content", extraClasses = "py-2", buttonId = "login-button")
+            projectButton("Sign in", hxGet = "/login", hxTarget = "#main-content", extraClasses = "text-white py-1", buttonId = "login-button")
 
 
             // div that will contain the user profile image and toggle the menu

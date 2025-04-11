@@ -30,47 +30,47 @@ fun HTML.eventDetail(event: Event, requestUser: UserProfile?) {
 
     body {
         div(classes = "w-[90%] mx-auto py-6") {
-            div(classes = "bg-gradient-to-br from-blue-50/80 to-indigo-50/90 shadow-lg p-6 rounded-xl border border-blue-200 transition-all duration-300") {
+            div(classes = "bg-gradient-to-br from-yellow-50/80 to-black/5 shadow-lg p-6 rounded-xl border border-yellow-300 transition-all duration-300") {
                 img(src = "/resources/uploads/images/${event.headerImagePath}", classes = "w-full h-56 object-cover rounded-xl mb-6 shadow-md", alt = event.title)
                 
                 // Title and essential info section
                 div(classes = "mb-6") {
-                    h1(classes = "text-3xl font-bold text-blue-800 mb-3") { +event.title }
+                    h1(classes = "text-3xl font-bold text-black mb-3") { +event.title }
                     
                     // Date information with icon
-                    div(classes = "flex items-center text-blue-600 mb-3") {
-                        svgIcon(SvgIcon.CALENDAR, classes = "w-5 h-5 mr-2 text-blue-500")
+                    div(classes = "flex items-center text-yellow-800 mb-3") {
+                        svgIcon(SvgIcon.CALENDAR, classes = "w-5 h-5 mr-2 text-yellow-600")
                         p(classes = "font-medium") { +formattedDate }
                     }
                     
                     // Location with icon - moved up as requested
-                    div(classes = "flex items-center text-blue-600 mb-3") {
-                        svgIcon(SvgIcon.LOCATION, classes = "w-5 h-5 mr-2 text-blue-500") 
-                        a(href = "https://www.google.com/maps/place/${event.location}", target = "_blank", classes = "hover:underline hover:text-blue-700 transition-colors") { +event.location }
+                    div(classes = "flex items-center text-yellow-800 mb-3") {
+                        svgIcon(SvgIcon.LOCATION, classes = "w-5 h-5 mr-2 text-yellow-600") 
+                        a(href = "https://www.google.com/maps/place/${event.location}", target = "_blank", classes = "hover:underline hover:text-yellow-900 transition-colors") { +event.location }
                     }
                     
                     // Organizer with icon - moved up as requested
-                    div(classes = "flex items-center text-blue-600") {
-                        svgIcon(SvgIcon.PROFILE, classes = "w-5 h-5 mr-2 text-blue-500")
+                    div(classes = "flex items-center text-yellow-800") {
+                        svgIcon(SvgIcon.PROFILE, classes = "w-5 h-5 mr-2 text-yellow-600")
                         span { +"Organized by: " }
                         span(classes = "font-medium ml-1") { +event.organizerName }
                     }
                 }
                 
                 // Description section with improved styling
-                div(classes = "mb-6 bg-white/60 p-4 rounded-lg border border-blue-100 shadow-sm") {
-                    h3(classes = "text-lg font-semibold text-blue-700 mb-2") { +"About This Event" }
-                    p(classes = "text-blue-900 leading-relaxed whitespace-pre-line") { +event.description }
+                div(classes = "mb-6 bg-white/60 p-4 rounded-lg border border-yellow-200 shadow-sm") {
+                    h3(classes = "text-lg font-semibold text-black mb-2") { +"About This Event" }
+                    p(classes = "text-gray-800 leading-relaxed whitespace-pre-line") { +event.description }
                 }
                 
                 // Countdown section
                 div(classes = "space-y-3 mb-6") {
                     if (eventDate > now) {
-                        div(classes = "flex items-center bg-blue-100/70 p-3 rounded-lg shadow-sm") {
-                            svgIcon(SvgIcon.TIME, classes = "w-5 h-5 mr-2 text-blue-600")
-                            p(classes = "text-blue-700 font-medium") {
+                        div(classes = "flex items-center bg-yellow-100/70 p-3 rounded-lg shadow-sm") {
+                            svgIcon(SvgIcon.TIME, classes = "w-5 h-5 mr-2 text-yellow-700")
+                            p(classes = "text-yellow-900 font-medium") {
                                 +"Starts in "
-                                span(classes = "text-blue-800") { id = "countdown" }
+                                span(classes = "text-black") { id = "countdown" }
                             }
                         }
                     } else {
@@ -82,14 +82,14 @@ fun HTML.eventDetail(event: Event, requestUser: UserProfile?) {
                 }
 
                 // Enhanced Participants Section
-                div(classes = "mb-8 bg-blue-50 border border-blue-200 rounded-lg p-4 transition-all duration-300 hover:shadow-md") {
+                div(classes = "mb-8 bg-yellow-50 border border-yellow-200 rounded-lg p-4 transition-all duration-300 hover:shadow-md") {
                     div(classes = "cursor-pointer flex items-center justify-between") {
                         attributes["onclick"] = "toggleParticipants()"
 
                         div {
-                            h3(classes = "text-lg font-bold text-blue-800") { +"Participants" }
+                            h3(classes = "text-lg font-bold text-black") { +"Participants" }
                             div(classes = "flex items-center") {
-                                span(classes = "text-blue-600 mr-2") {
+                                span(classes = "text-yellow-700 mr-2") {
                                     +"${event.attendees.size}/${event.maxAttendees}"
                                 }
                                 if (event.attendees.size >= event.maxAttendees) {
@@ -97,7 +97,7 @@ fun HTML.eventDetail(event: Event, requestUser: UserProfile?) {
                                 }
 
                                 // Tooltip to indicate clickable
-                                span(classes = "text-xs text-blue-500 ml-2 italic") { +"(click to view all)" }
+                                span(classes = "text-xs text-yellow-600 ml-2 italic") { +"(click to view all)" }
                             }
                         }
 
@@ -105,26 +105,26 @@ fun HTML.eventDetail(event: Event, requestUser: UserProfile?) {
                             // User Status Badge
                             requestUser?.let {
                                 when {
-                                    isParticipating -> span(classes = "inline-block bg-green-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow-sm") { +"You're going!" }
+                                    isParticipating -> span(classes = "inline-block bg-yellow-500 text-black text-xs font-bold px-3 py-1 rounded-full shadow-sm") { +"You're going!" }
                                     isWaiting -> span(classes = "inline-block bg-yellow-400 text-gray-800 text-xs font-bold px-3 py-1 rounded-full shadow-sm") { +"Waiting list" }
                                     event.needsApproval -> span(classes = "inline-block bg-gray-300 text-gray-800 text-xs font-bold px-3 py-1 rounded-full shadow-sm") { +"Needs approval" }
                                 }
                             }
-                            div(classes = "bg-blue-100 hover:bg-blue-200 rounded-full p-1 transition-colors duration-300") {
-                                svgIcon(SvgIcon.CHEVRON_DOWN, classes = "w-5 h-5 text-blue-600 participants-toggle-icon")
+                            div(classes = "bg-yellow-100 hover:bg-yellow-200 rounded-full p-1 transition-colors duration-300") {
+                                svgIcon(SvgIcon.CHEVRON_DOWN, classes = "w-5 h-5 text-yellow-700 participants-toggle-icon")
                             }
                         }
                     }
 
                     // Participants List (Hidden by Default)
-                    div(classes = "hidden mt-4 pt-3 border-t border-blue-200") {
+                    div(classes = "hidden mt-4 pt-3 border-t border-yellow-200") {
                         id = "participants-list"
                         if (event.attendees.isEmpty()) {
                             p(classes = "text-gray-600 text-center py-4 italic") { +"Be the first to join this event!" }
                         } else {
                             div(classes = "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2") {
                                 event.attendees.forEach { attendee ->
-                                    div(classes = "flex items-center p-2 rounded-md ${if (requestUser?.userId == attendee.userId) "bg-purple-100" else ""}") {
+                                    div(classes = "flex items-center p-2 rounded-md ${if (requestUser?.userId == attendee.userId) "bg-yellow-100" else ""}") {
                                         // Profile image - UPDATED
                                         div(classes = "w-8 h-8 rounded-full overflow-hidden mr-2") {
                                             userProfileImage(
@@ -139,7 +139,7 @@ fun HTML.eventDetail(event: Event, requestUser: UserProfile?) {
                                             span { +"${attendee.firstName} ${attendee.lastName}" }
 
                                             if (requestUser?.userId == attendee.userId) {
-                                                span(classes = "ml-1 text-purple-600 text-xs font-bold") { +"(You)" }
+                                                span(classes = "ml-1 text-yellow-700 text-xs font-bold") { +"(You)" }
                                             }
                                         }
                                         
@@ -163,12 +163,12 @@ fun HTML.eventDetail(event: Event, requestUser: UserProfile?) {
 
                 // Action Buttons (Social Sharing, Calendar, Back)
                 div(classes = "flex flex-row justify-start gap-4") {
-                    a(classes = "flex items-center gap-1 text-blue-500 hover:text-blue-700 transition-colors duration-300",
+                    a(classes = "flex items-center gap-1 text-yellow-700 hover:text-yellow-900 transition-colors duration-300",
                         href = "webcal://yourdomain.com/events/${event.id}.ics") {
                         svgIcon(SvgIcon.CALENDAR, classes = "w-4 h-4")
                         +"Add to Calendar"
                     }
-                    p(classes = "flex items-center gap-1 text-blue-500 hover:text-blue-700 transition-colors duration-300 cursor-pointer") {
+                    p(classes = "flex items-center gap-1 text-yellow-700 hover:text-yellow-900 transition-colors duration-300 cursor-pointer") {
                         attributes["hx-get"] = Routes.Ui.Event.LIST_UPCOMING
                         attributes["hx-target"] = "#main-content"
                         svgIcon(SvgIcon.ARROW_LEFT, classes = "w-4 h-4")
@@ -179,7 +179,7 @@ fun HTML.eventDetail(event: Event, requestUser: UserProfile?) {
                         if (eventDate <= now) {
                             span(classes = "text-gray-500 text-base") { +"Event has started." }
                         } else if (event.attendees.size >= event.maxAttendees && !isParticipating) {
-                            button(classes = "bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-lg shadow transition-colors duration-300") {
+                            button(classes = "bg-yellow-500 hover:bg-yellow-600 text-black px-4 py-2 rounded-lg shadow transition-colors duration-300") {
                                 attributes["onclick"] = "joinWaitingList(${event.id})"
                                 +"Join Waiting List"
                             }
@@ -187,7 +187,7 @@ fun HTML.eventDetail(event: Event, requestUser: UserProfile?) {
                             projectButton(
                                 text = "Join Event",
                                 onClick = "joinEvent(${event.id})",
-                                extraClasses = "bg-blue-600/60 hover:bg-blue-700 text-white px-4 py-3 rounded-lg shadow-md transition-colors duration-300"
+                                extraClasses = "px-4 py-3 rounded-lg shadow-md transition-colors duration-300"
                             )
                         }
                     }
@@ -196,12 +196,12 @@ fun HTML.eventDetail(event: Event, requestUser: UserProfile?) {
 
             // Admin Waiting List Section (Collapsible)
             if (isAdmin) {
-                div(classes = "mt-6 bg-white bg-opacity-80 shadow-lg px-6 py-2 rounded-xl border border-gray-200") {
+                div(classes = "mt-6 bg-white bg-opacity-80 shadow-lg px-6 py-2 rounded-xl border border-yellow-200") {
                     id = "waiting-list-container"
                     div(classes = "flex justify-between items-center mb-2 cursor-pointer") {
                         attributes["onclick"] = "toggleWaitingList()"
-                        h2(classes = "text-2xl font-semibold text-gray-800") { +"Waiting List" }
-                        button(classes = "text-blue-500 hover:text-blue-700 focus:outline-none") {
+                        h2(classes = "text-2xl font-semibold text-black") { +"Waiting List" }
+                        button(classes = "text-yellow-600 hover:text-yellow-800 focus:outline-none") {
                             svgIcon(SvgIcon.CHEVRON_DOWN, classes = "w-6 h-6 waiting-list-toggle-icon")
                         }
                     }
@@ -233,7 +233,7 @@ fun HTML.eventDetail(event: Event, requestUser: UserProfile?) {
                                             +waitingList.joinedAt.format(DateAndTimeFormatter)
                                         }
                                         div(classes = "w-1/3 flex justify-end") {
-                                            button(classes = "bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-700 transition-colors duration-300") {
+                                            button(classes = "bg-yellow-500 text-black px-4 py-1 rounded hover:bg-yellow-600 transition-colors duration-300") {
                                                 attributes["onclick"] = "approveUser(${waitingList.eventId}, ${waitingList.user.userId})"
                                                 +"Approve"
                                             }

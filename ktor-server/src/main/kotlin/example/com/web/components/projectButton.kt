@@ -14,7 +14,7 @@ fun HtmlBlockTag.projectButton(
     disabled: Boolean = false,
     buttonId: String = "button-id"
 ) {
-    button(classes = "bg-gradient-to-r from-blue-500/70  to-indigo-600/60 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold px-5 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-300 transition-all duration-200 $extraClasses") {
+    button(classes = "bg-gradient-to-r from-yellow-500  to-black hover:from-yellow-600 hover:to-gray-900 text-white font-semibold px-5 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-yellow-300 transition-all duration-200 $extraClasses") {
         id = buttonId
         if (onClick != null) {
             attributes["onclick"] = onClick

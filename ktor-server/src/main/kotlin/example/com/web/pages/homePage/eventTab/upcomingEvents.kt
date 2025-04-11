@@ -36,10 +36,10 @@ fun HtmlBlockTag.upcomingEvents(
         div(classes = "w-[90%] mx-auto mb-8") {
             // Header with title and Create Event button
             div(classes = "flex justify-between items-center mb-6") {
-                h1(classes = "text-2xl font-bold text-blue-700") {
+                h1(classes = "text-2xl font-bold text-black") {
                     +"Events"
                 }
-                button(classes = "flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg shadow-md transition-all duration-300") {
+                button(classes = "flex items-center gap-2 bg-gradient-to-r from-yellow-500  to-black hover:from-yellow-600 hover:to-gray-900 text-white px-5 py-1 rounded-lg shadow-md transition-all duration-300") {
                     attributes["hx-get"] = Routes.Ui.Event.CREATE
                     attributes["hx-target"] = "#main-content"
                     svgIcon(SvgIcon.CALENDAR, "w-5 h-5 mr-1")
@@ -48,7 +48,7 @@ fun HtmlBlockTag.upcomingEvents(
             }
             
             // Filter tabs in a more prominent tab-like design
-            div(classes = "flex border-b border-blue-200") {
+            div(classes = "flex border-b border-yellow-300") {
                 div(classes = "flex space-x-1") {
                     eventFilterTag("Upcoming", "upcoming", active = true)
                     eventFilterTag("Past", "past", active = false)
@@ -90,12 +90,12 @@ fun HtmlBlockTag.upcomingEvents(
 }
 
 private fun HtmlBlockTag.emptyState(type: String) {
-    div(classes = "flex flex-col items-center justify-center py-12 text-center bg-white/50 rounded-xl border border-blue-100 shadow-sm") {
-        svgIcon(SvgIcon.CALENDAR, "w-16 h-16 text-blue-200 mb-4")
-        h3(classes = "text-xl font-semibold text-blue-800 mb-2") { 
+    div(classes = "flex flex-col items-center justify-center py-12 text-center bg-white/50 rounded-xl border border-yellow-200 shadow-sm") {
+        svgIcon(SvgIcon.CALENDAR, "w-16 h-16 text-yellow-300 mb-4")
+        h3(classes = "text-xl font-semibold text-black mb-2") { 
             +if (type == "upcoming") "No upcoming events" else "No past events" 
         }
-        p(classes = "text-blue-600 mb-6") { 
+        p(classes = "text-yellow-800 mb-6") { 
             +if (type == "upcoming") "Be the first to create an event!" else "Check back later for past events" 
         }
         if (type == "upcoming") {
@@ -103,7 +103,7 @@ private fun HtmlBlockTag.emptyState(type: String) {
                 text = "Create New Event", 
                 hxGet = Routes.Ui.Event.CREATE, 
                 hxTarget = "#main-content",
-                extraClasses = "bg-blue-600 hover:bg-blue-700 text-white"
+                extraClasses = "bg-yellow-500 hover:bg-yellow-600 text-white"
             )
         }
     }
