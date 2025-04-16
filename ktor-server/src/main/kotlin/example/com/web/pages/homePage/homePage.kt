@@ -22,7 +22,7 @@ fun HTML.homePage(eventRepository: EventRepository, isAdminRequest: Boolean) {
             //navbar()
 
             // Alert Box
-            div(classes = "fixed z-20 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 hidden p-4 rounded-lg shadow-lg bg-white bg-opacity-90 border border-yellow-400 min-w-[300px]") {
+            div(classes = "fixed z-20 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 hidden p-4 rounded-lg shadow-lg bg-white bg-opacity-90 border border-yellow-400 w-[90%] max-w-[400px] sm:min-w-[300px]") {
                 id = "alert-box"
                 div(classes = "flex items-center justify-between") {
                     span(classes = "text-gray-800 font-semibold flex-grow") {
@@ -35,21 +35,21 @@ fun HTML.homePage(eventRepository: EventRepository, isAdminRequest: Boolean) {
                 }
             }
 
-            div (classes = "w-full flex flex-col justify-center items-center relative") {
+            div (classes = "w-full flex flex-col justify-center items-center relative px-2 sm:px-0") {
                 id = "main-content-bg"
 
-                // Back to Home Icon
-                div(classes = "z-50 fixed top-[10%] left-[15%] transform -translate-y-1/2 text-yellow-500 hover:text-yellow-700 hover:bg-yellow-300 transition-colors duration-300 mt-8 mr-3 bg-yellow-100 rounded-full p-2 shadow-md cursor-pointer") {
+                // Back to Home Icon - improved mobile positioning
+                div(classes = "z-50 fixed top-[75px] left-2 sm:top-[10%] sm:left-[5%] md:left-[10%] lg:left-[15%] text-yellow-500 hover:text-yellow-700 hover:bg-yellow-300 transition-colors duration-300 bg-yellow-100 rounded-full p-1.5 sm:p-2 shadow-md cursor-pointer") {
                     attributes["onclick"] = "navigate()"
-                    svgIcon(SvgIcon.ARROW_LEFT, classes = "w-6 h-6")
+                    svgIcon(SvgIcon.ARROW_LEFT, classes = "w-4 h-4 sm:w-5 sm:h-5")
                 }
-                // content
-                div( classes = "flex flex-col justify-center items-center w-[70%] mt-1 py-2 px-4") {
+                
+                // Content - responsive width
+                div(classes = "flex flex-col justify-center items-center w-full sm:w-[90%] md:w-[85%] lg:w-[70%] xl:w-[60%] mt-1 py-2") {
                     id = "main-content"
                     upcomingEvents(eventRepository, isAdminRequest)
                 }
             }
-
 
         }
         loadJs("home")
