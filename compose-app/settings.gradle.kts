@@ -13,6 +13,9 @@ pluginManagement {
         mavenCentral()
         gradlePluginPortal()
     }
+    
+    // Add build-logic to includeBuild
+    includeBuild("build-logic")
 }
 
 dependencyResolutionManagement {
@@ -29,3 +32,4 @@ dependencyResolutionManagement {
 }
 
 include(":composeApp")
+include(":core")
