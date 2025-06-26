@@ -56,7 +56,7 @@ fun Application.module() {
     configureSerialization()
     configureDatabases(environment.config)
     configureRouting(
-        userRepository = UserRepositoryImpl(),
+        userRepository = get(),
         hashingService = hashingService,
         tokenService = tokenService,
         tokenConfig = tokenConfig,

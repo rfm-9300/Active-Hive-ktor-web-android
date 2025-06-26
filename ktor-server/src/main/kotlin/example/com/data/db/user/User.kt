@@ -76,6 +76,19 @@ object PasswordResetTable : IntIdTable("password_reset") {
     val isUsed = bool("is_used").default(false)
 }
 
+// Table for storing access and refresh tokens
+object TokenTable : IntIdTable("user_token") {
+    val userId = reference("user_id", UserTable)
+    val accessToken = varchar("access_token", 512)
+    val refreshToken = varchar("refresh_token", 512)
+    val accessTokenExpiresAt = long("access_token_expires_at")
+    val refreshTokenExpiresAt = long("refresh_token_expires_at")
+    val isRevoked = bool("is_revoked").default(false)
+    val deviceInfo = varchar("device_info", 256).nullable()
+    val createdAt = datetime("created_at").default(LocalDateTime.now())
+    val lastUsedAt = datetime("last_used_at").default(LocalDateTime.now())
+}
+
 // UserProfilesTable now extends IntIdTable
 object UserProfilesTable : IntIdTable("user_profile") {
     val userId = reference("user_id", UserTable).uniqueIndex()

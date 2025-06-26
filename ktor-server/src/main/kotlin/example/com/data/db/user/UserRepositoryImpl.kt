@@ -3,10 +3,15 @@ package example.com.data.db.user
 import example.com.data.db.event.EventAttendeeTable
 import example.com.data.db.event.EventTable
 import example.com.data.db.event.toEvent
+import example.com.security.token.*
+import kotlinx.coroutines.Dispatchers
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import java.time.LocalDateTime
 
-class UserRepositoryImpl: UserRepository {
+class UserRepositoryImpl (
+    private val tokenService: TokenService
+): UserRepository {
     override suspend fun getUser(email: String): User? = suspendTransaction {
         UserTable
             .select { UserTable.email eq email }
@@ -442,4 +447,98 @@ class UserRepositoryImpl: UserRepository {
             false
         }
     }
+
+    override suspend fun saveTokenPair(userId: Int, accessToken: String, refreshToken: String, deviceInfo: String?): Int {
+        val accessTokenDecoded = tokenService.decodeToken(accessToken)
+        val refreshTokenDecoded = tokenService.decodeToken(refreshToken)
+
+        if (accessTokenDecoded == null || refreshTokenDecoded == null) {
+            throw IllegalArgumentException("Invalid tokens provided")
+        }
+
+        val accessTokenExpires = accessTokenDecoded.expiresAt.time
+        val refreshTokenExpires = refreshTokenDecoded.expiresAt.time
+
+        return dbQuery {
+            TokenTable.insert {
+                it[TokenTable.userId] = userId
+                it[TokenTable.accessToken] = accessToken
+                it[TokenTable.refreshToken] = refreshToken
+                it[TokenTable.accessTokenExpiresAt] = accessTokenExpires
+                it[TokenTable.refreshTokenExpiresAt] = refreshTokenExpires
+                it[TokenTable.deviceInfo] = deviceInfo
+            }.resultedValues?.firstOrNull()?.get(TokenTable.id)?.value ?: -1
+        }
+    }
+
+    override suspend fun revokeTokenById(tokenId: Int): Boolean {
+        return dbQuery {
+            TokenTable.update({ TokenTable.id eq tokenId }) {
+                it[isRevoked] = true
+            } > 0
+        }
+    }
+
+    override suspend fun revokeAllUserTokens(userId: Int): Boolean {
+        return dbQuery {
+            TokenTable.update({ TokenTable.userId eq userId }) {
+                it[isRevoked] = true
+            } > 0
+        }
+    }
+
+    override suspend fun findTokenByRefreshToken(refreshToken: String): TokenPair? {
+        return dbQuery {
+            TokenTable.select { TokenTable.refreshToken eq refreshToken and (TokenTable.isRevoked eq false) }
+                .mapNotNull { row ->
+                    TokenPair(
+                        id = row[TokenTable.id].value,
+                        userId = row[TokenTable.userId].value,
+                        accessToken = row[TokenTable.accessToken],
+                        refreshToken = row[TokenTable.refreshToken],
+                        accessTokenExpiresAt = row[TokenTable.accessTokenExpiresAt],
+                        refreshTokenExpiresAt = row[TokenTable.refreshTokenExpiresAt],
+                        isRevoked = row[TokenTable.isRevoked],
+                        deviceInfo = row[TokenTable.deviceInfo],
+                        createdAt = row[TokenTable.createdAt],
+                        lastUsedAt = row[TokenTable.lastUsedAt]
+                    )
+                }.singleOrNull()
+        }
+    }
+
+    override suspend fun refreshAccessToken(refreshToken: String, config: TokenConfig, vararg claims: TokenClaim): RefreshResult? {
+        val tokenPair = findTokenByRefreshToken(refreshToken) ?: return null
+
+        // Check if refresh token is expired
+        if (System.currentTimeMillis() > tokenPair.refreshTokenExpiresAt) {
+            revokeTokenById(tokenPair.id)
+            return null
+        }
+
+        // Generate a new access token
+        val newAccessToken = tokenService.generateAuthToken(config, *claims)
+        val accessTokenDecoded = tokenService.decodeToken(newAccessToken)
+        val accessTokenExpires = accessTokenDecoded?.expiresAt?.time ?: 0
+
+        // Update the token in the database
+        dbQuery {
+            TokenTable.update({ TokenTable.id eq tokenPair.id }) {
+                it[TokenTable.accessToken] = newAccessToken
+                it[TokenTable.accessTokenExpiresAt] = accessTokenExpires
+                it[TokenTable.lastUsedAt] = LocalDateTime.now()
+            }
+        }
+
+        // Return new tokens
+        return RefreshResult(
+            userId = tokenPair.userId,
+            newAccessToken = newAccessToken,
+            accessTokenExpiresAt = accessTokenExpires,
+            refreshToken = refreshToken,
+            refreshTokenExpiresAt = tokenPair.refreshTokenExpiresAt
+        )
+    }
+    private suspend fun <T> dbQuery(block: suspend () -> T): T =
+        newSuspendedTransaction(Dispatchers.IO) { block() }
 }

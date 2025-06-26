@@ -1,5 +1,10 @@
 package example.com.data.db.user
 
+import example.com.security.token.RefreshResult
+import example.com.security.token.TokenClaim
+import example.com.security.token.TokenConfig
+import example.com.security.token.TokenPair
+
 interface UserRepository {
     suspend fun getUser(email: String): User?
     suspend fun getUserById(userId: Int): User?
@@ -32,4 +37,11 @@ interface UserRepository {
     suspend fun getUserByResetToken(token: String): User?
     suspend fun updatePassword(userId: Int, newPasswordHash: String, newSalt: String): Boolean
     suspend fun deleteResetToken(userId: Int): Boolean
+
+    // token management methods
+    suspend fun saveTokenPair(userId: Int, accessToken: String, refreshToken: String, deviceInfo: String?): Int
+    suspend fun revokeTokenById(tokenId: Int): Boolean
+    suspend fun revokeAllUserTokens(userId: Int): Boolean
+    suspend fun findTokenByRefreshToken(refreshToken: String): TokenPair?
+    suspend fun refreshAccessToken(refreshToken: String, config: TokenConfig, vararg claims: TokenClaim): RefreshResult?
 }
