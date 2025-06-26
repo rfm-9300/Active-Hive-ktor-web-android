@@ -96,4 +96,8 @@ dependencies {
 
     implementation("androidx.compose.ui:ui-text-google-fonts:1.6.8")
 
+    implementation("androidx.credentials:credentials:1.5.0")
+    implementation("androidx.credentials:credentials-play-services-auth:1.5.0")
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.5.0")
+
 }

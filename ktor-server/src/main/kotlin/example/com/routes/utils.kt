@@ -10,6 +10,7 @@ import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import java.util.*
 
 suspend fun respondHelper(
     call: RoutingCall,
@@ -33,6 +34,16 @@ suspend fun getUserIdFromRequestToken(call: RoutingCall): String? {
             call = call,
             success = false,
             message = "User not found",
+            statusCode = HttpStatusCode.Unauthorized
+        )
+        return null
+    }
+    // check expiration
+    if (principal.expiresAt?.before(java.util.Date()) == true) {
+        respondHelper(
+            call = call,
+            success = false,
+            message = "Token expired",
             statusCode = HttpStatusCode.Unauthorized
         )
         return null
@@ -64,6 +75,11 @@ fun RoutingContext.getUserIdFromCookies(): Int? {
 fun getUserIdFromToken(token: String?): Int? {
     try {
         val decodedJWT = JWT.decode(token)
+        // check if the token has expired
+        if (decodedJWT.expiresAt?.before(Date()) == true) {
+            Logger.d("Token expired")
+            return null
+        }
         Logger.d("Decoded JWT claims: ${decodedJWT.claims}")
         Logger.d("UserID in token: ${decodedJWT.getClaim("userId").asString()}")
         return decodedJWT.getClaim("userId").asString().toIntOrNull()
